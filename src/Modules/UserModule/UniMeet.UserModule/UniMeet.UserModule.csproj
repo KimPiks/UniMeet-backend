@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\UniMeet.UserModule.Application\UniMeet.UserModule.Application.csproj" />
+      <ProjectReference Include="..\UniMeet.UserModule.Domain\UniMeet.UserModule.Domain.csproj" />
+      <ProjectReference Include="..\UniMeet.UserModule.Infrastructure\UniMeet.UserModule.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>
