@@ -64,7 +64,8 @@ public static class ModularSystem
 
         var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
         var toLoad = referencedPaths.Where(r =>
-            !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase) && r.Contains("Modules")).ToList();
+            !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase) && 
+            Path.GetFileName(r).Contains("Module", StringComparison.InvariantCultureIgnoreCase)).ToList();
 
         toLoad.ForEach(path => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path))));
         return loadedAssemblies;
