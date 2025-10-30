@@ -1,0 +1,8 @@
+﻿{
+  "Modules": {
+    "UserModule": {
+      "Enabled": true,
+      "ConnectionString": ""
+    }
+  }
+}
