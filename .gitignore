@@ -3,3 +3,4 @@ obj/
 .idea/
 *.http
 appsettings.Development.json
+erd/
