@@ -1,0 +1,8 @@
+services:
+  unimeet-api:
+    build:
+      context: .
+      dockerfile: src/UniMeet.API/Dockerfile
+    container_name: unimeet_api_service
+    ports:
+      - "5000:8080"
