@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UniMeet.UniversityModule.Domain.Universities;
+using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 
 namespace UniMeet.UniversityModule.Infrastructure;
 

@@ -1,4 +1,4 @@
-﻿namespace UniMeet.UniversityModule.Domain.Universities;
+﻿namespace UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 
 public sealed class AllowedEmailDomain
 {
@@ -9,9 +9,14 @@ public sealed class AllowedEmailDomain
     
     private AllowedEmailDomain() { }
     
-    public AllowedEmailDomain(string domain, University university)
+    internal AllowedEmailDomain(string domain, int universityId)
     {
         Domain = domain;
-        University = university;
+        UniversityId = universityId;
+    }
+    
+    internal void ChangeDomain(string newDomain)
+    {
+        Domain = newDomain;
     }
 }
