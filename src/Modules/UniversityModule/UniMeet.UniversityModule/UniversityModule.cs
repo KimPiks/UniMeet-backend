@@ -4,8 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using ModularSystem;
 using Serilog;
 using UniMeet.Shared.Exceptions;
+using UniMeet.UniversityModule.Application.Interfaces;
+using UniMeet.UniversityModule.Application.Services;
 using UniMeet.UniversityModule.Config;
+using UniMeet.UniversityModule.Domain.Repositories;
 using UniMeet.UniversityModule.Infrastructure;
+using UniMeet.UniversityModule.Infrastructure.Repositories;
 
 namespace UniMeet.UniversityModule;
 
@@ -39,6 +43,12 @@ public class UniversityModule : IModule
         {
             options.UseNpgsql(_configuration.ConnectionString);
         });
+        
+        // Repositories
+        services.AddScoped<IUniversityRepository, UniversityRepository>();
+        
+        // Services
+        services.AddScoped<IUniversityService, UniversityService>();
     }
     
     private static Configuration ValidateConfiguration(IConfiguration configuration)

@@ -1,4 +1,4 @@
-﻿namespace UniMeet.UniversityModule.Domain.Universities;
+﻿namespace UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 
 public sealed class FieldOfStudy
 {
@@ -9,9 +9,14 @@ public sealed class FieldOfStudy
     
     private FieldOfStudy() { }
     
-    public FieldOfStudy(string name, Department department)
+    internal FieldOfStudy(string name, int departmentId)
     {
         Name = name;
-        Department = department;
+        DepartmentId = departmentId;
+    }
+    
+    internal void Rename(string newName)
+    {
+        Name = newName;
     }
 }

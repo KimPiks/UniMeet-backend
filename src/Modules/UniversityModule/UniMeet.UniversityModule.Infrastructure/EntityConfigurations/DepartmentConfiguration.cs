@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UniMeet.UniversityModule.Domain.Universities;
+using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 
 namespace UniMeet.UniversityModule.Infrastructure.EntityConfigurations;
 
