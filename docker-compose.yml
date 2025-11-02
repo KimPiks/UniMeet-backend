@@ -5,9 +5,11 @@ services:
       dockerfile: src/UniMeet.API/Dockerfile
     container_name: unimeet_api_service
     ports:
-      - "5000:8080"
+      - "8080:8080"
     depends_on:
       - database
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
   
   database:
     image: postgres:16

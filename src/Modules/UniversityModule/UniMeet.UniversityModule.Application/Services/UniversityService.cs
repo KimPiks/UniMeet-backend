@@ -1,4 +1,5 @@
-﻿using UniMeet.UniversityModule.Application.Interfaces;
+﻿using UniMeet.UniversityModule.Application.DTOs;
+using UniMeet.UniversityModule.Application.Interfaces;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 using UniMeet.UniversityModule.Domain.Repositories;
 
@@ -13,16 +14,58 @@ public class UniversityService : IUniversityService
         _universityRepository = universityRepository;
     }
 
-    public async Task<University?> GetUniversityByIdAsync(int universityId)
+    public async Task<UniversityDto?> GetUniversityByIdAsync(int universityId)
     {
         var university = await _universityRepository.GetByIdAsync(universityId);
-        return university;
+        if (university == null)
+        {
+            return null;
+        }
+        
+        return new UniversityDto()
+        {
+            Id = university.Id,
+            Name = university.Name,
+            Country = university.Country,
+            Voivodeship = university.Voivodeship,
+            City = university.City,
+            Address = university.Address,
+            Departments = university.Departments.Select(department => new DepartmentDto()
+            {
+                Id = department.Id,
+                Name = department.Name
+            }).ToList(),
+            AllowedEmailDomains = university.AllowedEmailDomains.Select(domain => new AllowedEmailDomainDto()
+            {
+                Id = domain.Id,
+                Domain = domain.Domain
+            }).ToList()
+        };
     }
 
-    public async Task<IEnumerable<University>> GetAllUniversitiesAsync()
+    public async Task<IEnumerable<UniversityDto>> GetAllUniversitiesAsync()
     {
         var universities = await _universityRepository.GetAllAsync();
-        return universities;
+        return universities.Select(university => new UniversityDto()
+        {
+            Id = university.Id,
+            Name = university.Name,
+            Country = university.Country,
+            Voivodeship = university.Voivodeship,
+            City = university.City,
+            Address = university.Address,
+            
+            Departments = university.Departments.Select(department => new DepartmentDto()
+            {
+                Id = department.Id,
+                Name = department.Name
+            }).ToList(),
+            AllowedEmailDomains = university.AllowedEmailDomains.Select(domain => new AllowedEmailDomainDto()
+            {
+                Id = domain.Id,
+                Domain = domain.Domain
+            }).ToList()
+        });
     }
 
     public async Task CreateUniversityAsync(string name, string country, string voivodeship, string city, string address)
@@ -56,7 +99,7 @@ public class UniversityService : IUniversityService
         await _universityRepository.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Department>> GetDepartmentsByUniversityIdAsync(int universityId)
+    public async Task<IEnumerable<DepartmentDto>> GetDepartmentsByUniversityIdAsync(int universityId)
     {
         var university = await _universityRepository.GetByIdAsync(universityId);
         if (university == null)
@@ -64,7 +107,17 @@ public class UniversityService : IUniversityService
             throw new ArgumentException("University not found");
         }
         
-        return university.Departments;
+        return university.Departments.Select(department => new DepartmentDto()
+        {
+            Id = department.Id,
+            Name = department.Name,
+            
+            FieldsOfStudy = department.FieldsOfStudy.Select(fos => new FieldOfStudyDto()
+            {
+                Id = fos.Id,
+                Name = fos.Name
+            }).ToList()
+        });
     }
 
     public async Task DeleteDepartmentAsync(int universityId, int departmentId)
@@ -97,7 +150,7 @@ public class UniversityService : IUniversityService
         await _universityRepository.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<AllowedEmailDomain>> GetAllowedEmailDomainsByUniversityIdAsync(int universityId)
+    public async Task<IEnumerable<AllowedEmailDomainDto>> GetAllowedEmailDomainsByUniversityIdAsync(int universityId)
     {
         var university = await _universityRepository.GetByIdAsync(universityId);
         if (university == null)
@@ -105,7 +158,11 @@ public class UniversityService : IUniversityService
             throw new ArgumentException("University not found");
         }
         
-        return university.AllowedEmailDomains;
+        return university.AllowedEmailDomains.Select(domain => new AllowedEmailDomainDto()
+        {
+            Id = domain.Id,
+            Domain = domain.Domain
+        });
     }
 
     public async Task DeleteAllowedEmailDomainAsync(int universityId, int domainId)
@@ -115,13 +172,13 @@ public class UniversityService : IUniversityService
         {
             throw new ArgumentException("University not found");
         }
-        
+
         var domain = university.AllowedEmailDomains.FirstOrDefault(d => d.Id == domainId);
         if (domain == null)
         {
             throw new ArgumentException("Allowed email domain not found");
         }
-        
+
         university.RemoveAllowedEmailDomain(domain.Domain);
         await _universityRepository.SaveChangesAsync();
     }
