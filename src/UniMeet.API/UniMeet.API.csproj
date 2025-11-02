@@ -23,6 +23,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ModularSystem\ModularSystem.csproj" />
+      <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Application\UniMeet.UniversityModule.Application.csproj" />
+      <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Domain\UniMeet.UniversityModule.Domain.csproj" />
+      <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Infrastructure\UniMeet.UniversityModule.Infrastructure.csproj" />
+      <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule\UniMeet.UniversityModule.csproj" />
       <ProjectReference Include="..\Modules\UserModule\UniMeet.UserModule\UniMeet.UserModule.csproj" />
       <ProjectReference Include="..\UniMeet.Shared\UniMeet.Shared.csproj" />
     </ItemGroup>
