@@ -14,6 +14,9 @@ builder.Host.UseSerilog();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
+
 // Load modules
 ModularSystem.ModularSystem.RunModules(builder.Configuration, builder.Services);
 ModularSystem.ModularSystem.SummarizeModules();
@@ -24,8 +27,17 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "UniMeet API V1");
+    });
 }
 
+app.UseRouting();
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();
