@@ -58,7 +58,12 @@ public class UniversityService : IUniversityService
             Departments = university.Departments.Select(department => new DepartmentDto()
             {
                 Id = department.Id,
-                Name = department.Name
+                Name = department.Name,
+                FieldsOfStudy = department.FieldsOfStudy.Select(fos => new FieldOfStudyDto()
+                {
+                    Id = fos.Id,
+                    Name = fos.Name
+                }).ToList()
             }).ToList(),
             AllowedEmailDomains = university.AllowedEmailDomains.Select(domain => new AllowedEmailDomainDto()
             {
@@ -180,6 +185,69 @@ public class UniversityService : IUniversityService
         }
 
         university.RemoveAllowedEmailDomain(domain.Domain);
+        await _universityRepository.SaveChangesAsync();
+    }
+
+    public async Task AddFieldOfStudyAsync(int universityId, int departmentId, string fieldOfStudyName)
+    {
+        var university = await _universityRepository.GetByIdAsync(universityId);
+        if (university == null)
+        {
+            throw new ArgumentException("University not found");
+        }
+        
+        var department = university.Departments.FirstOrDefault(d => d.Id == departmentId);
+        if (department == null)
+        {
+            throw new ArgumentException("Department not found");
+        }
+        
+        university.AddFieldOfStudyToDepartment(department.Name, fieldOfStudyName);
+        await _universityRepository.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<FieldOfStudyDto>> GetFieldsOfStudyByDepartmentIdAsync(int universityId, int departmentId)
+    {
+        var university = await _universityRepository.GetByIdAsync(universityId);
+        if (university == null)
+        {
+            throw new ArgumentException("University not found");
+        }
+        
+        var department = university.Departments.FirstOrDefault(d => d.Id == departmentId);
+        if (department == null)
+        {
+            throw new ArgumentException("Department not found");
+        }
+        
+        return department.FieldsOfStudy.Select(fos => new FieldOfStudyDto()
+        {
+            Id = fos.Id,
+            Name = fos.Name
+        });
+    }
+
+    public async Task DeleteFieldOfStudyAsync(int universityId, int departmentId, int fieldOfStudyId)
+    {
+        var university = await _universityRepository.GetByIdAsync(universityId);
+        if (university == null)
+        {
+            throw new ArgumentException("University not found");
+        }
+        
+        var department = university.Departments.FirstOrDefault(d => d.Id == departmentId);
+        if (department == null)
+        {
+            throw new ArgumentException("Department not found");
+        }
+        
+        var fieldOfStudy = department.FieldsOfStudy.FirstOrDefault(fos => fos.Id == fieldOfStudyId);
+        if (fieldOfStudy == null)
+        {
+            throw new ArgumentException("Field of study not found");
+        }
+        
+        university.RemoveFieldOfStudyFromDepartment(department.Name, fieldOfStudy.Name);
         await _universityRepository.SaveChangesAsync();
     }
 }
