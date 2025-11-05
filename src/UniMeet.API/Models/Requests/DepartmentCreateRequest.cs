@@ -1,3 +1,3 @@
 ﻿namespace UniMeet.API.Models.Requests;
 
-public record DepartmentCreateRequest(string DepartmentName, int UniversityId);
+public record DepartmentCreateRequest(string DepartmentName);

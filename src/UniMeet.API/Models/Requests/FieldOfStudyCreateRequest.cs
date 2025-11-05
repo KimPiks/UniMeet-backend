@@ -1,3 +1,3 @@
 ﻿namespace UniMeet.API.Models.Requests;
 
-public record FieldOfStudyCreateRequest(int UniversityId, int DepartmentId, string FieldOfStudyName);
+public record FieldOfStudyCreateRequest(string FieldOfStudyName);
