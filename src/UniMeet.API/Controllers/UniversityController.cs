@@ -160,4 +160,46 @@ public class UniversityController : ControllerBase
             return NotFound(ApiResponse<object>.Fail(e.Message));
         }
     }
+
+    [HttpGet("FieldOfStudy/GetAll/{universityId:int}/{departmentId:int}")]
+    public async Task<IActionResult> GetFieldsOfStudy(int universityId, int departmentId)
+    {
+        try
+        {
+            var fieldsOfStudy = await _universityService.GetFieldsOfStudyByDepartmentIdAsync(universityId, departmentId);
+            return Ok(ApiResponse<object>.Ok(fieldsOfStudy, "Fields of study retrieved successfully"));
+        } 
+        catch (ArgumentException e)
+        {
+            return NotFound(ApiResponse<object>.Fail(e.Message));
+        }
+    }
+
+    [HttpPost("FieldOfStudy/[action]")]
+    public async Task<IActionResult> Create([FromBody] FieldOfStudyCreateRequest request)
+    {
+        try
+        {
+            await _universityService.AddFieldOfStudyAsync(request.UniversityId, request.DepartmentId, request.FieldOfStudyName);
+            return Ok(ApiResponse<object>.Ok(null!, "Field of study added successfully"));
+        }
+        catch (ArgumentException e)
+        {
+            return NotFound(ApiResponse<object>.Fail(e.Message));
+        }
+    }
+    
+    [HttpDelete("FieldOfStudy/Delete/{universityId:int}/{departmentId:int}/{fieldOfStudyId:int}")]
+    public async Task<IActionResult> DeleteFieldOfStudy(int universityId, int departmentId, int fieldOfStudyId)
+    {
+        try
+        {
+            await _universityService.DeleteFieldOfStudyAsync(universityId, departmentId, fieldOfStudyId);
+            return Ok(ApiResponse<object>.Ok(null!, "Field of study deleted successfully"));
+        }
+        catch (ArgumentException e)
+        {
+            return NotFound(ApiResponse<object>.Fail(e.Message));
+        }
+    }
 }
