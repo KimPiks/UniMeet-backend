@@ -83,7 +83,7 @@ public class University
         AllowedEmailDomains.Remove(allowedEmailDomain);
     }
     
-    public void ChangeDomain(string domain, string newDomain)
+    public void ChangeAllowedEmailDomain(string domain, string newDomain)
     {
         var allowedEmailDomain = AllowedEmailDomains.FirstOrDefault(d => d.Domain == domain);
         if (allowedEmailDomain == null)

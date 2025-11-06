@@ -33,7 +33,12 @@ public class UniversityService : IUniversityService
             Departments = university.Departments.Select(department => new DepartmentDto()
             {
                 Id = department.Id,
-                Name = department.Name
+                Name = department.Name,
+                FieldsOfStudy = department.FieldsOfStudy.Select(fos => new FieldOfStudyDto()
+                {
+                    Id = fos.Id,
+                    Name = fos.Name
+                }).ToList()
             }).ToList(),
             AllowedEmailDomains = university.AllowedEmailDomains.Select(domain => new AllowedEmailDomainDto()
             {
@@ -91,6 +96,42 @@ public class UniversityService : IUniversityService
         _universityRepository.Delete(university);
         await _universityRepository.SaveChangesAsync();
     }
+    
+    public async Task UpdateUniversityAsync(int universityId, string? name, string? country, string? voivodeship, string? city, string? address)
+    {
+        var university = await _universityRepository.GetByIdAsync(universityId);
+        if (university == null)
+        {
+            throw new ArgumentException("University not found");
+        }
+
+        if (!string.IsNullOrEmpty(name))
+        {
+            university.Rename(name);
+        }
+        
+        if (!string.IsNullOrEmpty(country))
+        {
+            university.ChangeCountry(country);
+        }
+        
+        if (!string.IsNullOrEmpty(voivodeship))
+        {
+            university.ChangeVoivodeship(voivodeship);
+        }
+        
+        if (!string.IsNullOrEmpty(city))
+        {
+            university.ChangeCity(city);
+        }
+        
+        if (!string.IsNullOrEmpty(address))
+        {
+            university.ChangeAddress(address);
+        }
+        
+        await _universityRepository.SaveChangesAsync();
+    }
 
     public async Task AddDepartmentAsync(int universityId, string departmentName)
     {
@@ -142,6 +183,28 @@ public class UniversityService : IUniversityService
         university.RemoveDepartment(department.Name);
         await _universityRepository.SaveChangesAsync();
     }
+    
+    public async Task UpdateDepartmentAsync(int universityId, int departmentId, string? newDepartmentName)
+    {
+        var university = await _universityRepository.GetByIdAsync(universityId);
+        if (university == null)
+        {
+            throw new ArgumentException("University not found");
+        }
+        
+        var department = university.Departments.FirstOrDefault(d => d.Id == departmentId);
+        if (department == null)
+        {
+            throw new ArgumentException("Department not found");
+        }
+        
+        if (!string.IsNullOrEmpty(newDepartmentName))
+        {
+            university.RenameDepartment(department.Name, newDepartmentName);
+        }
+        
+        await _universityRepository.SaveChangesAsync();
+    }
 
     public async Task AddAllowedEmailDomainAsync(int universityId, string domain)
     {
@@ -185,6 +248,28 @@ public class UniversityService : IUniversityService
         }
 
         university.RemoveAllowedEmailDomain(domain.Domain);
+        await _universityRepository.SaveChangesAsync();
+    }
+    
+    public async Task UpdateAllowedEmailDomainAsync(int universityId, int domainId, string? newDomain)
+    {
+        var university = await _universityRepository.GetByIdAsync(universityId);
+        if (university == null)
+        {
+            throw new ArgumentException("University not found");
+        }
+
+        var domain = university.AllowedEmailDomains.FirstOrDefault(d => d.Id == domainId);
+        if (domain == null)
+        {
+            throw new ArgumentException("Allowed email domain not found");
+        }
+
+        if (!string.IsNullOrEmpty(newDomain))
+        {
+            university.ChangeAllowedEmailDomain(domain.Domain, newDomain);
+        }
+        
         await _universityRepository.SaveChangesAsync();
     }
 
@@ -248,6 +333,34 @@ public class UniversityService : IUniversityService
         }
         
         university.RemoveFieldOfStudyFromDepartment(department.Name, fieldOfStudy.Name);
+        await _universityRepository.SaveChangesAsync();
+    }
+    
+    public async Task UpdateFieldOfStudyAsync(int universityId, int departmentId, int fieldOfStudyId, string? newFieldOfStudyName)
+    {
+        var university = await _universityRepository.GetByIdAsync(universityId);
+        if (university == null)
+        {
+            throw new ArgumentException("University not found");
+        }
+        
+        var department = university.Departments.FirstOrDefault(d => d.Id == departmentId);
+        if (department == null)
+        {
+            throw new ArgumentException("Department not found");
+        }
+        
+        var fieldOfStudy = department.FieldsOfStudy.FirstOrDefault(fos => fos.Id == fieldOfStudyId);
+        if (fieldOfStudy == null)
+        {
+            throw new ArgumentException("Field of study not found");
+        }
+        
+        if (!string.IsNullOrEmpty(newFieldOfStudyName))
+        {
+            university.RenameFieldOfStudyInDepartment(department.Name, fieldOfStudy.Name, newFieldOfStudyName);
+        }
+        
         await _universityRepository.SaveChangesAsync();
     }
 }

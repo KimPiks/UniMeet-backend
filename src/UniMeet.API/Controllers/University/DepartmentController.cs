@@ -65,4 +65,19 @@ public partial class UniversityController
             return NotFound(ApiResponse<object>.Fail(e.Message));
         }
     }
+
+    [HttpPatch("{universityId:int}/Department/{departmentId:int}")]
+    public async Task<IActionResult> UpdateDepartment([FromRoute] int universityId, [FromRoute] int departmentId,
+        [FromBody] DepartmentUpdateRequest request)
+    {
+        try
+        {
+            await _universityService.UpdateDepartmentAsync(universityId, departmentId, request.DepartmentName);
+            return Ok(ApiResponse<object>.Ok(null!, "Department updated successfully"));
+        }
+        catch (ArgumentException e)
+        {
+            return NotFound(ApiResponse<object>.Fail(e.Message));
+        }
+    }
 }
