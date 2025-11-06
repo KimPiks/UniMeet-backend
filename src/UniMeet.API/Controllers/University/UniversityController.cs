@@ -55,4 +55,34 @@ public partial class UniversityController : ControllerBase
             return NotFound(ApiResponse<object>.Fail(e.Message));
         }
     }
+
+    [HttpPatch("{universityId:int}")]
+    public async Task<IActionResult> UpdateUniversity([FromRoute] int universityId,
+        [FromBody] UniversityUpdateRequest request)
+    {
+        try
+        {
+            var university = await _universityService.GetUniversityByIdAsync(universityId);
+            if (university == null)
+            {
+                return NotFound(ApiResponse<object>.Fail("University not found"));
+            }
+
+            // Update only the fields that are provided in the request
+            var name = request.Name ?? university.Name;
+            var country = request.Country ?? university.Country;
+            var voivodeship = request.Voivodeship ?? university.Voivodeship;
+            var city = request.City ?? university.City;
+            var address = request.Address ?? university.Address;
+
+            // Update the university
+            await _universityService.UpdateUniversityAsync(universityId, name, country, voivodeship, city, address);
+
+            return Ok(ApiResponse<object>.Ok(null!, "University updated successfully"));
+        }
+        catch (ArgumentException e)
+        {
+            return NotFound(ApiResponse<object>.Fail(e.Message));
+        }
+    }
 }

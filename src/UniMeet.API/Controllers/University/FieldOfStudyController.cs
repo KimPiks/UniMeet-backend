@@ -20,6 +20,26 @@ public partial class UniversityController
         }
     }
 
+    [HttpGet("{universityId:int}/Department/{departmentId:int}/FieldOfStudy/{fieldOfStudyId:int}")]
+    public async Task<IActionResult> GetFieldOfStudy([FromRoute] int universityId, [FromRoute] int departmentId,
+        [FromRoute] int fieldOfStudyId)
+    {
+        try
+        {
+            var fieldsOfStudy = await _universityService.GetFieldsOfStudyByDepartmentIdAsync(universityId, departmentId);
+            var fieldOfStudy = fieldsOfStudy.FirstOrDefault(f => f.Id == fieldOfStudyId);
+            if (fieldOfStudy == null)
+            {
+                return NotFound(ApiResponse<object>.Fail("Field of study not found"));
+            }
+            return Ok(ApiResponse<object>.Ok(fieldOfStudy, "Field of study retrieved successfully"));
+        }
+        catch (ArgumentException e)
+        {
+            return NotFound(ApiResponse<object>.Fail(e.Message));
+        }
+    }
+
     [HttpPost("{universityId:int}/Department/{departmentId:int}/FieldOfStudy")]
     public async Task<IActionResult> CreateFieldOfStudy([FromRoute] int universityId, [FromRoute] int departmentId, [FromBody] FieldOfStudyCreateRequest request)
     {
@@ -41,6 +61,22 @@ public partial class UniversityController
         {
             await _universityService.DeleteFieldOfStudyAsync(universityId, departmentId, fieldOfStudyId);
             return Ok(ApiResponse<object>.Ok(null!, "Field of study deleted successfully"));
+        }
+        catch (ArgumentException e)
+        {
+            return NotFound(ApiResponse<object>.Fail(e.Message));
+        }
+    }
+
+    [HttpPatch("{universityId:int}/Department/{departmentId:int}/FieldOfStudy/{fieldOfStudyId:int}")]
+    public async Task<IActionResult> UpdateFieldOfStudy([FromRoute] int universityId, [FromRoute] int departmentId,
+        [FromRoute] int fieldOfStudyId, [FromBody] FieldOfStudyUpdateRequest request)
+    {
+        try
+        {
+            await _universityService.UpdateFieldOfStudyAsync(universityId, departmentId, fieldOfStudyId,
+                request.FieldOfStudyName);
+            return Ok(ApiResponse<object>.Ok(null!, "Field of study updated successfully"));
         }
         catch (ArgumentException e)
         {

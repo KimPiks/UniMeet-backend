@@ -10,19 +10,23 @@ public interface IUniversityService
     Task<IEnumerable<UniversityDto>> GetAllUniversitiesAsync();
     Task CreateUniversityAsync(string name, string country, string voivodeship, string city, string address);
     Task DeleteUniversityAsync(int universityId);
+    Task UpdateUniversityAsync(int universityId, string? name, string? country, string? voivodeship, string? city, string? address);
     
     // Department methods
     Task AddDepartmentAsync(int universityId, string departmentName);
     Task<IEnumerable<DepartmentDto>> GetDepartmentsByUniversityIdAsync(int universityId);
     Task DeleteDepartmentAsync(int universityId, int departmentId);
+    Task UpdateDepartmentAsync(int universityId, int departmentId, string? newDepartmentName);
     
     // AllowedEmailDomain methods
     Task AddAllowedEmailDomainAsync(int universityId, string domain);
     Task<IEnumerable<AllowedEmailDomainDto>> GetAllowedEmailDomainsByUniversityIdAsync(int universityId);
     Task DeleteAllowedEmailDomainAsync(int universityId, int domainId);
+    Task UpdateAllowedEmailDomainAsync(int universityId, int domainId, string? newDomain);
     
     // FieldOfStudy methods
     Task AddFieldOfStudyAsync(int universityId, int departmentId, string fieldOfStudyName);
     Task<IEnumerable<FieldOfStudyDto>> GetFieldsOfStudyByDepartmentIdAsync(int universityId, int departmentId);
     Task DeleteFieldOfStudyAsync(int universityId, int departmentId, int fieldOfStudyId);
+    Task UpdateFieldOfStudyAsync(int universityId, int departmentId, int fieldOfStudyId, string? newFieldOfStudyName);
 }

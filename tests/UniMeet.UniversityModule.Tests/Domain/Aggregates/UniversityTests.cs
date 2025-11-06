@@ -97,7 +97,7 @@ public class UniversityTests
     {
         var university = new University("UniMeet", "Poland", "Pomorskie", "Gdansk", "Some Address");
         var domain = university.AddAllowedEmailDomain("unimeet.pl", university.Id);
-        university.ChangeDomain("unimeet.pl", "newdomain.com");
+        university.ChangeAllowedEmailDomain("unimeet.pl", "newdomain.com");
         Assert.Equal("newdomain.com", domain.Domain);
         Assert.Contains(domain, university.AllowedEmailDomains);
     }
@@ -106,7 +106,7 @@ public class UniversityTests
     public void ChangeDomain_NonExistentDomain_ShouldThrowException()
     {
         var university = new University("UniMeet", "Poland", "Pomorskie", "Gdansk", "Some Address");
-        Assert.Throws<InvalidOperationException>(() => university.ChangeDomain("nonexistent.com", "newdomain.com"));
+        Assert.Throws<InvalidOperationException>(() => university.ChangeAllowedEmailDomain("nonexistent.com", "newdomain.com"));
     }
     
     [Fact]
@@ -115,7 +115,7 @@ public class UniversityTests
         var university = new University("UniMeet", "Poland", "Pomorskie", "Gdansk", "Some Address");
         university.AddAllowedEmailDomain("unimeet.pl", university.Id);
         university.AddAllowedEmailDomain("existing.com", university.Id);
-        Assert.Throws<InvalidOperationException>(() => university.ChangeDomain("unimeet.pl", "existing.com"));
+        Assert.Throws<InvalidOperationException>(() => university.ChangeAllowedEmailDomain("unimeet.pl", "existing.com"));
     }
     
     [Fact]
@@ -123,7 +123,7 @@ public class UniversityTests
     {
         var university = new University("UniMeet", "Poland", "Pomorskie", "Gdansk", "Some Address");
         university.AddAllowedEmailDomain("unimeet.pl", university.Id);
-        university.ChangeDomain("unimeet.pl", "newdomain.com");
+        university.ChangeAllowedEmailDomain("unimeet.pl", "newdomain.com");
         Assert.Contains(university.AllowedEmailDomains, d => d.Domain == "newdomain.com");
         Assert.DoesNotContain(university.AllowedEmailDomains, d => d.Domain == "unimeet.pl");
     }
