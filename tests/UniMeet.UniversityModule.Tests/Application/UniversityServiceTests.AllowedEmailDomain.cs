@@ -6,14 +6,15 @@ using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 
 namespace UniMeet.UniversityModule.Tests.Application;
 
-
 public partial class UniversityServiceTests
 {
+    // --- Tests for AddAllowedEmailDomainAsync ---
+
     [Fact]
-    public async Task AddDepartmentAsync_ShouldAddDepartmentAndSaveChanges_WhenUniversityExists()
+    public async Task AddAllowedEmailDomainAsync_ShouldAddDomainAndSaveChanges_WhenUniversityExists()
     {
         // ---- ARRANGE ----
-        var departmentName = "IT Faculty";
+        var domain = "test.edu";
         var fakeUniversity = new University("Test Uni", "Country", "Voivo", "City", "Address");
 
         _mockRepository
@@ -21,12 +22,11 @@ public partial class UniversityServiceTests
             .ReturnsAsync(fakeUniversity);
 
         // ---- ACT ----
-        await _service.AddDepartmentAsync(1, departmentName);
+        await _service.AddAllowedEmailDomainAsync(1, domain);
 
         // ---- ASSERT ----
-        fakeUniversity.Departments.Should().HaveCount(1);
-        fakeUniversity.Departments.First().Name.Should().Be(departmentName);
-
+        fakeUniversity.AllowedEmailDomains.Should().HaveCount(1);
+        fakeUniversity.AllowedEmailDomains.First().Domain.Should().Be(domain);
         _mockRepository.Verify(
             repo => repo.SaveChangesAsync(It.IsAny<CancellationToken>()),
             Times.Once()
@@ -34,7 +34,7 @@ public partial class UniversityServiceTests
     }
 
     [Fact]
-    public async Task AddDepartmentAsync_ShouldThrowException_WhenUniversityNotFound()
+    public async Task AddAllowedEmailDomainAsync_ShouldThrowException_WhenUniversityNotFound()
     {
         // ---- ARRANGE ----
         _mockRepository
@@ -42,7 +42,7 @@ public partial class UniversityServiceTests
             .ReturnsAsync((University?)null);
 
         // ---- ACT ----
-        Func<Task> act = () => _service.AddDepartmentAsync(99, "Test Dept");
+        Func<Task> act = () => _service.AddAllowedEmailDomainAsync(99, "test.edu");
 
         // ---- ASSERT ----
         await act.Should()
@@ -50,69 +50,68 @@ public partial class UniversityServiceTests
                  .WithMessage("University not found");
     }
 
+    // --- Tests for GetAllowedEmailDomainsByUniversityIdAsync ---
+
     [Fact]
-    public async Task GetDepartmentsByUniversityIdAsync_ShouldReturnMappedDtos_WhenDepartmentsExist()
+    public async Task GetAllowedEmailDomainsByUniversityIdAsync_ShouldReturnMappedDtos_WhenDomainsExist()
     {
         // ---- ARRANGE ----
         var fakeUniversity = new University("Test Uni", "Country", "Voivo", "City", "Address");
-        fakeUniversity.AddDepartment("IT Faculty", 1);
-        fakeUniversity.AddDepartment("Management Faculty", 1);
-        fakeUniversity.AddFieldOfStudyToDepartment("IT Faculty", "Computer Science");
+        fakeUniversity.AddAllowedEmailDomain("test1.edu", 1);
+        fakeUniversity.AddAllowedEmailDomain("test2.edu", 1);
 
         _mockRepository
             .Setup(repo => repo.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeUniversity);
 
         // ---- ACT ----
-        var result = await _service.GetDepartmentsByUniversityIdAsync(1);
+        var result = await _service.GetAllowedEmailDomainsByUniversityIdAsync(1);
         var resultList = result.ToList();
 
         // ---- ASSERT ----
         resultList.Should().NotBeNull();
         resultList.Should().HaveCount(2);
-        resultList.First().Name.Should().Be("IT Faculty");
-        resultList.First().FieldsOfStudy.Should().HaveCount(1);
-        resultList.First().FieldsOfStudy.First().Name.Should().Be("Computer Science");
+        resultList.First().Domain.Should().Be("test1.edu");
     }
 
     [Fact]
-    public async Task GetDepartmentsByUniversityIdAsync_ShouldReturnEmptyList_WhenNoDepartmentsExist()
+    public async Task GetAllowedEmailDomainsByUniversityIdAsync_ShouldThrowException_WhenUniversityNotFound()
+    {
+        // ---- ARRANGE ----
+        _mockRepository
+            .Setup(repo => repo.GetByIdAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((University?)null);
+
+        // ---- ACT ----
+        Func<Task> act = () => _service.GetAllowedEmailDomainsByUniversityIdAsync(99);
+
+        // ---- ASSERT ----
+        await act.Should()
+                 .ThrowAsync<ArgumentException>()
+                 .WithMessage("University not found");
+    }
+
+    // --- Tests for DeleteAllowedEmailDomainAsync ---
+
+    [Fact]
+    public async Task DeleteAllowedEmailDomainAsync_ShouldRemoveDomainAndSaveChanges_WhenDomainExists()
     {
         // ---- ARRANGE ----
         var fakeUniversity = new University("Test Uni", "Country", "Voivo", "City", "Address");
+        fakeUniversity.AddAllowedEmailDomain("to-delete.com", 1);
+
+        var domainToRemove = fakeUniversity.AllowedEmailDomains.First();
+        typeof(AllowedEmailDomain).GetProperty("Id").SetValue(domainToRemove, 5);
 
         _mockRepository
             .Setup(repo => repo.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeUniversity);
 
         // ---- ACT ----
-        var result = await _service.GetDepartmentsByUniversityIdAsync(1);
+        await _service.DeleteAllowedEmailDomainAsync(1, 5);
 
         // ---- ASSERT ----
-        result.Should().NotBeNull();
-        result.Should().BeEmpty();
-    }
-
-
-    [Fact]
-    public async Task DeleteDepartmentAsync_ShouldRemoveDepartmentAndSaveChanges_WhenDepartmentExists()
-    {
-        // ---- ARRANGE ----
-        var fakeUniversity = new University("Test Uni", "Country", "Voivo", "City", "Address");
-        fakeUniversity.AddDepartment("To Be Deleted", 1);
-
-        var departmentToRemove = fakeUniversity.Departments.First();
-        typeof(Department).GetProperty("Id").SetValue(departmentToRemove, 5);
-
-        _mockRepository
-            .Setup(repo => repo.GetByIdAsync(1, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(fakeUniversity);
-
-        // ---- ACT ----
-        await _service.DeleteDepartmentAsync(1, 5); 
-
-        // ---- ASSERT ----
-        fakeUniversity.Departments.Should().BeEmpty();
+        fakeUniversity.AllowedEmailDomains.Should().BeEmpty();
         _mockRepository.Verify(
             repo => repo.SaveChangesAsync(It.IsAny<CancellationToken>()),
             Times.Once()
@@ -120,7 +119,7 @@ public partial class UniversityServiceTests
     }
 
     [Fact]
-    public async Task DeleteDepartmentAsync_ShouldThrowException_WhenDepartmentNotFound()
+    public async Task DeleteAllowedEmailDomainAsync_ShouldThrowException_WhenDomainNotFound()
     {
         // ---- ARRANGE ----
         var fakeUniversity = new University("Test Uni", "Country", "Voivo", "City", "Address");
@@ -130,36 +129,37 @@ public partial class UniversityServiceTests
             .ReturnsAsync(fakeUniversity);
 
         // ---- ACT ----
-        Func<Task> act = () => _service.DeleteDepartmentAsync(1, 99); 
+        Func<Task> act = () => _service.DeleteAllowedEmailDomainAsync(1, 99);
 
         // ---- ASSERT ----
         await act.Should()
                  .ThrowAsync<ArgumentException>()
-                 .WithMessage("Department not found");
+                 .WithMessage("Allowed email domain not found");
     }
 
+    // --- Tests for UpdateAllowedEmailDomainAsync ---
 
     [Fact]
-    public async Task UpdateDepartmentAsync_ShouldRenameDepartmentAndSaveChanges_WhenDataIsProvided()
+    public async Task UpdateAllowedEmailDomainAsync_ShouldUpdateDomainAndSaveChanges_WhenDataIsProvided()
     {
         // ---- ARRANGE ----
-        var oldName = "Old Name";
-        var newName = "New Faculty Name";
+        var oldDomain = "old.com";
+        var newDomain = "new.com";
         var fakeUniversity = new University("Test Uni", "Country", "Voivo", "City", "Address");
-        fakeUniversity.AddDepartment(oldName, 1);
+        fakeUniversity.AddAllowedEmailDomain(oldDomain, 1);
 
-        var departmentToUpdate = fakeUniversity.Departments.First();
-        typeof(Department).GetProperty("Id").SetValue(departmentToUpdate, 5);
+        var domainToUpdate = fakeUniversity.AllowedEmailDomains.First();
+        typeof(AllowedEmailDomain).GetProperty("Id").SetValue(domainToUpdate, 5);
 
         _mockRepository
             .Setup(repo => repo.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(fakeUniversity);
 
         // ---- ACT ----
-        await _service.UpdateDepartmentAsync(1, 5, newName);
+        await _service.UpdateAllowedEmailDomainAsync(1, 5, newDomain);
 
         // ---- ASSERT ----
-        departmentToUpdate.Name.Should().Be(newName);
+        domainToUpdate.Domain.Should().Be(newDomain);
         _mockRepository.Verify(
             repo => repo.SaveChangesAsync(It.IsAny<CancellationToken>()),
             Times.Once()
@@ -167,7 +167,7 @@ public partial class UniversityServiceTests
     }
 
     [Fact]
-    public async Task UpdateDepartmentAsync_ShouldThrowException_WhenDepartmentNotFound()
+    public async Task UpdateAllowedEmailDomainAsync_ShouldThrowException_WhenDomainNotFound()
     {
         // ---- ARRANGE ----
         var fakeUniversity = new University("Test Uni", "Country", "Voivo", "City", "Address");
@@ -177,11 +177,11 @@ public partial class UniversityServiceTests
             .ReturnsAsync(fakeUniversity);
 
         // ---- ACT ----
-        Func<Task> act = () => _service.UpdateDepartmentAsync(1, 99, "New Name");
+        Func<Task> act = () => _service.UpdateAllowedEmailDomainAsync(1, 99, "new.com");
 
         // ---- ASSERT ----
         await act.Should()
                  .ThrowAsync<ArgumentException>()
-                 .WithMessage("Department not found");
+                 .WithMessage("Allowed email domain not found");
     }
 }
