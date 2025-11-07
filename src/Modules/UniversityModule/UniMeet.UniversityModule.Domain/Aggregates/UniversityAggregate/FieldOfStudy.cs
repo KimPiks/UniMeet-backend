@@ -11,6 +11,9 @@ public sealed class FieldOfStudy
     
     internal FieldOfStudy(string name, int departmentId)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Field of study name cannot be null or empty.", nameof(name));
+        
         Name = name;
         DepartmentId = departmentId;
     }

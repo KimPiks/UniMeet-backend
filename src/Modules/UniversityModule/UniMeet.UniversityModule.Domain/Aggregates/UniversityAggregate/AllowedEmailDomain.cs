@@ -11,6 +11,9 @@ public sealed class AllowedEmailDomain
     
     internal AllowedEmailDomain(string domain, int universityId)
     {
+        if (string.IsNullOrWhiteSpace(domain))
+            throw new ArgumentException("Email domain cannot be null or empty.", nameof(domain));
+        
         Domain = domain;
         UniversityId = universityId;
     }
