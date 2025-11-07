@@ -12,6 +12,9 @@ public sealed class Department
     
     internal Department(string name, int universityId)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Department name cannot be null or empty.", nameof(name));
+        
         Name = name;
         UniversityId = universityId;
     }

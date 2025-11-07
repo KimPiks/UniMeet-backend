@@ -16,6 +16,21 @@ public class University
     
     public University(string name, string country, string voivodeship, string city, string address)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("University name cannot be null or empty.", nameof(name));
+        
+        if (string.IsNullOrWhiteSpace(country)) 
+            throw new ArgumentException("Country cannot be null or empty.", nameof(country));
+        
+        if (string.IsNullOrWhiteSpace(voivodeship)) 
+            throw new ArgumentException("Voivodeship cannot be null or empty.", nameof(voivodeship));
+        
+        if (string.IsNullOrWhiteSpace(city)) 
+            throw new ArgumentException("City cannot be null or empty.", nameof(city));
+        
+        if (string.IsNullOrWhiteSpace(address)) 
+            throw new ArgumentException("Address cannot be null or empty.", nameof(address));
+        
         Name = name;
         Country = country;
         Voivodeship = voivodeship;

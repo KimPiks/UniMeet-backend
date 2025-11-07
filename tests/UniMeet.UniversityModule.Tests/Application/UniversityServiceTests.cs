@@ -156,7 +156,7 @@ public partial class UniversityServiceTests
         Func<Task> act = () => _service.CreateUniversityAsync(null, "Country", "Voivo", "City", "Address");
 
         // ASSERT
-        await act.Should().ThrowAsync<ArgumentNullException>();
+        await act.Should().ThrowAsync<ArgumentException>();
 
         _mockRepository.Verify(
             repo => repo.SaveChangesAsync(It.IsAny<CancellationToken>()),
