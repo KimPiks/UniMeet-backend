@@ -2,7 +2,7 @@
 
 public record DepartmentDto
 {
-    public int Id { get; init; }
-    public string Name { get; init; } = string.Empty;
-    public ICollection<FieldOfStudyDto> FieldsOfStudy { get; init; } = new List<FieldOfStudyDto>();
+    public required int Id { get; init; }
+    public required string Name { get; init; } = string.Empty;
+    public required ICollection<FieldOfStudyDto> FieldsOfStudy { get; init; } = new List<FieldOfStudyDto>();
 }

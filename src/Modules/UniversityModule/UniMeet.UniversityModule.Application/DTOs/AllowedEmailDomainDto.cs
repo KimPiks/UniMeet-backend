@@ -2,6 +2,6 @@
 
 public class AllowedEmailDomainDto
 {
-    public int Id { get; set; }
-    public string Domain { get; set; } = null!;
+    public required int Id { get; set; }
+    public required string Domain { get; set; } = null!;
 }

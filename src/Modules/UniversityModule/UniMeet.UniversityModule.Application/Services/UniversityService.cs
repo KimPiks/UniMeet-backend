@@ -1,5 +1,6 @@
 ﻿using UniMeet.UniversityModule.Application.DTOs;
 using UniMeet.UniversityModule.Application.Interfaces;
+using UniMeet.UniversityModule.Application.Mappers;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 using UniMeet.UniversityModule.Domain.Repositories;
 
@@ -21,61 +22,14 @@ public class UniversityService : IUniversityService
         {
             return null;
         }
-        
-        return new UniversityDto()
-        {
-            Id = university.Id,
-            Name = university.Name,
-            Country = university.Country,
-            Voivodeship = university.Voivodeship,
-            City = university.City,
-            Address = university.Address,
-            Departments = university.Departments.Select(department => new DepartmentDto()
-            {
-                Id = department.Id,
-                Name = department.Name,
-                FieldsOfStudy = department.FieldsOfStudy.Select(fos => new FieldOfStudyDto()
-                {
-                    Id = fos.Id,
-                    Name = fos.Name
-                }).ToList()
-            }).ToList(),
-            AllowedEmailDomains = university.AllowedEmailDomains.Select(domain => new AllowedEmailDomainDto()
-            {
-                Id = domain.Id,
-                Domain = domain.Domain
-            }).ToList()
-        };
+
+        return university.ToDto();
     }
 
     public async Task<IEnumerable<UniversityDto>> GetAllUniversitiesAsync()
     {
         var universities = await _universityRepository.GetAllAsync();
-        return universities.Select(university => new UniversityDto()
-        {
-            Id = university.Id,
-            Name = university.Name,
-            Country = university.Country,
-            Voivodeship = university.Voivodeship,
-            City = university.City,
-            Address = university.Address,
-            
-            Departments = university.Departments.Select(department => new DepartmentDto()
-            {
-                Id = department.Id,
-                Name = department.Name,
-                FieldsOfStudy = department.FieldsOfStudy.Select(fos => new FieldOfStudyDto()
-                {
-                    Id = fos.Id,
-                    Name = fos.Name
-                }).ToList()
-            }).ToList(),
-            AllowedEmailDomains = university.AllowedEmailDomains.Select(domain => new AllowedEmailDomainDto()
-            {
-                Id = domain.Id,
-                Domain = domain.Domain
-            }).ToList()
-        });
+        return universities.Select(university => university.ToDto());
     }
 
     public async Task CreateUniversityAsync(string name, string country, string voivodeship, string city, string address)
@@ -153,17 +107,7 @@ public class UniversityService : IUniversityService
             throw new ArgumentException("University not found");
         }
         
-        return university.Departments.Select(department => new DepartmentDto()
-        {
-            Id = department.Id,
-            Name = department.Name,
-            
-            FieldsOfStudy = department.FieldsOfStudy.Select(fos => new FieldOfStudyDto()
-            {
-                Id = fos.Id,
-                Name = fos.Name
-            }).ToList()
-        });
+        return university.Departments.Select(department => department.ToDto());
     }
 
     public async Task DeleteDepartmentAsync(int universityId, int departmentId)
@@ -226,11 +170,7 @@ public class UniversityService : IUniversityService
             throw new ArgumentException("University not found");
         }
         
-        return university.AllowedEmailDomains.Select(domain => new AllowedEmailDomainDto()
-        {
-            Id = domain.Id,
-            Domain = domain.Domain
-        });
+        return university.AllowedEmailDomains.Select(allowedDomain => allowedDomain.ToDto());
     }
 
     public async Task DeleteAllowedEmailDomainAsync(int universityId, int domainId)
