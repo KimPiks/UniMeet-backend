@@ -11,4 +11,8 @@
       <ProjectReference Include="..\UniMeet.UniversityModule.Domain\UniMeet.UniversityModule.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="13.1.0" />
+    </ItemGroup>
+
 </Project>

@@ -4,12 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using ModularSystem;
 using Serilog;
 using UniMeet.Shared.Exceptions;
-using UniMeet.UniversityModule.Application.Interfaces;
-using UniMeet.UniversityModule.Application.Services;
 using UniMeet.UniversityModule.Config;
 using UniMeet.UniversityModule.Domain.Repositories;
 using UniMeet.UniversityModule.Infrastructure;
 using UniMeet.UniversityModule.Infrastructure.Repositories;
+using MediatR;
+using UniMeet.UniversityModule.Application.Universities.Commands.CreateUniversity;
 
 namespace UniMeet.UniversityModule;
 
@@ -46,9 +46,9 @@ public class UniversityModule : IModule
         
         // Repositories
         services.AddScoped<IUniversityRepository, UniversityRepository>();
-        
+
         // Services
-        services.AddScoped<IUniversityService, UniversityService>();
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateUniversityCommand>());
     }
     
     private static Configuration ValidateConfiguration(IConfiguration configuration)
