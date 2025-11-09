@@ -32,8 +32,19 @@ public class UpdateFieldOfStudyCommandHandlerTests
         fakeUniversity.AddFieldOfStudyToDepartment(department.Name, oldName);
         var fieldOfStudy = department.FieldsOfStudy.First();
 
-        typeof(Department).GetProperty("Id").SetValue(department, 5);
-        typeof(FieldOfStudy).GetProperty("Id").SetValue(fieldOfStudy, 10);
+        var idProp = typeof(Department).GetProperty("Id");
+        if (idProp == null)
+        {
+            throw new InvalidOperationException("Department.Id property not found.");
+        }
+        idProp.SetValue(department, 5);
+
+        var idProperty = typeof(FieldOfStudy).GetProperty("Id");
+        if (idProperty == null)
+        {
+            throw new InvalidOperationException("FieldOfStudy.Id property not found.");
+        }
+        idProperty.SetValue(fieldOfStudy, 10);
 
         _mockRepository
             .Setup(repo => repo.GetByIdAsync(1, It.IsAny<CancellationToken>()))
@@ -59,7 +70,12 @@ public class UpdateFieldOfStudyCommandHandlerTests
         var fakeUniversity = new University("Test Uni", "Country", "Voivo", "City", "Address");
         fakeUniversity.AddDepartment("IT Faculty", 1);
         var department = fakeUniversity.Departments.First();
-        typeof(Department).GetProperty("Id").SetValue(department, 5);
+        var idProp = typeof(Department).GetProperty("Id");
+        if (idProp == null) 
+        {
+            throw new InvalidOperationException("Department.Id property not found.");
+        }
+        idProp.SetValue(department, 5);
 
         _mockRepository
             .Setup(repo => repo.GetByIdAsync(1, It.IsAny<CancellationToken>()))

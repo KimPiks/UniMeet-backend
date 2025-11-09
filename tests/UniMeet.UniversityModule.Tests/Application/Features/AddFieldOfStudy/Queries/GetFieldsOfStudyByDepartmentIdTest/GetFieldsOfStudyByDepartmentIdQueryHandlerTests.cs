@@ -31,7 +31,10 @@ public class GetFieldsOfStudyByDepartmentIdQueryHandlerTests
         var department = fakeUniversity.Departments.First();
         fakeUniversity.AddFieldOfStudyToDepartment(department.Name, "Computer Science");
         
-        typeof(Department).GetProperty("Id").SetValue(department, 5);
+        var idProperty = typeof(Department).GetProperty("Id");
+        if (idProperty == null)
+            throw new InvalidOperationException("Property 'Id' not found on Department type.");
+        idProperty.SetValue(department, 5);
 
         _mockRepository
             .Setup(repo => repo.GetByIdAsync(1, It.IsAny<CancellationToken>()))
