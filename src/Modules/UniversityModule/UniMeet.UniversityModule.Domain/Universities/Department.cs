@@ -1,4 +1,6 @@
-﻿namespace UniMeet.UniversityModule.Domain.Universities;
+﻿using UniMeet.UniversityModule.Domain.Universities.Exceptions;
+
+namespace UniMeet.UniversityModule.Domain.Universities;
 
 public sealed class Department
 {
@@ -13,7 +15,7 @@ public sealed class Department
     internal Department(string name, int universityId)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Department name cannot be null or empty.", nameof(name));
+            throw new InvalidDepartmentNameException(name);
         
         Name = name;
         UniversityId = universityId;
@@ -21,14 +23,20 @@ public sealed class Department
 
     internal void Rename(string newName)
     {
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new InvalidDepartmentNameException(newName);
+        
         Name = newName;
     }
     
     internal void AddFieldOfStudy(string name)
     {
-        if (FieldsOfStudy.Any(f => f.Name == name))
-            throw new InvalidOperationException($"Field of study with name '{name}' already exists in this department.");
+        if (string.IsNullOrWhiteSpace(name))
+            throw new InvalidFieldOfStudyNameException(name);
         
+        if (FieldsOfStudy.Any(f => f.Name == name))
+            throw new FieldOfStudyAlreadyExistsException(name); 
+                
         var fieldOfStudy = new FieldOfStudy(name, Id);
         FieldsOfStudy.Add(fieldOfStudy);
     }
@@ -37,19 +45,22 @@ public sealed class Department
     {
         var fieldOfStudy = FieldsOfStudy.FirstOrDefault(f => f.Id == fieldOfStudyId);
         if (fieldOfStudy == null)
-            throw new InvalidOperationException($"Field of study with id '{fieldOfStudy}' is not found in this department.");
+            throw new FieldOfStudyNotFoundException(fieldOfStudyId);
         
         FieldsOfStudy.Remove(fieldOfStudy);
     }
     
     internal void RenameFieldOfStudy(int fieldOfStudyId, string newName)
     {
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new InvalidFieldOfStudyNameException(newName);
+        
         var fieldOfStudy = FieldsOfStudy.FirstOrDefault(f => f.Id == fieldOfStudyId);
         if (fieldOfStudy == null)
-            throw new InvalidOperationException($"Field of study with id '{fieldOfStudyId}' is not found in this department.");
+            throw new FieldOfStudyNotFoundException(fieldOfStudyId);
         
         if (FieldsOfStudy.Any(f => f.Name == newName))
-            throw new InvalidOperationException($"Field of study with name '{newName}' already exists in this department.");
+            throw new FieldOfStudyAlreadyExistsException(newName);
         
         fieldOfStudy.Rename(newName);
     }

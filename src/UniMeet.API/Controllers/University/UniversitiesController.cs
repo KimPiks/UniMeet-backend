@@ -108,7 +108,7 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
         }
     }
 
-    [HttpPatch]
+    [HttpPut]
     public async Task<IActionResult> UpdateUniversity([FromBody] UniversityUpdateRequest request)
     {
         var command = new UpdateUniversityCommand(

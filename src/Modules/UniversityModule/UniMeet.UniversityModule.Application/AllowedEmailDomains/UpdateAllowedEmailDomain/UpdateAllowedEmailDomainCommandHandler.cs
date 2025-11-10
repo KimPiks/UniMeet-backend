@@ -16,9 +16,7 @@ public class UpdateAllowedEmailDomainCommandHandler(IUniversityRepository univer
         if (domain == null)
             throw new ArgumentException("Allowed email domain not found");
 
-        if (!string.IsNullOrEmpty(request.NewDomain))
-            university.ChangeAllowedEmailDomain(request.DomainId, request.NewDomain);
-        
+        university.ChangeAllowedEmailDomain(request.DomainId, request.NewDomain);
         await universityRepository.SaveChangesAsync(cancellationToken);
     }
 }

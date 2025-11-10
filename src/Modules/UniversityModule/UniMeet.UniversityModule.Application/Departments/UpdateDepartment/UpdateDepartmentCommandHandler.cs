@@ -16,9 +16,7 @@ public class UpdateDepartmentCommandHandler(IUniversityRepository universityRepo
         if (department == null)
             throw new ArgumentException("Department not found");
         
-        if (!string.IsNullOrEmpty(request.NewDepartmentName))
-            university.RenameDepartment(request.DepartmentId, request.NewDepartmentName);
-        
+        university.RenameDepartment(request.DepartmentId, request.NewDepartmentName);
         await universityRepository.SaveChangesAsync(cancellationToken);
     }
 }

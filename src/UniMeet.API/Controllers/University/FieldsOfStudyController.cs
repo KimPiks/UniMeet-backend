@@ -70,7 +70,7 @@ public class FieldsOfStudyController(IMediator mediator) : ControllerBase
         }
     }
 
-    [HttpPatch]
+    [HttpPut]
     public async Task<IActionResult> UpdateFieldOfStudy([FromBody] FieldOfStudyUpdateRequest request)
     {
         var command = new UpdateFieldOfStudyCommand(request.FieldOfStudyId, request.FieldOfStudyName);

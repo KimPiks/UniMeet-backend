@@ -2,6 +2,6 @@
 
 public class FieldOfStudyUpdateRequest
 {
-    public int FieldOfStudyId { get; set; }
-    public string? FieldOfStudyName { get; set; }
+    public required int FieldOfStudyId { get; set; }
+    public required string FieldOfStudyName { get; set; }
 }

@@ -88,7 +88,7 @@ public class DepartmentsController(IMediator mediator) : ControllerBase
         }
     }
 
-    [HttpPatch]
+    [HttpPut]
     public async Task<IActionResult> UpdateDepartment([FromBody] DepartmentUpdateRequest request)
     {
         var command = new UpdateDepartmentCommand(request.DepartmentId, request.DepartmentName);
