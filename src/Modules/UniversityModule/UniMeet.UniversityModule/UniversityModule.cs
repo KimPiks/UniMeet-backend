@@ -7,9 +7,9 @@ using UniMeet.Shared.Exceptions;
 using UniMeet.Shared.Mediator.Extensions;
 using UniMeet.UniversityModule.Application;
 using UniMeet.UniversityModule.Config;
-using UniMeet.UniversityModule.Domain.Repositories;
+using UniMeet.UniversityModule.Domain.Universities;
 using UniMeet.UniversityModule.Infrastructure;
-using UniMeet.UniversityModule.Infrastructure.Repositories;
+using UniMeet.UniversityModule.Infrastructure.Universities;
 
 namespace UniMeet.UniversityModule;
 

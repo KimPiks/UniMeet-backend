@@ -4,9 +4,8 @@ using FluentAssertions;
 using System.Threading;
 using System.Threading.Tasks;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
-using UniMeet.UniversityModule.Domain.Repositories;
-using UniMeet.UniversityModule.Application.Mappers;
 using UniMeet.UniversityModule.Application.Universities.GetUniversityById;
+using UniMeet.UniversityModule.Domain.Universities;
 
 public class GetUniversityByIdQueryHandlerTests
 {
