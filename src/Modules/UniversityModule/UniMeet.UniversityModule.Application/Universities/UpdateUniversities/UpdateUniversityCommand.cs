@@ -8,4 +8,4 @@ public record UpdateUniversityCommand(
     string? Country,
     string? Voivodeship,
     string? City,
-    string? Address) : IRequest;
+    string? Address) : ICommand;

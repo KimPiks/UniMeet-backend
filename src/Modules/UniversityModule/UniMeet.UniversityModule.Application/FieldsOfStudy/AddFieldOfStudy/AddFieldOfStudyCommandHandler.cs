@@ -4,7 +4,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.FieldsOfStudy.AddFieldOfStudy;
 
 public class AddFieldOfStudyCommandHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<AddFieldOfStudyCommand>
+    : ICommandHandler<AddFieldOfStudyCommand>
 {
     public async Task HandleAsync(AddFieldOfStudyCommand request, CancellationToken cancellationToken = default)
     {

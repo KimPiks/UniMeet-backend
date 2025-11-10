@@ -4,7 +4,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.Departments.UpdateDepartment;
 
 public class UpdateDepartmentCommandHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<UpdateDepartmentCommand>
+    : ICommandHandler<UpdateDepartmentCommand>
 {
     public async Task HandleAsync(UpdateDepartmentCommand request, CancellationToken cancellationToken)
     {

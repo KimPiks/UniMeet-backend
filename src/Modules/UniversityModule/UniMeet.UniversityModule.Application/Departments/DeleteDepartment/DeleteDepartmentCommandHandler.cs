@@ -4,7 +4,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.Departments.DeleteDepartment;
 
 public class DeleteDepartmentCommandHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<DeleteDepartmentCommand>
+    : ICommandHandler<DeleteDepartmentCommand>
 {
     public async Task HandleAsync(DeleteDepartmentCommand request, CancellationToken cancellationToken)
     {

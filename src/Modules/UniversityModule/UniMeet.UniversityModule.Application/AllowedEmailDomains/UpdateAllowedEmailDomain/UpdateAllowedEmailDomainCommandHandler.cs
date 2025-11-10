@@ -4,7 +4,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.AllowedEmailDomains.UpdateAllowedEmailDomain;
 
 public class UpdateAllowedEmailDomainCommandHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<UpdateAllowedEmailDomainCommand>
+    : ICommandHandler<UpdateAllowedEmailDomainCommand>
 {
     public async Task HandleAsync(UpdateAllowedEmailDomainCommand request, CancellationToken cancellationToken)
     {

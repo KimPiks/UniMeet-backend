@@ -4,7 +4,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.FieldsOfStudy.GetFieldOfStudyById;
 
 public class GetFieldOfStudyByIdQueryHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<GetFieldOfStudyByIdQuery, FieldOfStudyDto?>
+    : IQueryHandler<GetFieldOfStudyByIdQuery, FieldOfStudyDto?>
 {
     public async Task<FieldOfStudyDto?> HandleAsync(GetFieldOfStudyByIdQuery request, CancellationToken cancellationToken)
     {

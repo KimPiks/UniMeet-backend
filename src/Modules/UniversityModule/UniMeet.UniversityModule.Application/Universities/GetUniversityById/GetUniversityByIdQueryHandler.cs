@@ -5,7 +5,7 @@ namespace UniMeet.UniversityModule.Application.Universities.GetUniversityById;
 
 
 public class GetUniversityByIdQueryHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<GetUniversityByIdQuery, UniversityDto?>
+    : IQueryHandler<GetUniversityByIdQuery, UniversityDto?>
 {
     public async Task<UniversityDto?> HandleAsync(GetUniversityByIdQuery request, CancellationToken cancellationToken)
     {

@@ -4,7 +4,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.Departments.AddDepartment;
 
 public class AddDepartmentCommandHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<AddDepartmentCommand>
+    : ICommandHandler<AddDepartmentCommand>
 {
     public async Task HandleAsync(AddDepartmentCommand request, CancellationToken cancellationToken)
     {

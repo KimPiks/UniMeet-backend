@@ -4,7 +4,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.AllowedEmailDomains.DeleteAllowedEmailDomain;
 
 public class DeleteAllowedEmailDomainCommandHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<DeleteAllowedEmailDomainCommand>
+    : ICommandHandler<DeleteAllowedEmailDomainCommand>
 {
     public async Task HandleAsync(DeleteAllowedEmailDomainCommand request, CancellationToken cancellationToken)
     {

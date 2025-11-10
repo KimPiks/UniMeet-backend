@@ -4,7 +4,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.FieldsOfStudy.DeleteFieldOfStudy;
 
 public class DeleteFieldOfStudyCommandHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<DeleteFieldOfStudyCommand>
+    : ICommandHandler<DeleteFieldOfStudyCommand>
 {
     public async Task HandleAsync(DeleteFieldOfStudyCommand request, CancellationToken cancellationToken)
     {

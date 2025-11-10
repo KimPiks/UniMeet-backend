@@ -4,7 +4,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.FieldsOfStudy.UpdateFieldOfStudy;
 
 public class UpdateFieldOfStudyCommandHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<UpdateFieldOfStudyCommand>
+    : ICommandHandler<UpdateFieldOfStudyCommand>
 {
     public async Task HandleAsync(UpdateFieldOfStudyCommand request, CancellationToken cancellationToken)
     {

@@ -7,4 +7,4 @@ public record CreateUniversityCommand(
     string Country,
     string Voivodeship,
     string City,
-    string Address) : IRequest;
+    string Address) : ICommand;
