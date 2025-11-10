@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
+using UniMeet.UniversityModule.Application.Departments.AddDepartment;
+using UniMeet.UniversityModule.Application.Departments.DeleteDepartment;
+using UniMeet.UniversityModule.Application.Departments.GetDepartmentById;
+using UniMeet.UniversityModule.Application.Departments.GetDepartmentsByUniversityId;
+using UniMeet.UniversityModule.Application.Departments.UpdateDepartment;
 using UniMeet.UniversityModule.Application.DTOs;
-using UniMeet.UniversityModule.Application.Features.Departments.Commands.AddDepartment;
-using UniMeet.UniversityModule.Application.Features.Departments.Commands.DeleteDepartment;
-using UniMeet.UniversityModule.Application.Features.Departments.Commands.UpdateDepartment;
-using UniMeet.UniversityModule.Application.Features.Departments.Queries.GetDepartmentsByUniversityId;
-using UniMeet.UniversityModule.Application.Features.Departments.Queries.GetDepartmentById; 
 
 namespace UniMeet.API.Controllers.University;
 

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using UniMeet.UniversityModule.Application.Departments.GetDepartmentsByUniversityId;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 using UniMeet.UniversityModule.Domain.Repositories;
-using UniMeet.UniversityModule.Application.Features.Departments.Queries.GetDepartmentsByUniversityId;
 using UniMeet.UniversityModule.Application.Mappers; 
 
 public class GetDepartmentsByUniversityIdQueryHandlerTests

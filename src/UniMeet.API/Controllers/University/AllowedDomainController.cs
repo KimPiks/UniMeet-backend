@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
+using UniMeet.UniversityModule.Application.AllowedEmailDomains.AddAllowedEmailDomain;
+using UniMeet.UniversityModule.Application.AllowedEmailDomains.DeleteAllowedEmailDomain;
+using UniMeet.UniversityModule.Application.AllowedEmailDomains.GetAllowedEmailDomainById;
+using UniMeet.UniversityModule.Application.AllowedEmailDomains.GetAllowedEmailDomainsByUniversityId;
+using UniMeet.UniversityModule.Application.AllowedEmailDomains.UpdateAllowedEmailDomain;
 using UniMeet.UniversityModule.Application.DTOs;
-using UniMeet.UniversityModule.Application.Features.AllowedEmailDomains.Commands.AddAllowedEmailDomain;
-using UniMeet.UniversityModule.Application.Features.AllowedEmailDomains.Commands.DeleteAllowedEmailDomain;
-using UniMeet.UniversityModule.Application.Features.AllowedEmailDomains.Commands.UpdateAllowedEmailDomain;
-using UniMeet.UniversityModule.Application.Features.AllowedEmailDomains.Queries.GetAllowedEmailDomainsByUniversityId;
-using UniMeet.UniversityModule.Application.Features.AllowedEmailDomains.Queries.GetAllowedEmailDomainById; 
 
 namespace UniMeet.API.Controllers.University;
 

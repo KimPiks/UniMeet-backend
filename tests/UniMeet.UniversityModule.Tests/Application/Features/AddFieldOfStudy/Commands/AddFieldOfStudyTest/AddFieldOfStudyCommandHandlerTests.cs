@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 using UniMeet.UniversityModule.Domain.Repositories;
-using UniMeet.UniversityModule.Application.Features.FieldsOfStudy.Commands.AddFieldOfStudy;
+using UniMeet.UniversityModule.Application.FieldsOfStudy.AddFieldOfStudy;
 
 public class AddFieldOfStudyCommandHandlerTests
 {

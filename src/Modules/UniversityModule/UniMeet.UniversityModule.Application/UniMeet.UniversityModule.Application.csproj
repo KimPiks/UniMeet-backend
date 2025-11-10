@@ -12,4 +12,11 @@
       <ProjectReference Include="..\UniMeet.UniversityModule.Domain\UniMeet.UniversityModule.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="AllowedEmailDomains\" />
+      <Folder Include="Departments\" />
+      <Folder Include="FieldsOfStudy\" />
+      <Folder Include="Universities\" />
+    </ItemGroup>
+
 </Project>

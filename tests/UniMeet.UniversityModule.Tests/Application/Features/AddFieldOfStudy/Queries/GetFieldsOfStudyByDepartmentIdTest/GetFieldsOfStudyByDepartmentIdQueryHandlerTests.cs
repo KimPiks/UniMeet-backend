@@ -8,8 +8,8 @@ using System.Linq;
 using System.Collections.Generic;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 using UniMeet.UniversityModule.Domain.Repositories;
-using UniMeet.UniversityModule.Application.Features.FieldsOfStudy.Queries.GetFieldsOfStudyByDepartmentId;
-using UniMeet.UniversityModule.Application.DTOs; // Wymagane dla DTO
+using UniMeet.UniversityModule.Application.DTOs;
+using UniMeet.UniversityModule.Application.FieldsOfStudy.GetFieldsOfStudyByDepartmentId; // Wymagane dla DTO
 
 public class GetFieldsOfStudyByDepartmentIdQueryHandlerTests
 {
