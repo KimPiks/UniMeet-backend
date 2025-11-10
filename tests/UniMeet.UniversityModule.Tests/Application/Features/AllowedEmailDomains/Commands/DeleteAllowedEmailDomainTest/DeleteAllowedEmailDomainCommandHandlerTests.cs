@@ -5,9 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using UniMeet.UniversityModule.Application.AllowedEmailDomains.DeleteAllowedEmailDomain;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 using UniMeet.UniversityModule.Domain.Repositories;
-using UniMeet.UniversityModule.Application.Features.AllowedEmailDomains.Commands.DeleteAllowedEmailDomain;
 
 public class DeleteAllowedEmailDomainCommandHandlerTests
 {

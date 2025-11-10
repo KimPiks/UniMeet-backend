@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
-using UniMeet.UniversityModule.Application.DTOs; 
-using UniMeet.UniversityModule.Application.Features.FieldsOfStudy.Commands.AddFieldOfStudy;
-using UniMeet.UniversityModule.Application.Features.FieldsOfStudy.Commands.DeleteFieldOfStudy;
-using UniMeet.UniversityModule.Application.Features.FieldsOfStudy.Commands.UpdateFieldOfStudy;
-using UniMeet.UniversityModule.Application.Features.FieldsOfStudy.Queries.GetFieldsOfStudyByDepartmentId;
-using UniMeet.UniversityModule.Application.Features.FieldsOfStudy.Queries.GetFieldOfStudyById;
+using UniMeet.UniversityModule.Application.DTOs;
+using UniMeet.UniversityModule.Application.FieldsOfStudy.AddFieldOfStudy;
+using UniMeet.UniversityModule.Application.FieldsOfStudy.DeleteFieldOfStudy;
+using UniMeet.UniversityModule.Application.FieldsOfStudy.GetFieldOfStudyById;
+using UniMeet.UniversityModule.Application.FieldsOfStudy.GetFieldsOfStudyByDepartmentId;
+using UniMeet.UniversityModule.Application.FieldsOfStudy.UpdateFieldOfStudy;
 
 namespace UniMeet.API.Controllers.University;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 using UniMeet.UniversityModule.Domain.Repositories;
-using UniMeet.UniversityModule.Application.Universities.Commands.DeleteUniversity;
+using UniMeet.UniversityModule.Application.Universities.DeleteUniversity;
 
 public class DeleteUniversityCommandHandlerTests
 {

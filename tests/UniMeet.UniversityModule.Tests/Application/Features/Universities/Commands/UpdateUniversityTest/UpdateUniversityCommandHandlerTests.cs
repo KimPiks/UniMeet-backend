@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 using UniMeet.UniversityModule.Domain.Repositories;
-using UniMeet.UniversityModule.Application.Universities.Commands.UpdateUniversity;
+using UniMeet.UniversityModule.Application.Universities.UpdateUniversities;
 
 public class UpdateUniversityCommandHandlerTests
 {

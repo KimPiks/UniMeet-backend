@@ -5,9 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using UniMeet.UniversityModule.Application.AllowedEmailDomains.AddAllowedEmailDomain;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 using UniMeet.UniversityModule.Domain.Repositories;
-using UniMeet.UniversityModule.Application.Features.AllowedEmailDomains.Commands.AddAllowedEmailDomain;
 
 public class AddAllowedEmailDomainCommandHandlerTests
 {

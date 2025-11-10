@@ -1,0 +1,23 @@
+using UniMeet.Shared.Abstractions;
+using UniMeet.UniversityModule.Application.DTOs;
+using UniMeet.UniversityModule.Application.Mappers;
+using UniMeet.UniversityModule.Domain.Repositories;
+
+namespace UniMeet.UniversityModule.Application.Departments.GetDepartmentById;
+
+public class GetDepartmentByIdQueryHandler(IUniversityRepository universityRepository)
+    : IRequestHandler<GetDepartmentByIdQuery, DepartmentDto?>
+{
+    public async Task<DepartmentDto?> HandleAsync(GetDepartmentByIdQuery request, CancellationToken cancellationToken)
+    {
+        var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
+        if (university == null)
+        {
+            throw new ArgumentException("University not found");
+        }
+        
+        var department = university.Departments.FirstOrDefault(d => d.Id == request.DepartmentId);
+
+        return department?.ToDto();
+    }
+}
