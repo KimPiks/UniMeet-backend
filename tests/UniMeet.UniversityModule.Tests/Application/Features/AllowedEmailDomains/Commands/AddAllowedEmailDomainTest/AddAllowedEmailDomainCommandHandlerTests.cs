@@ -34,7 +34,7 @@ public class AddAllowedEmailDomainCommandHandlerTests
         var command = new AddAllowedEmailDomainCommand(1, domain);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         fakeUniversity.AllowedEmailDomains.Should().HaveCount(1);
@@ -56,7 +56,7 @@ public class AddAllowedEmailDomainCommandHandlerTests
         var command = new AddAllowedEmailDomainCommand(99, "test.edu");
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

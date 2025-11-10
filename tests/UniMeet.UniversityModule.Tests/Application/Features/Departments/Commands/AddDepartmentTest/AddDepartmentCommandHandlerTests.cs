@@ -34,7 +34,7 @@ public class AddDepartmentCommandHandlerTests
         var command = new AddDepartmentCommand(1, departmentName);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         fakeUniversity.Departments.Should().HaveCount(1);
@@ -57,7 +57,7 @@ public class AddDepartmentCommandHandlerTests
         var command = new AddDepartmentCommand(99, "Test Dept");
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

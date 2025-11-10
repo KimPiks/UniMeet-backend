@@ -1,12 +1,12 @@
-using MediatR;
 using UniMeet.UniversityModule.Application.DTOs;
-using UniMeet.UniversityModule.Application.Mappers; // Upewnij się, że masz ToDto() dla Department
+using UniMeet.UniversityModule.Application.Mappers; 
 using UniMeet.UniversityModule.Domain.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Features.Departments.Queries.GetDepartmentsByUniversityId;
 
@@ -19,7 +19,7 @@ public class GetDepartmentsByUniversityIdQueryHandler : IRequestHandler<GetDepar
         _universityRepository = universityRepository;
     }
 
-    public async Task<IEnumerable<DepartmentDto>> Handle(GetDepartmentsByUniversityIdQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<DepartmentDto>> HandleAsync(GetDepartmentsByUniversityIdQuery request, CancellationToken cancellationToken)
     {
         var university = await _universityRepository.GetByIdAsync(request.UniversityId);
         if (university == null)

@@ -1,8 +1,8 @@
-using MediatR;
 using UniMeet.UniversityModule.Domain.Repositories;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Universities.Commands.UpdateUniversity;
 
@@ -15,7 +15,7 @@ public class UpdateUniversityCommandHandler : IRequestHandler<UpdateUniversityCo
         _universityRepository = universityRepository;
     }
 
-    public async Task Handle(UpdateUniversityCommand request, CancellationToken cancellationToken)
+    public async Task HandleAsync(UpdateUniversityCommand request, CancellationToken cancellationToken)
     {
 
         var university = await _universityRepository.GetByIdAsync(request.UniversityId);

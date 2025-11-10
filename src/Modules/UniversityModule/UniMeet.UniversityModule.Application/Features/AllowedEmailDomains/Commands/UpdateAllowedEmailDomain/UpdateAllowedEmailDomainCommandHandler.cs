@@ -1,9 +1,9 @@
-using MediatR;
 using UniMeet.UniversityModule.Domain.Repositories;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Features.AllowedEmailDomains.Commands.UpdateAllowedEmailDomain;
 
@@ -16,7 +16,7 @@ public class UpdateAllowedEmailDomainCommandHandler : IRequestHandler<UpdateAllo
         _universityRepository = universityRepository;
     }
 
-    public async Task Handle(UpdateAllowedEmailDomainCommand request, CancellationToken cancellationToken)
+    public async Task HandleAsync(UpdateAllowedEmailDomainCommand request, CancellationToken cancellationToken)
     {
         var university = await _universityRepository.GetByIdAsync(request.UniversityId);
         if (university == null)

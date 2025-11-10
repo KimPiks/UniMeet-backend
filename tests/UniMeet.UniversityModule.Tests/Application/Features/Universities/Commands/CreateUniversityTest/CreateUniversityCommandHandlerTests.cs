@@ -28,7 +28,7 @@ public class CreateUniversityCommandHandlerTests
         var command = new CreateUniversityCommand(name, country, "Test Voivo", "Test City", "Test Address");
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         _mockRepository.Verify(
@@ -58,7 +58,7 @@ public class CreateUniversityCommandHandlerTests
             .ThrowsAsync(new ArgumentException()); 
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ASSERT
         await act.Should().ThrowAsync<ArgumentException>();

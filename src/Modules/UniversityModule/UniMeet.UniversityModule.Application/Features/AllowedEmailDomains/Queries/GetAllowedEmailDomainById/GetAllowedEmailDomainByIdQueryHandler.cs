@@ -1,4 +1,3 @@
-using MediatR;
 using UniMeet.UniversityModule.Application.DTOs;
 using UniMeet.UniversityModule.Application.Mappers;
 using UniMeet.UniversityModule.Domain.Repositories;
@@ -6,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Features.AllowedEmailDomains.Queries.GetAllowedEmailDomainById;
 
@@ -18,7 +18,7 @@ public class GetAllowedEmailDomainByIdQueryHandler : IRequestHandler<GetAllowedE
         _universityRepository = universityRepository;
     }
 
-    public async Task<AllowedEmailDomainDto?> Handle(GetAllowedEmailDomainByIdQuery request, CancellationToken cancellationToken)
+    public async Task<AllowedEmailDomainDto?> HandleAsync(GetAllowedEmailDomainByIdQuery request, CancellationToken cancellationToken)
     {
         var university = await _universityRepository.GetByIdAsync(request.UniversityId);
         if (university == null)

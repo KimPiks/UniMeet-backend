@@ -1,5 +1,4 @@
-﻿using MediatR; 
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
 using UniMeet.UniversityModule.Application.DTOs;
@@ -20,7 +19,7 @@ public partial class UniversityController
         
         try
         {
-            await _mediator.Send(command);
+            await _mediator.SendAsync(command);
             return Ok(ApiResponse<object>.Ok(null!, "Department added successfully"));
         } catch (ArgumentException e)
         {
@@ -36,7 +35,7 @@ public partial class UniversityController
         var query = new GetDepartmentsByUniversityIdQuery(universityId);
         try
         {
-            var departments = await _mediator.Send(query);
+            var departments = await _mediator.SendAsync(query);
             return Ok(ApiResponse<IEnumerable<DepartmentDto>>.Ok(departments, "Departments retrieved successfully"));
         }
         catch (ArgumentException e)
@@ -52,7 +51,7 @@ public partial class UniversityController
         
         try
         {
-            var department = await _mediator.Send(query);            
+            var department = await _mediator.SendAsync(query);            
 
             if (department == null)
             {
@@ -73,7 +72,7 @@ public partial class UniversityController
         
         try
         {
-            await _mediator.Send(command);
+            await _mediator.SendAsync(command);
             return Ok(ApiResponse<object>.Ok(null!, "Department deleted successfully"));
         }
         catch (ArgumentException e)
@@ -90,7 +89,7 @@ public partial class UniversityController
         
         try
         {
-            await _mediator.Send(command);
+            await _mediator.SendAsync(command);
             return Ok(ApiResponse<object>.Ok(null!, "Department updated successfully"));
         }
         catch (ArgumentException e)

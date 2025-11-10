@@ -1,22 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
+using UniMeet.Shared.Abstractions;
 using UniMeet.UniversityModule.Application.DTOs;
-using MediatR;
 using UniMeet.UniversityModule.Application.Universities.Queries.GetUniversityById;
 using UniMeet.UniversityModule.Application.Universities.Queries.GetAllUniversities;
 using UniMeet.UniversityModule.Application.Universities.Commands.CreateUniversity;
 using UniMeet.UniversityModule.Application.Universities.Commands.DeleteUniversity;
 using UniMeet.UniversityModule.Application.Universities.Commands.UpdateUniversity;
-//using UniMeet.API.Models.Requests; 
+
 namespace UniMeet.API.Controllers.University;
 
 [ApiController]
 [Route("api/[controller]")]
 public partial class UniversityController : ControllerBase
 {
-
     private readonly IMediator _mediator;
+    
     public UniversityController(IMediator mediator)
     {
         _mediator = mediator;
@@ -26,7 +26,7 @@ public partial class UniversityController : ControllerBase
     public async Task<IActionResult> GetUniversityById([FromRoute] int universityId)
     {
         var query = new GetUniversityByIdQuery(universityId);
-        var university = await _mediator.Send(query);
+        var university = await _mediator.SendAsync(query);
 
 
         if (university == null)
@@ -41,7 +41,7 @@ public partial class UniversityController : ControllerBase
     {
         var query = new GetAllUniversitiesQuery();
 
-        var universities = await _mediator.Send(query);
+        var universities = await _mediator.SendAsync(query);
 
         return Ok(ApiResponse<IEnumerable<UniversityDto>>.Ok(universities, "Universities retrieved successfully"));
     }
@@ -57,7 +57,7 @@ public partial class UniversityController : ControllerBase
             request.Address
         );
 
-        await _mediator.Send(command);
+        await _mediator.SendAsync(command);
 
         return Ok(ApiResponse<object>.Ok(null!, "University created successfully"));
     }
@@ -68,7 +68,7 @@ public partial class UniversityController : ControllerBase
             var command = new DeleteUniversityCommand(universityId);
         try
         {
-            await _mediator.Send(command);
+            await _mediator.SendAsync(command);
             
             return Ok(ApiResponse<object>.Ok(null!, "University deleted successfully"));
         }
@@ -94,7 +94,7 @@ public partial class UniversityController : ControllerBase
         
         try
         {
-            await _mediator.Send(command);
+            await _mediator.SendAsync(command);
             return Ok(ApiResponse<object>.Ok(null!, "University updated successfully"));
         }
         catch (ArgumentException e)

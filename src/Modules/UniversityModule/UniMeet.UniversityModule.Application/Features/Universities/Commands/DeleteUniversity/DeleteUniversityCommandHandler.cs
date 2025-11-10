@@ -1,14 +1,11 @@
-using MediatR;
 using UniMeet.UniversityModule.Domain.Repositories;
-using System; // Potrzebne dla ArgumentException
+using System; 
 using System.Threading;
 using System.Threading.Tasks;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Universities.Commands.DeleteUniversity;
 
-/// <summary>
-/// Handler (klasa obsługująca) dla komendy DeleteUniversityCommand.
-/// </summary>
 public class DeleteUniversityCommandHandler : IRequestHandler<DeleteUniversityCommand>
 {
     private readonly IUniversityRepository _universityRepository;
@@ -18,7 +15,7 @@ public class DeleteUniversityCommandHandler : IRequestHandler<DeleteUniversityCo
         _universityRepository = universityRepository;
     }
 
-    public async Task Handle(DeleteUniversityCommand request, CancellationToken cancellationToken)
+    public async Task HandleAsync(DeleteUniversityCommand request, CancellationToken cancellationToken)
     {
         var university = await _universityRepository.GetByIdAsync(request.UniversityId);
         

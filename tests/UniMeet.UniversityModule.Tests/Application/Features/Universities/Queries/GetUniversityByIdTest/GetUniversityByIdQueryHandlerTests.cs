@@ -34,7 +34,7 @@ public class GetUniversityByIdQueryHandlerTests
         var query = new GetUniversityByIdQuery(1);
 
         //---- ACT -----
-        var result = await _handler.Handle(query, CancellationToken.None);
+        var result = await _handler.HandleAsync(query, CancellationToken.None);
 
         // ---- ASSERT ----
         result.Should().NotBeNull();
@@ -66,7 +66,7 @@ public class GetUniversityByIdQueryHandlerTests
         var query = new GetUniversityByIdQuery(1);
 
         // ---- ACT ---- 
-        var result = await _handler.Handle(query, CancellationToken.None);
+        var result = await _handler.HandleAsync(query, CancellationToken.None);
         
         // ---- ASSERT ----
         result.Should().BeNull();

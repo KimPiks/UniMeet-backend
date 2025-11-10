@@ -35,7 +35,7 @@ public class UpdateUniversityCommandHandlerTests
         var command = new UpdateUniversityCommand(1, newName, newCountry, null, null, null);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         
@@ -59,7 +59,7 @@ public class UpdateUniversityCommandHandlerTests
         var command = new UpdateUniversityCommand(99, "New name", null, null, null, null);
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()
@@ -86,7 +86,7 @@ public class UpdateUniversityCommandHandlerTests
         var command = new UpdateUniversityCommand(1, null, null, null, null, null);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         fakeUniversity.Name.Should().Be(oldName);

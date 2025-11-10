@@ -39,7 +39,7 @@ public class UpdateAllowedEmailDomainCommandHandlerTests
         var command = new UpdateAllowedEmailDomainCommand(1, 5, newDomain);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         domainToUpdate.Domain.Should().Be(newDomain);
@@ -62,7 +62,7 @@ public class UpdateAllowedEmailDomainCommandHandlerTests
         var command = new UpdateAllowedEmailDomainCommand(1, 99, "new.com");
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

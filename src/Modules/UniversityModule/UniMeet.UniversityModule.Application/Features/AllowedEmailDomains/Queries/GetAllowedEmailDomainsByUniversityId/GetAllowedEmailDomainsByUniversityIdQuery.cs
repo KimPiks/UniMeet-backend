@@ -1,6 +1,6 @@
-using MediatR;
 using UniMeet.UniversityModule.Application.DTOs;
 using System.Collections.Generic;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Features.AllowedEmailDomains.Queries.GetAllowedEmailDomainsByUniversityId;
 

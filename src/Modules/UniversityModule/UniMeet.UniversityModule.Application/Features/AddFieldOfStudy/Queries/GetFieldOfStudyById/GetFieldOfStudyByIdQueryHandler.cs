@@ -1,10 +1,10 @@
-using MediatR;
 using UniMeet.UniversityModule.Application.DTOs;
 using UniMeet.UniversityModule.Domain.Repositories;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Features.FieldsOfStudy.Queries.GetFieldOfStudyById;
 
@@ -17,7 +17,7 @@ public class GetFieldOfStudyByIdQueryHandler : IRequestHandler<GetFieldOfStudyBy
         _universityRepository = universityRepository;
     }
 
-    public async Task<FieldOfStudyDto?> Handle(GetFieldOfStudyByIdQuery request, CancellationToken cancellationToken)
+    public async Task<FieldOfStudyDto?> HandleAsync(GetFieldOfStudyByIdQuery request, CancellationToken cancellationToken)
     {
         var university = await _universityRepository.GetByIdAsync(request.UniversityId);
         if (university == null)

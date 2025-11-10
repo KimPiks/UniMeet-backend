@@ -43,7 +43,7 @@ public class AddFieldOfStudyCommandHandlerTests
         var command = new AddFieldOfStudyCommand(1, 5, fieldName);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         department.FieldsOfStudy.Should().HaveCount(1);
@@ -66,7 +66,7 @@ public class AddFieldOfStudyCommandHandlerTests
         var command = new AddFieldOfStudyCommand(1, 99, "Test Field");
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

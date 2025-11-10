@@ -38,7 +38,7 @@ public class GetDepartmentsByUniversityIdQueryHandlerTests
         var query = new GetDepartmentsByUniversityIdQuery(1);
 
         // ---- ACT ----
-        var result = await _handler.Handle(query, CancellationToken.None);
+        var result = await _handler.HandleAsync(query, CancellationToken.None);
         var resultList = result.ToList();
 
         // ---- ASSERT ----
@@ -62,7 +62,7 @@ public class GetDepartmentsByUniversityIdQueryHandlerTests
         var query = new GetDepartmentsByUniversityIdQuery(1);
 
         // ---- ACT ----
-        var result = await _handler.Handle(query, CancellationToken.None);
+        var result = await _handler.HandleAsync(query, CancellationToken.None);
 
         // ---- ASSERT ----
         result.Should().NotBeNull();

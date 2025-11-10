@@ -37,7 +37,7 @@ public class GetAllowedEmailDomainsByUniversityIdQueryHandlerTests
         var query = new GetAllowedEmailDomainsByUniversityIdQuery(1);
 
         // ---- ACT ----
-        var result = await _handler.Handle(query, CancellationToken.None);
+        var result = await _handler.HandleAsync(query, CancellationToken.None);
         var resultList = result.ToList();
 
         // ---- ASSERT ----
@@ -57,7 +57,7 @@ public class GetAllowedEmailDomainsByUniversityIdQueryHandlerTests
         var query = new GetAllowedEmailDomainsByUniversityIdQuery(99);
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(query, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(query, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

@@ -1,9 +1,9 @@
-using MediatR;
 using UniMeet.UniversityModule.Domain.Repositories;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Features.FieldsOfStudy.Commands.AddFieldOfStudy;
 
@@ -16,7 +16,7 @@ public class AddFieldOfStudyCommandHandler : IRequestHandler<AddFieldOfStudyComm
         _universityRepository = universityRepository;
     }
 
-    public async Task Handle(AddFieldOfStudyCommand request, CancellationToken cancellationToken)
+    public async Task HandleAsync(AddFieldOfStudyCommand request, CancellationToken cancellationToken = default)
     {
         var university = await _universityRepository.GetByIdAsync(request.UniversityId);
         if (university == null)

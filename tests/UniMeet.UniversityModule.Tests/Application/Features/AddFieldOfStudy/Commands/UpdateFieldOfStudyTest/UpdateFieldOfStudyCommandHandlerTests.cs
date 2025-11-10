@@ -53,7 +53,7 @@ public class UpdateFieldOfStudyCommandHandlerTests
         var command = new UpdateFieldOfStudyCommand(1, 5, 10, newName);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         fieldOfStudy.Name.Should().Be(newName);
@@ -84,7 +84,7 @@ public class UpdateFieldOfStudyCommandHandlerTests
         var command = new UpdateFieldOfStudyCommand(1, 5, 99, "New Name");
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

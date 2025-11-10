@@ -1,4 +1,4 @@
-using MediatR;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Universities.Commands.CreateUniversity;
 

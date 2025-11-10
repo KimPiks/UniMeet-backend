@@ -32,7 +32,7 @@ public class DeleteUniversityCommandHandlerTests
         var command = new DeleteUniversityCommand(1);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         _mockRepository.Verify(
@@ -57,7 +57,7 @@ public class DeleteUniversityCommandHandlerTests
         var command = new DeleteUniversityCommand(99);
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

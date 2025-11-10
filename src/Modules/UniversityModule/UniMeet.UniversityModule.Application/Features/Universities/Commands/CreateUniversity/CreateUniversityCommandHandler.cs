@@ -1,8 +1,8 @@
-using MediatR;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
 using UniMeet.UniversityModule.Domain.Repositories;
 using System.Threading;
 using System.Threading.Tasks;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Universities.Commands.CreateUniversity;
 
@@ -16,7 +16,7 @@ public class CreateUniversityCommandHandler : IRequestHandler<CreateUniversityCo
         _universityRepository = universityRepository;
     }
 
-    public async Task Handle(CreateUniversityCommand request, CancellationToken cancellationToken)
+    public async Task HandleAsync(CreateUniversityCommand request, CancellationToken cancellationToken)
     {
         var university = new University(
             request.Name,

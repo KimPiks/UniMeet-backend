@@ -1,5 +1,4 @@
-﻿using MediatR; 
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
 using UniMeet.UniversityModule.Application.DTOs;
@@ -20,7 +19,7 @@ public partial class UniversityController
         
         try
         {
-            await _mediator.Send(command);
+            await _mediator.SendAsync(command);
             return Ok(ApiResponse<object>.Ok(null!, "Allowed email domain added successfully"));
         }
         catch (ArgumentException e)
@@ -36,7 +35,7 @@ public partial class UniversityController
         
         try
         {
-            var domains = await _mediator.Send(query);
+            var domains = await _mediator.SendAsync(query);
             return Ok(ApiResponse<IEnumerable<AllowedEmailDomainDto>>.Ok(domains, "Allowed email domains retrieved successfully"));
         }
         catch (ArgumentException e)
@@ -52,7 +51,7 @@ public partial class UniversityController
         
         try
         {
-            var domain = await _mediator.Send(query);
+            var domain = await _mediator.SendAsync(query);
             
             if (domain == null)
             {
@@ -74,7 +73,7 @@ public partial class UniversityController
         
         try
         {
-            await _mediator.Send(command);
+            await _mediator.SendAsync(command);
             return Ok(ApiResponse<object>.Ok(null!, "Allowed email domain deleted successfully"));
         }
         catch (ArgumentException e)
@@ -91,7 +90,7 @@ public partial class UniversityController
         
         try
         {
-            await _mediator.Send(command);
+            await _mediator.SendAsync(command);
             return Ok(ApiResponse<object>.Ok(null!, "Allowed email domain updated successfully"));
         }
         catch (ArgumentException e)

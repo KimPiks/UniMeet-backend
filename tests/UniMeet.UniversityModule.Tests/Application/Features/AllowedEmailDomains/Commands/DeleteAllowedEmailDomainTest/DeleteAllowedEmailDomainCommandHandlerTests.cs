@@ -40,7 +40,7 @@ public class DeleteAllowedEmailDomainCommandHandlerTests
         var command = new DeleteAllowedEmailDomainCommand(1, 5);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         fakeUniversity.AllowedEmailDomains.Should().BeEmpty();
@@ -63,7 +63,7 @@ public class DeleteAllowedEmailDomainCommandHandlerTests
         var command = new DeleteAllowedEmailDomainCommand(1, 99);
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

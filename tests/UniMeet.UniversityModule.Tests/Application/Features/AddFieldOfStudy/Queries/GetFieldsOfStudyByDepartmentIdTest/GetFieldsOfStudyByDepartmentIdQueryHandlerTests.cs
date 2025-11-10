@@ -43,7 +43,7 @@ public class GetFieldsOfStudyByDepartmentIdQueryHandlerTests
         var query = new GetFieldsOfStudyByDepartmentIdQuery(1, 5);
 
         // ---- ACT ----
-        var result = await _handler.Handle(query, CancellationToken.None);
+        var result = await _handler.HandleAsync(query, CancellationToken.None);
         var resultList = result.ToList();
 
         // ---- ASSERT ----
@@ -65,7 +65,7 @@ public class GetFieldsOfStudyByDepartmentIdQueryHandlerTests
         var query = new GetFieldsOfStudyByDepartmentIdQuery(1, 99);
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(query, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(query, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

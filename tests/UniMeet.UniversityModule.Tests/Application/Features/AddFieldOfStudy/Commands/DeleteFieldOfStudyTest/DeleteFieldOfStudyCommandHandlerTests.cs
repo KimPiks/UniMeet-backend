@@ -52,7 +52,7 @@ public class DeleteFieldOfStudyCommandHandlerTests
         var command = new DeleteFieldOfStudyCommand(1, 5, 10);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         department.FieldsOfStudy.Should().BeEmpty();
@@ -83,7 +83,7 @@ public class DeleteFieldOfStudyCommandHandlerTests
         var command = new DeleteFieldOfStudyCommand(1, 5, 99);
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

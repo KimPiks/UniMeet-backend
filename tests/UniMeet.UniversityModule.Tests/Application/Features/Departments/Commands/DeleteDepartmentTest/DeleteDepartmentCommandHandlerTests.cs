@@ -41,7 +41,7 @@ public class DeleteDepartmentCommandHandlerTests
         var command = new DeleteDepartmentCommand(1, 5);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None); 
+        await _handler.HandleAsync(command, CancellationToken.None); 
 
         // ---- ASSERT ----
         fakeUniversity.Departments.Should().BeEmpty();
@@ -64,7 +64,7 @@ public class DeleteDepartmentCommandHandlerTests
         var command = new DeleteDepartmentCommand(1, 99);
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None); 
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None); 
 
         // ---- ASSERT ----
         await act.Should()

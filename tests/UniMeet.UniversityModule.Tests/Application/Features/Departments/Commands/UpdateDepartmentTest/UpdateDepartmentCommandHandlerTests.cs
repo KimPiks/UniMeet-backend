@@ -42,7 +42,7 @@ public class UpdateDepartmentCommandHandlerTests
         var command = new UpdateDepartmentCommand(1, 5, newName);
 
         // ---- ACT ----
-        await _handler.Handle(command, CancellationToken.None);
+        await _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         departmentToUpdate.Name.Should().Be(newName);
@@ -65,7 +65,7 @@ public class UpdateDepartmentCommandHandlerTests
         var command = new UpdateDepartmentCommand(1, 99, "New Name");
 
         // ---- ACT ----
-        Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+        Func<Task> act = () => _handler.HandleAsync(command, CancellationToken.None);
 
         // ---- ASSERT ----
         await act.Should()

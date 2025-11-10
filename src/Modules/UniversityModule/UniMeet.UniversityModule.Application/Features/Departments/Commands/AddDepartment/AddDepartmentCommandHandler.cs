@@ -1,8 +1,8 @@
-using MediatR;
 using UniMeet.UniversityModule.Domain.Repositories;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using UniMeet.Shared.Abstractions;
 
 namespace UniMeet.UniversityModule.Application.Features.Departments.Commands.AddDepartment;
 
@@ -15,7 +15,7 @@ public class AddDepartmentCommandHandler : IRequestHandler<AddDepartmentCommand>
         _universityRepository = universityRepository;
     }
 
-    public async Task Handle(AddDepartmentCommand request, CancellationToken cancellationToken)
+    public async Task HandleAsync(AddDepartmentCommand request, CancellationToken cancellationToken)
     {
         var university = await _universityRepository.GetByIdAsync(request.UniversityId);
         if (university == null)
