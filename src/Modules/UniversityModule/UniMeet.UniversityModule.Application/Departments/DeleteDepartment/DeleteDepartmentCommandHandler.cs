@@ -8,19 +8,15 @@ public class DeleteDepartmentCommandHandler(IUniversityRepository universityRepo
 {
     public async Task HandleAsync(DeleteDepartmentCommand request, CancellationToken cancellationToken)
     {
-        var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
+        var university = await universityRepository.GetByDepartmentIdAsync(request.DepartmentId, cancellationToken);
         if (university == null)
-        {
-            throw new ArgumentException("University not found");
-        }
+            throw new ArgumentException("University not found for the given department");
         
         var department = university.Departments.FirstOrDefault(d => d.Id == request.DepartmentId);
-        if (department == null)
-        {
+        if (department == null) 
             throw new ArgumentException("Department not found");
-        }
         
-        university.RemoveDepartment(department.Name);
+        university.RemoveDepartment(request.DepartmentId);
         await universityRepository.SaveChangesAsync(cancellationToken);
     }
 }

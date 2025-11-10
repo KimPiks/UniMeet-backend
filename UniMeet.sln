@@ -32,8 +32,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.UniversityModule.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.UniversityModule.Infrastructure", "src\Modules\UniversityModule\UniMeet.UniversityModule.Infrastructure\UniMeet.UniversityModule.Infrastructure.csproj", "{14222B24-6771-4EE4-AE11-3B0424AC0D3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.UniversityModule.Tests", "tests\UniMeet.UniversityModule.Tests\UniMeet.UniversityModule.Tests.csproj", "{FFD4DCFA-9302-4C18-8085-E4E3F9587655}"
-EndProject
 
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,7 +54,6 @@ Global
 		{8A1220AB-53DA-462C-AF03-2AE6A93E6A7F} = {A90711A8-B81C-4D1F-815F-FE6BCB59F112}
 		{603FFA65-A4CA-4E73-AF49-BC7579FD9BCC} = {A90711A8-B81C-4D1F-815F-FE6BCB59F112}
 		{14222B24-6771-4EE4-AE11-3B0424AC0D3A} = {A90711A8-B81C-4D1F-815F-FE6BCB59F112}
-		{FFD4DCFA-9302-4C18-8085-E4E3F9587655} = {0F39FCD5-0050-4AAE-BCCF-07C83D40C55F}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6D5880E7-E007-43C4-B5A0-9AB8FD22487C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -119,9 +116,5 @@ Global
 		{14222B24-6771-4EE4-AE11-3B0424AC0D3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14222B24-6771-4EE4-AE11-3B0424AC0D3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14222B24-6771-4EE4-AE11-3B0424AC0D3A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFD4DCFA-9302-4C18-8085-E4E3F9587655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFD4DCFA-9302-4C18-8085-E4E3F9587655}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFD4DCFA-9302-4C18-8085-E4E3F9587655}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFD4DCFA-9302-4C18-8085-E4E3F9587655}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

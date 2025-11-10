@@ -8,28 +8,16 @@ public class UpdateFieldOfStudyCommandHandler(IUniversityRepository universityRe
 {
     public async Task HandleAsync(UpdateFieldOfStudyCommand request, CancellationToken cancellationToken)
     {
-        var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
+        var university = await universityRepository.GetByFieldOfStudyIdAsync(request.FieldOfStudyId, cancellationToken);
         if (university == null)
-        {
             throw new ArgumentException("University not found");
-        }
-        
-        var department = university.Departments.FirstOrDefault(d => d.Id == request.DepartmentId);
-        if (department == null)
-        {
-            throw new ArgumentException("Department not found");
-        }
-        
-        var fieldOfStudy = department.FieldsOfStudy.FirstOrDefault(fos => fos.Id == request.FieldOfStudyId);
+
+        var fieldOfStudy = university.GetFieldOfStudyById(request.FieldOfStudyId);
         if (fieldOfStudy == null)
-        {
             throw new ArgumentException("Field of study not found");
-        }
         
         if (!string.IsNullOrEmpty(request.NewFieldOfStudyName))
-        {
-            university.RenameFieldOfStudyInDepartment(department.Name, fieldOfStudy.Name, request.NewFieldOfStudyName);
-        }
+            university.RenameFieldOfStudy(request.FieldOfStudyId, request.NewFieldOfStudyName);
         
         await universityRepository.SaveChangesAsync(cancellationToken);
     }

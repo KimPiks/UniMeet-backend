@@ -10,11 +10,9 @@ public class AddDepartmentCommandHandler(IUniversityRepository universityReposit
     {
         var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
         if (university == null)
-        {
             throw new ArgumentException("University not found");
-        }
 
-        university.AddDepartment(request.DepartmentName, request.UniversityId);
+        university.AddDepartment(request.DepartmentName);
         await universityRepository.SaveChangesAsync(cancellationToken);
     }
 }

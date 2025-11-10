@@ -8,22 +8,16 @@ public class UpdateAllowedEmailDomainCommandHandler(IUniversityRepository univer
 {
     public async Task HandleAsync(UpdateAllowedEmailDomainCommand request, CancellationToken cancellationToken)
     {
-        var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
+        var university = await universityRepository.GetByAllowedDomainIdAsync(request.DomainId, cancellationToken);
         if (university == null)
-        {
             throw new ArgumentException("University not found");
-        }
 
         var domain = university.AllowedEmailDomains.FirstOrDefault(d => d.Id == request.DomainId);
         if (domain == null)
-        {
             throw new ArgumentException("Allowed email domain not found");
-        }
 
         if (!string.IsNullOrEmpty(request.NewDomain))
-        {
-            university.ChangeAllowedEmailDomain(domain.Domain, request.NewDomain);
-        }
+            university.ChangeAllowedEmailDomain(request.DomainId, request.NewDomain);
         
         await universityRepository.SaveChangesAsync(cancellationToken);
     }

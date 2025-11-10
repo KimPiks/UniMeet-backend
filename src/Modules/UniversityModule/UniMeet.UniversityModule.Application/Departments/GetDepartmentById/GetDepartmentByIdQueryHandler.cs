@@ -8,11 +8,9 @@ public class GetDepartmentByIdQueryHandler(IUniversityRepository universityRepos
 {
     public async Task<DepartmentDto?> HandleAsync(GetDepartmentByIdQuery request, CancellationToken cancellationToken)
     {
-        var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
+        var university = await universityRepository.GetByDepartmentIdAsync(request.DepartmentId, cancellationToken);
         if (university == null)
-        {
             throw new ArgumentException("University not found");
-        }
         
         var department = university.Departments.FirstOrDefault(d => d.Id == request.DepartmentId);
 

@@ -1,4 +1,4 @@
-﻿namespace UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
+﻿namespace UniMeet.UniversityModule.Domain.Universities;
 
 public sealed class FieldOfStudy
 {
