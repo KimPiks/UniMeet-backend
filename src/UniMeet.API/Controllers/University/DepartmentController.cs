@@ -2,6 +2,11 @@
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
 using UniMeet.UniversityModule.Application.DTOs;
+using UniMeet.UniversityModule.Application.Features.Departments.Commands.AddDepartment;
+using UniMeet.UniversityModule.Application.Features.Departments.Commands.DeleteDepartment;
+using UniMeet.UniversityModule.Application.Features.Departments.Commands.UpdateDepartment;
+using UniMeet.UniversityModule.Application.Features.Departments.Queries.GetDepartmentsByUniversityId;
+using UniMeet.UniversityModule.Application.Features.Departments.Queries.GetDepartmentById; 
 
 namespace UniMeet.API.Controllers.University;
 
@@ -10,12 +15,15 @@ public partial class UniversityController
     [HttpPost("{universityId:int}/Department")]
     public async Task<IActionResult> CreateDepartment([FromRoute] int universityId, [FromBody] DepartmentCreateRequest request)
     {
+        var command = new AddDepartmentCommand(universityId, request.DepartmentName);
+        
         try
         {
-            await _universityService.AddDepartmentAsync(universityId, request.DepartmentName);
+            await _mediator.SendAsync(command);
             return Ok(ApiResponse<object>.Ok(null!, "Department added successfully"));
         } catch (ArgumentException e)
         {
+
             return NotFound(ApiResponse<object>.Fail(e.Message));
         }
     }
@@ -23,9 +31,11 @@ public partial class UniversityController
     [HttpGet("{universityId:int}/Department")]
     public async Task<IActionResult> GetAllDepartments([FromRoute] int universityId)
     {
+
+        var query = new GetDepartmentsByUniversityIdQuery(universityId);
         try
         {
-            var departments = await _universityService.GetDepartmentsByUniversityIdAsync(universityId);
+            var departments = await _mediator.SendAsync(query);
             return Ok(ApiResponse<IEnumerable<DepartmentDto>>.Ok(departments, "Departments retrieved successfully"));
         }
         catch (ArgumentException e)
@@ -37,16 +47,19 @@ public partial class UniversityController
     [HttpGet("{universityId:int}/Department/{departmentId:int}")]
     public async Task<IActionResult> GetDepartmentById([FromRoute] int universityId, [FromRoute] int departmentId)
     {
+        var query = new GetDepartmentByIdQuery(universityId, departmentId);
+        
         try
         {
-            var departments = await _universityService.GetDepartmentsByUniversityIdAsync(universityId);
-            var department = departments.FirstOrDefault(d => d.Id == departmentId);
+            var department = await _mediator.SendAsync(query);            
+
             if (department == null)
             {
                 return NotFound(ApiResponse<object>.Fail("Department not found"));
             }
+            
             return Ok(ApiResponse<DepartmentDto>.Ok(department, "Department retrieved successfully"));
-        } catch (ArgumentException e)
+        } catch (ArgumentException e) 
         {
             return NotFound(ApiResponse<object>.Fail(e.Message));
         }
@@ -55,9 +68,11 @@ public partial class UniversityController
     [HttpDelete("{universityId:int}/Department/{departmentId:int}")]
     public async Task<IActionResult> DeleteDepartment([FromRoute] int universityId, [FromRoute] int departmentId)
     {
+        var command = new DeleteDepartmentCommand(universityId, departmentId);
+        
         try
         {
-            await _universityService.DeleteDepartmentAsync(universityId, departmentId);
+            await _mediator.SendAsync(command);
             return Ok(ApiResponse<object>.Ok(null!, "Department deleted successfully"));
         }
         catch (ArgumentException e)
@@ -70,9 +85,11 @@ public partial class UniversityController
     public async Task<IActionResult> UpdateDepartment([FromRoute] int universityId, [FromRoute] int departmentId,
         [FromBody] DepartmentUpdateRequest request)
     {
+        var command = new UpdateDepartmentCommand(universityId, departmentId, request.DepartmentName);
+        
         try
         {
-            await _universityService.UpdateDepartmentAsync(universityId, departmentId, request.DepartmentName);
+            await _mediator.SendAsync(command);
             return Ok(ApiResponse<object>.Ok(null!, "Department updated successfully"));
         }
         catch (ArgumentException e)
