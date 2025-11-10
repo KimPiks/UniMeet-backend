@@ -10,10 +10,8 @@ public class GetDepartmentsByUniversityIdQueryHandler(IUniversityRepository univ
     {
         var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
         if (university == null)
-        {
-            
             throw new ArgumentException("University not found");
-        }
+        
         return university.Departments.Select(department => department.ToDto()).ToList();
     }
 }

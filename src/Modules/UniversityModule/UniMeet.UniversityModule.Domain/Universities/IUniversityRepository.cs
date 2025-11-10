@@ -1,11 +1,11 @@
-﻿using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
-
-namespace UniMeet.UniversityModule.Domain.Universities;
+﻿namespace UniMeet.UniversityModule.Domain.Universities;
 
 public interface IUniversityRepository
 {
     Task<University?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-    Task<University?> GetByDomainAsync(string domain, CancellationToken cancellationToken = default);
+    Task<University?> GetByAllowedDomainIdAsync(int allowedDomainId, CancellationToken cancellationToken = default);
+    Task<University?> GetByDepartmentIdAsync(int departmentId, CancellationToken cancellationToken = default);
+    Task<University?> GetByFieldOfStudyIdAsync(int fieldOfStudyId, CancellationToken cancellationToken = default);
     Task<IEnumerable<University>> GetAllAsync(CancellationToken cancellationToken = default);
     Task AddAsync(University university, CancellationToken cancellationToken = default);
     void Delete(University university);

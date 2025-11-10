@@ -2,5 +2,6 @@
 
 public class AllowedEmailUpdateRequest
 {
-    public string? Domain { get; set; } 
+    public int DomainId { get; set; }
+    public string? NewDomain { get; set; } 
 }

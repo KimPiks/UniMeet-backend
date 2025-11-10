@@ -1,5 +1,5 @@
 ﻿using UniMeet.UniversityModule.Application.FieldsOfStudy;
-using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
+using UniMeet.UniversityModule.Domain.Universities;
 
 namespace UniMeet.UniversityModule.Application.Departments;
 

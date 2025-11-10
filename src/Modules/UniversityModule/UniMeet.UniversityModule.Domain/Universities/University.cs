@@ -1,4 +1,4 @@
-﻿namespace UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
+﻿namespace UniMeet.UniversityModule.Domain.Universities;
 
 public class University
 {
@@ -63,113 +63,98 @@ public class University
         Country = newCountry;
     }
     
-    public Department AddDepartment(string name, int universityId)
+    public FieldOfStudy? GetFieldOfStudyById(int fieldOfStudyId)
+    {
+        return Departments.Select(department => 
+            department.FieldsOfStudy.FirstOrDefault(f => f.Id == fieldOfStudyId))
+            .OfType<FieldOfStudy>()
+            .FirstOrDefault();
+    }
+    
+    public void AddDepartment(string name)
     {
         if (Departments.Any(d => d.Name == name))
-        {
             throw new InvalidOperationException($"Department with name '{name}' already exists in this university.");
-        }
         
-        var department = new Department(name, universityId);
+        var department = new Department(name, Id);
         Departments.Add(department);
-        return department;
     }
     
-    public AllowedEmailDomain AddAllowedEmailDomain(string domain, int universityId)
+    public void AddAllowedEmailDomain(string domain)
     {
         if (AllowedEmailDomains.Any(d => d.Domain == domain))
-        {
             throw new InvalidOperationException($"Email domain '{domain}' is already allowed for this university.");
-        }
         
-        var allowedEmailDomain = new AllowedEmailDomain(domain, universityId);
+        var allowedEmailDomain = new AllowedEmailDomain(domain, Id);
         AllowedEmailDomains.Add(allowedEmailDomain);
-        return allowedEmailDomain;
     }
     
-    public void RemoveAllowedEmailDomain(string domain)
+    public void RemoveAllowedEmailDomain(int allowedDomainId)
     {
-        var allowedEmailDomain = AllowedEmailDomains.FirstOrDefault(d => d.Domain == domain);
+        var allowedEmailDomain = AllowedEmailDomains.FirstOrDefault(d => d.Id == allowedDomainId);
         if (allowedEmailDomain == null)
-        {
-            throw new InvalidOperationException($"Email domain '{domain}' is not found in this university.");
-        }
+            throw new InvalidOperationException($"Email domain with id '{allowedEmailDomain}' is not found in this university.");
         
         AllowedEmailDomains.Remove(allowedEmailDomain);
     }
     
-    public void ChangeAllowedEmailDomain(string domain, string newDomain)
+    public void ChangeAllowedEmailDomain(int allowedDomainId, string newDomain)
     {
-        var allowedEmailDomain = AllowedEmailDomains.FirstOrDefault(d => d.Domain == domain);
+        var allowedEmailDomain = AllowedEmailDomains.FirstOrDefault(d => d.Id == allowedDomainId);
         if (allowedEmailDomain == null)
-        {
-            throw new InvalidOperationException($"Email domain '{domain}' is not found in this university.");
-        }
+            throw new InvalidOperationException($"Email domain with id '{allowedEmailDomain}' is not found in this university.");
+        
         if (AllowedEmailDomains.Any(d => d.Domain == newDomain))
-        {
             throw new InvalidOperationException($"Email domain '{newDomain}' is already allowed for this university.");
-        }
         
         allowedEmailDomain.ChangeDomain(newDomain);
     }
     
-    public void RemoveDepartment(string name)
+    public void RemoveDepartment(int departmentId)
     {
-        var department = Departments.FirstOrDefault(d => d.Name == name);
+        var department = Departments.FirstOrDefault(d => d.Id == departmentId);
         if (department == null)
-        {
-            throw new InvalidOperationException($"Department with name '{name}' is not found in this university.");
-        }
+            throw new InvalidOperationException($"Department with id '{departmentId}' is not found in this university.");
         
         Departments.Remove(department);
     }
     
-    public void RenameDepartment(string name, string newName)
+    public void RenameDepartment(int departmentId, string newName)
     {
-        var department = Departments.FirstOrDefault(d => d.Name == name);
+        var department = Departments.FirstOrDefault(d => d.Id == departmentId);
         if (department == null)
-        {
-            throw new InvalidOperationException($"Department with name '{name}' is not found in this university.");
-        }
+            throw new InvalidOperationException($"Department with id '{departmentId}' is not found in this university.");
+
         if (Departments.Any(d => d.Name == newName))
-        {
             throw new InvalidOperationException($"Department with name '{newName}' already exists in this university.");
-        }
         
         department.Rename(newName);
     }
     
-    public FieldOfStudy AddFieldOfStudyToDepartment(string departmentName, string fieldOfStudyName)
+    public void AddFieldOfStudy(int departmentId, string fieldOfStudyName)
     {
-        var department = Departments.FirstOrDefault(d => d.Name == departmentName);
+        var department = Departments.FirstOrDefault(d => d.Id == departmentId);
         if (department == null)
-        {
-            throw new InvalidOperationException($"Department with name '{departmentName}' is not found in this university.");
-        }
+            throw new InvalidOperationException($"Department with id '{departmentId}' is not found in this university.");
         
-        var fieldOfStudy = department.AddFieldOfStudy(fieldOfStudyName, department.Id);
-        return fieldOfStudy;
+        department.AddFieldOfStudy(fieldOfStudyName);
     }
     
-    public void RemoveFieldOfStudyFromDepartment(string departmentName, string fieldOfStudyName)
+    public void RemoveFieldOfStudy(int fieldOfStudyId)
     {
-        var department = Departments.FirstOrDefault(d => d.Name == departmentName);
+        var department = Departments.FirstOrDefault(d => d.FieldsOfStudy.Any(f => f.Id == fieldOfStudyId));
         if (department == null)
-        {
-            throw new InvalidOperationException($"Department with name '{departmentName}' is not found in this university.");
-        }
+            throw new InvalidOperationException($"Field of study with id '{fieldOfStudyId}' is not found in this university.");
         
-        department.RemoveFieldOfStudy(fieldOfStudyName);
+        department.RemoveFieldOfStudy(fieldOfStudyId);
     }
     
-    public void RenameFieldOfStudyInDepartment(string departmentName, string currentFieldOfStudyName, string newFieldOfStudyName)
+    public void RenameFieldOfStudy(int fieldOfStudyId, string newFieldOfStudyName)
     {
-        var department = Departments.FirstOrDefault(d => d.Name == departmentName);
+        var department = Departments.FirstOrDefault(d => d.FieldsOfStudy.Any(f => f.Id == fieldOfStudyId));
         if (department == null)
-        {
-            throw new InvalidOperationException($"Department with name '{departmentName}' is not found in this university.");
-        }
-        
-        department.RenameFieldOfStudy(currentFieldOfStudyName, newFieldOfStudyName);
+            throw new InvalidOperationException($"Field of study with id '{fieldOfStudyId}' is not found in this university.");
+
+        department.RenameFieldOfStudy(fieldOfStudyId, newFieldOfStudyName);
     }
 }
