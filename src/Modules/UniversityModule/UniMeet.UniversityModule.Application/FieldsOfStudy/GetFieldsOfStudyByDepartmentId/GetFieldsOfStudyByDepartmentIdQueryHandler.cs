@@ -8,13 +8,15 @@ public class GetFieldsOfStudyByDepartmentIdQueryHandler(IUniversityRepository un
 {
     public async Task<IEnumerable<FieldOfStudyDto>> HandleAsync(GetFieldsOfStudyByDepartmentIdQuery request, CancellationToken cancellationToken)
     {
+        request.Validate();
+        
         var university = await universityRepository.GetByDepartmentIdAsync(request.DepartmentId, cancellationToken);
         if (university == null)
-            throw new ArgumentException("University not found");
+            throw new KeyNotFoundException("University not found");
         
         var department = university.Departments.FirstOrDefault(d => d.Id == request.DepartmentId);
         if (department == null)
-            throw new ArgumentException("Department not found");
+            throw new KeyNotFoundException("Department not found");
         
         return department.FieldsOfStudy.Select(fos => new FieldOfStudyDto()
         {

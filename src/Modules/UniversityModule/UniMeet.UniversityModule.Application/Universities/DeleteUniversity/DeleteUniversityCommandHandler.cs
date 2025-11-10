@@ -8,12 +8,11 @@ public class DeleteUniversityCommandHandler(IUniversityRepository universityRepo
 {
     public async Task HandleAsync(DeleteUniversityCommand request, CancellationToken cancellationToken)
     {
-        var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
+        request.Validate();
         
+        var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
         if (university == null)
-        {
-            throw new ArgumentException("University not found");
-        }
+            throw new KeyNotFoundException("University not found");
         
         universityRepository.Delete(university);
         await universityRepository.SaveChangesAsync(cancellationToken);

@@ -8,6 +8,8 @@ public class GetAllUniversitiesQueryHandler(IUniversityRepository universityRepo
 {
     public async Task<IEnumerable<UniversityDto>> HandleAsync(GetAllUniversitiesQuery request, CancellationToken cancellationToken)
         {
+            request.Validate();
+            
             var universities = await universityRepository.GetAllAsync(cancellationToken);
             return universities.Select(university => university.ToDto()).ToList();
         }

@@ -8,9 +8,11 @@ public class AddAllowedEmailDomainCommandHandler(IUniversityRepository universit
 {
     public async Task HandleAsync(AddAllowedEmailDomainCommand request, CancellationToken cancellationToken)
     {
+        request.Validate();
+        
         var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
         if (university == null)
-            throw new ArgumentException("University not found");
+            throw new KeyNotFoundException($"University with ID {request.UniversityId} was not found.");
         
         university.AddAllowedEmailDomain(request.Domain);
         await universityRepository.SaveChangesAsync(cancellationToken);
