@@ -2,6 +2,6 @@
 
 public class DepartmentUpdateRequest
 {
-    public int DepartmentId { get; set; }
-    public string? DepartmentName { get; set; }
+    public required int DepartmentId { get; set; }
+    public required string DepartmentName { get; set; }
 }

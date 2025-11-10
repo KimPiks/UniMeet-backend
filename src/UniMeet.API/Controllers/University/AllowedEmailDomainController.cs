@@ -70,7 +70,7 @@ public class AllowedEmailDomainsController(IMediator mediator) : ControllerBase
         }
     }
 
-    [HttpPatch]
+    [HttpPut]
     public async Task<IActionResult> UpdateAllowedEmailDomain([FromBody] AllowedEmailUpdateRequest request)
     {
         var command = new UpdateAllowedEmailDomainCommand(request.DomainId, request.NewDomain);

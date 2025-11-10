@@ -1,4 +1,6 @@
-﻿namespace UniMeet.UniversityModule.Domain.Universities;
+﻿using UniMeet.UniversityModule.Domain.Universities.Exceptions;
+
+namespace UniMeet.UniversityModule.Domain.Universities;
 
 public sealed class FieldOfStudy
 {
@@ -12,7 +14,7 @@ public sealed class FieldOfStudy
     internal FieldOfStudy(string name, int departmentId)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Field of study name cannot be null or empty.", nameof(name));
+            throw new InvalidFieldOfStudyNameException(name);
         
         Name = name;
         DepartmentId = departmentId;
@@ -20,6 +22,9 @@ public sealed class FieldOfStudy
     
     internal void Rename(string newName)
     {
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new InvalidFieldOfStudyNameException(newName);
+        
         Name = newName;
     }
 }

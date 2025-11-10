@@ -1,4 +1,6 @@
-﻿namespace UniMeet.UniversityModule.Domain.Universities;
+﻿using UniMeet.UniversityModule.Domain.Universities.Exceptions;
+
+namespace UniMeet.UniversityModule.Domain.Universities;
 
 public sealed class AllowedEmailDomain
 {
@@ -12,7 +14,7 @@ public sealed class AllowedEmailDomain
     internal AllowedEmailDomain(string domain, int universityId)
     {
         if (string.IsNullOrWhiteSpace(domain))
-            throw new ArgumentException("Email domain cannot be null or empty.", nameof(domain));
+            throw new InvalidAllowedEmailDomainNameException(domain);
         
         Domain = domain;
         UniversityId = universityId;
@@ -20,6 +22,9 @@ public sealed class AllowedEmailDomain
     
     internal void ChangeDomain(string newDomain)
     {
+        if (string.IsNullOrWhiteSpace(newDomain))
+            throw new InvalidAllowedEmailDomainNameException(newDomain);
+        
         Domain = newDomain;
     }
 }

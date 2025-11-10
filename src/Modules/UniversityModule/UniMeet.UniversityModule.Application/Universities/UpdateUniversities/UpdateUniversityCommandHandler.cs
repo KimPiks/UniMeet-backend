@@ -15,30 +15,11 @@ public class UpdateUniversityCommandHandler(IUniversityRepository universityRepo
             throw new ArgumentException("University not found");
         }
 
-        if (!string.IsNullOrEmpty(request.Name))
-        {
-            university.Rename(request.Name);
-        }
-        
-        if (!string.IsNullOrEmpty(request.Country))
-        {
-            university.ChangeCountry(request.Country);
-        }
-        
-        if (!string.IsNullOrEmpty(request.Voivodeship))
-        {
-            university.ChangeVoivodeship(request.Voivodeship);
-        }
-        
-        if (!string.IsNullOrEmpty(request.City))
-        {
-            university.ChangeCity(request.City);
-        }
-        
-        if (!string.IsNullOrEmpty(request.Address))
-        {
-            university.ChangeAddress(request.Address);
-        }
+        university.Rename(request.Name);
+        university.ChangeCountry(request.Country);
+        university.ChangeVoivodeship(request.Voivodeship);
+        university.ChangeCity(request.City);
+        university.ChangeAddress(request.Address);
         
         await universityRepository.SaveChangesAsync(cancellationToken);
     }

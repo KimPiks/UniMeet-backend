@@ -1,4 +1,5 @@
 using Serilog;
+using UniMeet.API.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog();
+
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -22,6 +25,8 @@ ModularSystem.ModularSystem.RunModules(builder.Configuration, builder.Services);
 ModularSystem.ModularSystem.SummarizeModules();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

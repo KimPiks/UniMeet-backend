@@ -1,4 +1,6 @@
-﻿namespace UniMeet.UniversityModule.Domain.Universities;
+﻿using UniMeet.UniversityModule.Domain.Universities.Exceptions;
+
+namespace UniMeet.UniversityModule.Domain.Universities;
 
 public class University
 {
@@ -17,19 +19,19 @@ public class University
     public University(string name, string country, string voivodeship, string city, string address)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("University name cannot be null or empty.", nameof(name));
+            throw new InvalidUniversityNameException(name);
         
         if (string.IsNullOrWhiteSpace(country)) 
-            throw new ArgumentException("Country cannot be null or empty.", nameof(country));
-        
-        if (string.IsNullOrWhiteSpace(voivodeship)) 
-            throw new ArgumentException("Voivodeship cannot be null or empty.", nameof(voivodeship));
+            throw new InvalidCountryNameException(country);
+
+        if (string.IsNullOrWhiteSpace(voivodeship))
+            throw new InvalidVoivodeshipNameException(voivodeship);
         
         if (string.IsNullOrWhiteSpace(city)) 
-            throw new ArgumentException("City cannot be null or empty.", nameof(city));
+            throw new InvalidCityNameException(city);
         
         if (string.IsNullOrWhiteSpace(address)) 
-            throw new ArgumentException("Address cannot be null or empty.", nameof(address));
+            throw new InvalidAddressException(address);
         
         Name = name;
         Country = country;
@@ -40,26 +42,41 @@ public class University
     
     public void Rename(string newName)
     {
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new InvalidUniversityNameException(newName);
+        
         Name = newName;
     }
     
     public void ChangeAddress(string newAddress)
     {
+        if (string.IsNullOrWhiteSpace(newAddress)) 
+            throw new InvalidAddressException(newAddress);
+        
         Address = newAddress;
     }
     
     public void ChangeCity(string newCity)
     {
+        if (string.IsNullOrWhiteSpace(newCity)) 
+            throw new InvalidCityNameException(newCity);
+        
         City = newCity;
     }
     
     public void ChangeVoivodeship(string newVoivodeship)
     {
+        if (string.IsNullOrWhiteSpace(newVoivodeship))
+            throw new InvalidVoivodeshipNameException(newVoivodeship);
+        
         Voivodeship = newVoivodeship;
     }
     
     public void ChangeCountry(string newCountry)
     {
+        if (string.IsNullOrWhiteSpace(newCountry)) 
+            throw new InvalidCountryNameException(newCountry);
+        
         Country = newCountry;
     }
     
@@ -73,8 +90,11 @@ public class University
     
     public void AddDepartment(string name)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new InvalidDepartmentNameException(name);
+        
         if (Departments.Any(d => d.Name == name))
-            throw new InvalidOperationException($"Department with name '{name}' already exists in this university.");
+            throw new DepartmentAlreadyExistsException(name);
         
         var department = new Department(name, Id);
         Departments.Add(department);
@@ -82,8 +102,11 @@ public class University
     
     public void AddAllowedEmailDomain(string domain)
     {
+        if (string.IsNullOrWhiteSpace(domain))
+            throw new InvalidAllowedEmailDomainNameException(domain);
+        
         if (AllowedEmailDomains.Any(d => d.Domain == domain))
-            throw new InvalidOperationException($"Email domain '{domain}' is already allowed for this university.");
+            throw new AllowedDomainAlreadyExistsException(domain);
         
         var allowedEmailDomain = new AllowedEmailDomain(domain, Id);
         AllowedEmailDomains.Add(allowedEmailDomain);
@@ -93,19 +116,22 @@ public class University
     {
         var allowedEmailDomain = AllowedEmailDomains.FirstOrDefault(d => d.Id == allowedDomainId);
         if (allowedEmailDomain == null)
-            throw new InvalidOperationException($"Email domain with id '{allowedEmailDomain}' is not found in this university.");
+            throw new AllowedDomainNotFoundException(allowedDomainId);
         
         AllowedEmailDomains.Remove(allowedEmailDomain);
     }
     
     public void ChangeAllowedEmailDomain(int allowedDomainId, string newDomain)
     {
+        if (string.IsNullOrWhiteSpace(newDomain))
+            throw new InvalidAllowedEmailDomainNameException(newDomain);
+        
         var allowedEmailDomain = AllowedEmailDomains.FirstOrDefault(d => d.Id == allowedDomainId);
         if (allowedEmailDomain == null)
-            throw new InvalidOperationException($"Email domain with id '{allowedEmailDomain}' is not found in this university.");
+            throw new AllowedDomainNotFoundException(allowedDomainId);
         
         if (AllowedEmailDomains.Any(d => d.Domain == newDomain))
-            throw new InvalidOperationException($"Email domain '{newDomain}' is already allowed for this university.");
+            throw new AllowedDomainAlreadyExistsException(newDomain);
         
         allowedEmailDomain.ChangeDomain(newDomain);
     }
@@ -114,19 +140,22 @@ public class University
     {
         var department = Departments.FirstOrDefault(d => d.Id == departmentId);
         if (department == null)
-            throw new InvalidOperationException($"Department with id '{departmentId}' is not found in this university.");
+            throw new DepartmentNotFoundException(departmentId);
         
         Departments.Remove(department);
     }
     
     public void RenameDepartment(int departmentId, string newName)
     {
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new InvalidDepartmentNameException(newName);
+        
         var department = Departments.FirstOrDefault(d => d.Id == departmentId);
         if (department == null)
-            throw new InvalidOperationException($"Department with id '{departmentId}' is not found in this university.");
+            throw new DepartmentNotFoundException(departmentId);
 
         if (Departments.Any(d => d.Name == newName))
-            throw new InvalidOperationException($"Department with name '{newName}' already exists in this university.");
+            throw new DepartmentAlreadyExistsException(newName);
         
         department.Rename(newName);
     }
@@ -135,7 +164,7 @@ public class University
     {
         var department = Departments.FirstOrDefault(d => d.Id == departmentId);
         if (department == null)
-            throw new InvalidOperationException($"Department with id '{departmentId}' is not found in this university.");
+            throw new DepartmentNotFoundException(departmentId);
         
         department.AddFieldOfStudy(fieldOfStudyName);
     }
@@ -144,17 +173,20 @@ public class University
     {
         var department = Departments.FirstOrDefault(d => d.FieldsOfStudy.Any(f => f.Id == fieldOfStudyId));
         if (department == null)
-            throw new InvalidOperationException($"Field of study with id '{fieldOfStudyId}' is not found in this university.");
+            throw new FieldOfStudyNotFoundException(fieldOfStudyId);
         
         department.RemoveFieldOfStudy(fieldOfStudyId);
     }
     
     public void RenameFieldOfStudy(int fieldOfStudyId, string newFieldOfStudyName)
     {
+        if (string.IsNullOrWhiteSpace(newFieldOfStudyName))
+            throw new InvalidFieldOfStudyNameException(newFieldOfStudyName);
+        
         var department = Departments.FirstOrDefault(d => d.FieldsOfStudy.Any(f => f.Id == fieldOfStudyId));
         if (department == null)
-            throw new InvalidOperationException($"Field of study with id '{fieldOfStudyId}' is not found in this university.");
-
+            throw new FieldOfStudyNotFoundException(fieldOfStudyId);
+        
         department.RenameFieldOfStudy(fieldOfStudyId, newFieldOfStudyName);
     }
 }

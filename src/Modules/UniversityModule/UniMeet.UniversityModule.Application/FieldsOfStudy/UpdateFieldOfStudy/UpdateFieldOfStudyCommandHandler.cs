@@ -16,9 +16,7 @@ public class UpdateFieldOfStudyCommandHandler(IUniversityRepository universityRe
         if (fieldOfStudy == null)
             throw new ArgumentException("Field of study not found");
         
-        if (!string.IsNullOrEmpty(request.NewFieldOfStudyName))
-            university.RenameFieldOfStudy(request.FieldOfStudyId, request.NewFieldOfStudyName);
-        
+        university.RenameFieldOfStudy(request.FieldOfStudyId, request.NewFieldOfStudyName);
         await universityRepository.SaveChangesAsync(cancellationToken);
     }
 }
