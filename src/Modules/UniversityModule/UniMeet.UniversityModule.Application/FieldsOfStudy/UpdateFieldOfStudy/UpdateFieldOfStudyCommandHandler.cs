@@ -8,13 +8,15 @@ public class UpdateFieldOfStudyCommandHandler(IUniversityRepository universityRe
 {
     public async Task HandleAsync(UpdateFieldOfStudyCommand request, CancellationToken cancellationToken)
     {
+        request.Validate();
+        
         var university = await universityRepository.GetByFieldOfStudyIdAsync(request.FieldOfStudyId, cancellationToken);
         if (university == null)
-            throw new ArgumentException("University not found");
+            throw new KeyNotFoundException("University not found");
 
         var fieldOfStudy = university.GetFieldOfStudyById(request.FieldOfStudyId);
         if (fieldOfStudy == null)
-            throw new ArgumentException("Field of study not found");
+            throw new KeyNotFoundException("Field of study not found");
         
         university.RenameFieldOfStudy(request.FieldOfStudyId, request.NewFieldOfStudyName);
         await universityRepository.SaveChangesAsync(cancellationToken);

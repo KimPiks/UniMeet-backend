@@ -2,7 +2,7 @@
 using UniMeet.API.Responses;
 using UniMeet.Shared.Exceptions;
 
-namespace UniMeet.API.Exceptions;
+namespace UniMeet.API.Middlewares;
 
 public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddleware
 {
@@ -16,6 +16,16 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddlew
         {
             logger.LogWarning(ex, "Domain error occurred: {Message}", ex.Message);
             await WriteResponse(context, HttpStatusCode.BadRequest, ApiResponse<string>.Fail(ex.Message));
+        }
+        catch (ValidationException ex)
+        {
+            logger.LogWarning(ex, "Validation error occurred: {Message}", ex.Message);
+            await WriteResponse(context, HttpStatusCode.BadRequest, ApiResponse<string>.Fail(ex.Message));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            logger.LogWarning(ex, "Not found error occured: {Message}", ex.Message);
+            await WriteResponse(context, HttpStatusCode.NotFound, ApiResponse<string>.Fail(ex.Message));
         }
         catch (Exception ex)
         {

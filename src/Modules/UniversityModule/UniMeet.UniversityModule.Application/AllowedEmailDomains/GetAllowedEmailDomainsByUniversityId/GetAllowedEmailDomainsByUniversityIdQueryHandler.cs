@@ -8,9 +8,11 @@ public class GetAllowedEmailDomainsByUniversityIdQueryHandler(IUniversityReposit
 {
     public async Task<IEnumerable<AllowedEmailDomainDto>> HandleAsync(GetAllowedEmailDomainsByUniversityIdQuery request, CancellationToken cancellationToken)
     {
+        request.Validate();
+        
         var university = await universityRepository.GetByIdAsync(request.UniversityId, cancellationToken);
         if (university == null)
-            throw new ArgumentException("University not found");
+            throw new KeyNotFoundException("University not found");
 
         return university.AllowedEmailDomains.Select(allowedDomain => allowedDomain.ToDto()).ToList();
     }

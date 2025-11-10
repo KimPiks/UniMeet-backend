@@ -1,5 +1,5 @@
 using Serilog;
-using UniMeet.API.Exceptions;
+using UniMeet.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

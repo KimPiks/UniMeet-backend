@@ -8,6 +8,8 @@ public class CreateUniversityCommandHandler(IUniversityRepository universityRepo
 {
     public async Task HandleAsync(CreateUniversityCommand request, CancellationToken cancellationToken)
     {
+        request.Validate();
+        
         var university = new University(
             request.Name,
             request.Country,

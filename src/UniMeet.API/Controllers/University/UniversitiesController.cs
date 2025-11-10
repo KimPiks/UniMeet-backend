@@ -11,7 +11,7 @@ using UniMeet.UniversityModule.Application.Universities.CreateUniversity;
 using UniMeet.UniversityModule.Application.Universities.DeleteUniversity;
 using UniMeet.UniversityModule.Application.Universities.GetAllUniversities;
 using UniMeet.UniversityModule.Application.Universities.GetUniversityById;
-using UniMeet.UniversityModule.Application.Universities.UpdateUniversities;
+using UniMeet.UniversityModule.Application.Universities.UpdateUniversity;
 
 namespace UniMeet.API.Controllers.University;
 
@@ -24,21 +24,14 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
     {
         var query = new GetUniversityByIdQuery(universityId);
         var university = await mediator.SendAsync(query);
-        
-        if (university == null)
-        {
-            return NotFound(ApiResponse<object>.Fail("University not found"));
-        }
-        return Ok(ApiResponse<UniversityDto>.Ok(university, "University retrieved successfully"));
+        return Ok(ApiResponse<UniversityDto?>.Ok(university, "University retrieved successfully"));
     }
     
     [HttpGet]
     public async Task<IActionResult> GetAllUniversities()
     {
         var query = new GetAllUniversitiesQuery();
-
         var universities = await mediator.SendAsync(query);
-
         return Ok(ApiResponse<IEnumerable<UniversityDto>>.Ok(universities, "Universities retrieved successfully"));
     }
     
@@ -46,32 +39,17 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetAllowedEmailDomains([FromRoute] int universityId)
     {
         var query = new GetAllowedEmailDomainsByUniversityIdQuery(universityId);
-        
-        try
-        {
-            var domains = await mediator.SendAsync(query);
-            return Ok(ApiResponse<IEnumerable<AllowedEmailDomainDto>>.Ok(domains, "Allowed email domains retrieved successfully"));
-        }
-        catch (ArgumentException e)
-        {
-            return NotFound(ApiResponse<object>.Fail(e.Message));
-        }
+        var domains = await mediator.SendAsync(query);
+        return Ok(ApiResponse<IEnumerable<AllowedEmailDomainDto>>.Ok(domains, "Allowed email domains retrieved successfully"));
     }
     
     [HttpGet("{universityId:int}/Departments")]
     public async Task<IActionResult> GetAllDepartments([FromRoute] int universityId)
     {
-
         var query = new GetDepartmentsByUniversityIdQuery(universityId);
-        try
-        {
-            var departments = await mediator.SendAsync(query);
-            return Ok(ApiResponse<IEnumerable<DepartmentDto>>.Ok(departments, "Departments retrieved successfully"));
-        }
-        catch (ArgumentException e)
-        {
-            return NotFound(ApiResponse<object>.Fail(e.Message));
-        }
+        var departments = await mediator.SendAsync(query);
+        return Ok(ApiResponse<IEnumerable<DepartmentDto>>.Ok(departments, "Departments retrieved successfully"));
+
     }
 
     [HttpPost]
@@ -86,7 +64,6 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
         );
 
         await mediator.SendAsync(command);
-
         return Ok(ApiResponse<object>.Ok(null!, "University created successfully"));
     }
 
@@ -94,18 +71,8 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> DeleteUniversity([FromRoute] int universityId)
     {
         var command = new DeleteUniversityCommand(universityId);
-        
-        try
-        {
-            await mediator.SendAsync(command);
-            
-            return Ok(ApiResponse<object>.Ok(null!, "University deleted successfully"));
-        }
-        catch (ArgumentException e)
-        {
-
-            return NotFound(ApiResponse<object>.Fail(e.Message));
-        }
+        await mediator.SendAsync(command);
+        return Ok(ApiResponse<object>.Ok(null!, "University deleted successfully"));
     }
 
     [HttpPut]
@@ -120,14 +87,7 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
             request.Address
         );
         
-        try
-        {
-            await mediator.SendAsync(command);
-            return Ok(ApiResponse<object>.Ok(null!, "University updated successfully"));
-        }
-        catch (ArgumentException e)
-        {
-            return NotFound(ApiResponse<object>.Fail(e.Message));
-        }
+        await mediator.SendAsync(command);
+        return Ok(ApiResponse<object>.Ok(null!, "University updated successfully"));
     }
 }

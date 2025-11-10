@@ -8,9 +8,11 @@ public class GetFieldOfStudyByIdQueryHandler(IUniversityRepository universityRep
 {
     public async Task<FieldOfStudyDto?> HandleAsync(GetFieldOfStudyByIdQuery request, CancellationToken cancellationToken)
     {
+        request.Validate();
+        
         var university = await universityRepository.GetByFieldOfStudyIdAsync(request.FieldOfStudyId, cancellationToken);
         if (university == null)
-            throw new ArgumentException("University not found");
+            throw new KeyNotFoundException("University not found");
 
         var fieldOfStudy = university.GetFieldOfStudyById(request.FieldOfStudyId);
         if (fieldOfStudy == null)
