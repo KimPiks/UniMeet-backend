@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
-using UniMeet.UniversityModule.Domain.Repositories;
 using UniMeet.UniversityModule.Application.FieldsOfStudy.UpdateFieldOfStudy;
+using UniMeet.UniversityModule.Domain.Universities;
 
 public class UpdateFieldOfStudyCommandHandlerTests
 {

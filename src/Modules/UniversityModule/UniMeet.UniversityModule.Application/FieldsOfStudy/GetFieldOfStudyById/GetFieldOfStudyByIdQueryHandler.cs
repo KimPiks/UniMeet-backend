@@ -1,6 +1,5 @@
 using UniMeet.Shared.Abstractions;
-using UniMeet.UniversityModule.Application.DTOs;
-using UniMeet.UniversityModule.Domain.Repositories;
+using UniMeet.UniversityModule.Domain.Universities;
 
 namespace UniMeet.UniversityModule.Application.FieldsOfStudy.GetFieldOfStudyById;
 

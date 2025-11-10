@@ -2,7 +2,7 @@
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
 using UniMeet.Shared.Abstractions;
-using UniMeet.UniversityModule.Application.DTOs;
+using UniMeet.UniversityModule.Application.Universities;
 using UniMeet.UniversityModule.Application.Universities.CreateUniversity;
 using UniMeet.UniversityModule.Application.Universities.DeleteUniversity;
 using UniMeet.UniversityModule.Application.Universities.GetAllUniversities;

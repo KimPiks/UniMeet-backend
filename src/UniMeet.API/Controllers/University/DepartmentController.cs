@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
+using UniMeet.UniversityModule.Application.Departments;
 using UniMeet.UniversityModule.Application.Departments.AddDepartment;
 using UniMeet.UniversityModule.Application.Departments.DeleteDepartment;
 using UniMeet.UniversityModule.Application.Departments.GetDepartmentById;
 using UniMeet.UniversityModule.Application.Departments.GetDepartmentsByUniversityId;
 using UniMeet.UniversityModule.Application.Departments.UpdateDepartment;
-using UniMeet.UniversityModule.Application.DTOs;
 
 namespace UniMeet.API.Controllers.University;
 

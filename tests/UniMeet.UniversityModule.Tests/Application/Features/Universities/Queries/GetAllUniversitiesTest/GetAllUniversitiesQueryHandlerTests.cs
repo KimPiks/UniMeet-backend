@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic; 
 using System.Linq;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
-using UniMeet.UniversityModule.Domain.Repositories;
-using UniMeet.UniversityModule.Application.Mappers;
 using UniMeet.UniversityModule.Application.Universities.GetAllUniversities;
+using UniMeet.UniversityModule.Domain.Universities;
 
 public class GetAllUniversitiesQueryHandlerTests
 {

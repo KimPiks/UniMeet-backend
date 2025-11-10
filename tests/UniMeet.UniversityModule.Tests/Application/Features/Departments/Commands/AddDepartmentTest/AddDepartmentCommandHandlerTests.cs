@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using UniMeet.UniversityModule.Application.Departments.AddDepartment;
 using UniMeet.UniversityModule.Domain.Aggregates.UniversityAggregate;
-using UniMeet.UniversityModule.Domain.Repositories;
+using UniMeet.UniversityModule.Domain.Universities;
 
 public class AddDepartmentCommandHandlerTests
 {

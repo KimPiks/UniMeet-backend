@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
-using UniMeet.UniversityModule.Application.DTOs;
+using UniMeet.UniversityModule.Application.FieldsOfStudy;
 using UniMeet.UniversityModule.Application.FieldsOfStudy.AddFieldOfStudy;
 using UniMeet.UniversityModule.Application.FieldsOfStudy.DeleteFieldOfStudy;
 using UniMeet.UniversityModule.Application.FieldsOfStudy.GetFieldOfStudyById;
