@@ -4,7 +4,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.AllowedEmailDomains.GetAllowedEmailDomainById;
 
 public class GetAllowedEmailDomainByIdQueryHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<GetAllowedEmailDomainByIdQuery, AllowedEmailDomainDto?>
+    : IQueryHandler<GetAllowedEmailDomainByIdQuery, AllowedEmailDomainDto?>
 {
     public async Task<AllowedEmailDomainDto?> HandleAsync(GetAllowedEmailDomainByIdQuery request, CancellationToken cancellationToken)
     {

@@ -5,7 +5,7 @@ using UniMeet.UniversityModule.Domain.Universities;
 namespace UniMeet.UniversityModule.Application.Universities.CreateUniversity;
 
 public class CreateUniversityCommandHandler(IUniversityRepository universityRepository)
-    : IRequestHandler<CreateUniversityCommand>
+    : ICommandHandler<CreateUniversityCommand>
 {
     public async Task HandleAsync(CreateUniversityCommand request, CancellationToken cancellationToken)
     {
