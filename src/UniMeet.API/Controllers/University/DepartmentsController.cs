@@ -35,9 +35,9 @@ public class DepartmentsController(IMediator mediator) : ControllerBase
     }
     
     [HttpGet("{departmentId:int}/FieldsOfStudy")]
-    public async Task<IActionResult> GetFieldsOfStudy([FromRoute] int departmentId)
+    public async Task<IActionResult> GetFieldsOfStudy([FromRoute] int departmentId, [FromQuery] int offset = 0, [FromQuery] int limit = 100)
     {
-        var query = new GetFieldsOfStudyByDepartmentIdQuery(departmentId);
+        var query = new GetFieldsOfStudyByDepartmentIdQuery(departmentId, offset, limit);
         var fieldsOfStudy = await mediator.SendAsync(query);
         return Ok(ApiResponse<IEnumerable<FieldOfStudyDto>>.Ok(fieldsOfStudy, "Fields of study retrieved successfully"));
     }

@@ -43,12 +43,14 @@ public class UniversityRepository(UniversityContext context) : IUniversityReposi
             .FirstOrDefaultAsync(u => u.Departments.Any(d => d.FieldsOfStudy.Any(fos => fos.Id == fieldOfStudyId)), cancellationToken);
     }
 
-    public async Task<IEnumerable<University>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<University>> GetAllAsync(int offset, int limit, CancellationToken cancellationToken = default)
     {
         return await context.Universities
             .Include(u => u.AllowedEmailDomains)
             .Include(u => u.Departments)
             .ThenInclude(d => d.FieldsOfStudy)
+            .Skip(offset)
+            .Take(limit)
             .ToListAsync(cancellationToken);
     }
 
