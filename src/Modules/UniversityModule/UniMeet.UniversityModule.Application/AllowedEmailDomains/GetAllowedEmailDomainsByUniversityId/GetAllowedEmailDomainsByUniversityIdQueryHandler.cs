@@ -14,6 +14,10 @@ public class GetAllowedEmailDomainsByUniversityIdQueryHandler(IUniversityReposit
         if (university == null)
             throw new KeyNotFoundException("University not found");
 
-        return university.AllowedEmailDomains.Select(allowedDomain => allowedDomain.ToDto()).ToList();
+        return university.AllowedEmailDomains
+            .Select(allowedDomain => allowedDomain.ToDto())
+            .Skip(request.Offset)
+            .Take(request.Limit)
+            .ToList();
     }
 }

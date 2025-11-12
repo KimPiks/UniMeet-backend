@@ -18,10 +18,14 @@ public class GetFieldsOfStudyByDepartmentIdQueryHandler(IUniversityRepository un
         if (department == null)
             throw new KeyNotFoundException("Department not found");
         
-        return department.FieldsOfStudy.Select(fos => new FieldOfStudyDto()
-        {
-            Id = fos.Id,
-            Name = fos.Name
-        }).ToList(); 
+        return department.FieldsOfStudy
+            .Select(fos => new FieldOfStudyDto()
+            {
+                Id = fos.Id,
+                Name = fos.Name
+            })
+            .Skip(request.Offset)
+            .Take(request.Limit)
+            .ToList(); 
     }
 }

@@ -14,6 +14,10 @@ public class GetDepartmentsByUniversityIdQueryHandler(IUniversityRepository univ
         if (university == null)
             throw new KeyNotFoundException("University not found");
         
-        return university.Departments.Select(department => department.ToDto()).ToList();
+        return university.Departments
+            .Select(department => department.ToDto())
+            .Skip(request.Offset)
+            .Take(request.Limit)
+            .ToList();
     }
 }

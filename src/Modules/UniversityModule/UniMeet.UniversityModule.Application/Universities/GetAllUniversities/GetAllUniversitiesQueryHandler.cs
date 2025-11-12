@@ -10,7 +10,7 @@ public class GetAllUniversitiesQueryHandler(IUniversityRepository universityRepo
         {
             request.Validate();
             
-            var universities = await universityRepository.GetAllAsync(cancellationToken);
+            var universities = await universityRepository.GetAllAsync(request.Offset, request.Limit, cancellationToken);
             return universities.Select(university => university.ToDto()).ToList();
         }
     }

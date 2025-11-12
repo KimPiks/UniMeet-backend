@@ -28,25 +28,25 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAllUniversities()
+    public async Task<IActionResult> GetAllUniversities([FromQuery] int offset = 0, [FromQuery] int limit = 100)
     {
-        var query = new GetAllUniversitiesQuery();
+        var query = new GetAllUniversitiesQuery(offset, limit);
         var universities = await mediator.SendAsync(query);
         return Ok(ApiResponse<IEnumerable<UniversityDto>>.Ok(universities, "Universities retrieved successfully"));
     }
     
     [HttpGet("{universityId:int}/AllowedEmailDomains")]
-    public async Task<IActionResult> GetAllowedEmailDomains([FromRoute] int universityId)
+    public async Task<IActionResult> GetAllowedEmailDomains([FromRoute] int universityId, [FromQuery] int offset = 0, [FromQuery] int limit = 100)
     {
-        var query = new GetAllowedEmailDomainsByUniversityIdQuery(universityId);
+        var query = new GetAllowedEmailDomainsByUniversityIdQuery(universityId, offset, limit);
         var domains = await mediator.SendAsync(query);
         return Ok(ApiResponse<IEnumerable<AllowedEmailDomainDto>>.Ok(domains, "Allowed email domains retrieved successfully"));
     }
     
     [HttpGet("{universityId:int}/Departments")]
-    public async Task<IActionResult> GetAllDepartments([FromRoute] int universityId)
+    public async Task<IActionResult> GetAllDepartments([FromRoute] int universityId, [FromQuery] int offset = 0, [FromQuery] int limit = 100)
     {
-        var query = new GetDepartmentsByUniversityIdQuery(universityId);
+        var query = new GetDepartmentsByUniversityIdQuery(universityId, offset, limit);
         var departments = await mediator.SendAsync(query);
         return Ok(ApiResponse<IEnumerable<DepartmentDto>>.Ok(departments, "Departments retrieved successfully"));
 
