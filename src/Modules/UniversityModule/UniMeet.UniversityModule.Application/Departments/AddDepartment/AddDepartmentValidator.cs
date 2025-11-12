@@ -14,6 +14,9 @@ public static class AddDepartmentValidator
         if (string.IsNullOrWhiteSpace(request.DepartmentName))
             errors.Add("Name is required.");
         
+        if (request.DepartmentName.Length > 100)
+            errors.Add("Name must not exceed 100 characters.");
+        
         if (errors.Count > 0)
             throw new ValidationException(errors);
     }

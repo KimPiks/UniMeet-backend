@@ -20,7 +20,7 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddlew
         catch (ValidationException ex)
         {
             logger.LogWarning(ex, "Validation error occurred: {Message}", ex.Message);
-            await WriteResponse(context, HttpStatusCode.BadRequest, ApiResponse<string>.Fail(ex.Message));
+            await WriteResponse(context, HttpStatusCode.BadRequest, ApiResponse<List<string>>.Fail(ex.Errors.ToList(), ex.Message));
         }
         catch (KeyNotFoundException ex)
         {

@@ -13,6 +13,9 @@ public static class UpdateFieldOfStudyValidator
         
         if (string.IsNullOrWhiteSpace(request.NewFieldOfStudyName))
             errors.Add("Field of study name cannot be empty.");
+        
+        if (request.NewFieldOfStudyName.Length > 100) 
+            errors.Add("Field of study name cannot exceed 100 characters.");
 
         if (errors.Count > 0)
             throw new ValidationException(errors);

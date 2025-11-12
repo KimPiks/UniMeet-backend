@@ -14,6 +14,9 @@ public static class AddFieldOfStudyValidator
         if (string.IsNullOrWhiteSpace(request.FieldOfStudyName))
             errors.Add("Name is required.");
         
+        if (request.FieldOfStudyName.Length > 100)
+            errors.Add("Name cannot exceed 100 characters.");
+        
         if (errors.Count > 0)
             throw new ValidationException(errors);
     }
