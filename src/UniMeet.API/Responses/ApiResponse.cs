@@ -18,9 +18,19 @@ public class ApiResponse<T>
     {
         return new ApiResponse<T>(true, message, data);
     }
+
+    public static ApiResponse<T> Ok(string message)
+    {
+        return new ApiResponse<T>(true, message, default!);
+    }
     
     public static ApiResponse<T> Fail(string message)
     {
         return new ApiResponse<T>(false, message, default!);
+    }
+    
+    public static ApiResponse<T> Fail(T data, string message)
+    {
+        return new ApiResponse<T>(false, message, data);
     }
 }

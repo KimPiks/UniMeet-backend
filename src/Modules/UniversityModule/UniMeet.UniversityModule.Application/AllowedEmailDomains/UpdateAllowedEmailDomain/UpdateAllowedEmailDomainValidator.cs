@@ -13,6 +13,9 @@ public static class UpdateAllowedEmailDomainValidator
         
         if (string.IsNullOrWhiteSpace(request.NewDomain))
             errors.Add("New domain cannot be empty.");
+        
+        if (request.NewDomain.Length < 3 || request.NewDomain.Length > 255)
+            errors.Add("New domain must be between 3 and 255 characters long.");
 
         if (errors.Count > 0)
             throw new ValidationException(errors);

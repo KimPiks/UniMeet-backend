@@ -14,6 +14,9 @@ public static class UpdateDepartmentValidator
         if (string.IsNullOrEmpty(request.NewDepartmentName)) 
             errors.Add("New Department Name cannot be empty.");
         
+        if (request.NewDepartmentName.Length > 100) 
+            errors.Add("New Department Name cannot exceed 100 characters.");
+        
         if (errors.Count > 0)
             throw new ValidationException(errors);
     }
