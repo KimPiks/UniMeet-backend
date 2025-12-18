@@ -14,7 +14,7 @@ public class GetUniversityByIdQueryHandler(IUniversityRepository universityRepos
 
         if (university == null)
             return null;
-
+        
         return university.ToDto();
     }
 }

@@ -1,0 +1,50 @@
+﻿namespace UniMeet.UserModule.Domain.Users;
+
+public class User
+{
+    public Guid Id { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public string PasswordHash { get; set;} = null!;
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    public bool IsActive { get; set; } = false;
+
+    public int UniversityId { get; set; }
+
+    private User() { }
+
+    public User(string firstName, string lastName, string email, string passwordHash, int universityId)
+    {
+        Id = Guid.NewGuid();
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
+        PasswordHash = passwordHash;
+        UniversityId = universityId;
+        IsActive = false;
+        
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
+    }
+    
+    public void UpdatePassword(string newPasswordHash)
+    {
+        PasswordHash = newPasswordHash;
+        UpdatedAt = DateTime.UtcNow;
+    }
+    
+    public void Rename(string newFirstName, string newLastName)
+    {
+        FirstName = newFirstName;
+        LastName = newLastName;
+        UpdatedAt = DateTime.UtcNow;
+    }
+    
+    public void Activate()
+    {
+        IsActive = true;
+        UpdatedAt = DateTime.UtcNow;
+    }
+}
