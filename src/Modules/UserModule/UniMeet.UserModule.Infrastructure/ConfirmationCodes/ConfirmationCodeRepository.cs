@@ -29,14 +29,14 @@ public class ConfirmationCodeRepository(UserContext context) : IConfirmationCode
             .ToListAsync(cancellationToken);
     }
 
-    public async Task AddAsync(ConfirmationCode user, CancellationToken cancellationToken = default)
+    public async Task AddAsync(ConfirmationCode code, CancellationToken cancellationToken = default)
     {
-        await context.ConfirmationCodes.AddAsync(user, cancellationToken);
+        await context.ConfirmationCodes.AddAsync(code, cancellationToken);
     }
 
-    public void Delete(ConfirmationCode user)
+    public void Delete(ConfirmationCode code)
     {
-        context.ConfirmationCodes.Remove(user);
+        context.ConfirmationCodes.Remove(code);
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)

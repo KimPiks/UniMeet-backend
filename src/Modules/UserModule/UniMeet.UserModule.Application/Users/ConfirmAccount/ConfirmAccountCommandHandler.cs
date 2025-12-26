@@ -15,7 +15,7 @@ public class ConfirmAccountCommandHandler(IConfirmationCodeRepository confirmati
         if (confirmationCode == null)
             throw new CodeNotFoundException(request.ConfirmationCode);
         
-        if (DateTime.UtcNow > confirmationCode.ExpiresAtUtc)
+        if (confirmationCode.IsExpired())
             throw new ConfirmationCodeExpiredException(request.ConfirmationCode);
         
         confirmationCode.User.Activate();

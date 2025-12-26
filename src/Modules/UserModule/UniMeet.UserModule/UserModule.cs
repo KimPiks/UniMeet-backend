@@ -9,10 +9,12 @@ using UniMeet.UserModule.Application;
 using UniMeet.UserModule.Application.Services;
 using UniMeet.UserModule.Config;
 using UniMeet.UserModule.Domain.ConfirmationCodes;
+using UniMeet.UserModule.Domain.PasswordResetCodes;
 using UniMeet.UserModule.Domain.Services;
 using UniMeet.UserModule.Domain.Users;
 using UniMeet.UserModule.Infrastructure;
 using UniMeet.UserModule.Infrastructure.ConfirmationCodes;
+using UniMeet.UserModule.Infrastructure.PasswordResetCodes;
 using UniMeet.UserModule.Infrastructure.Users;
 
 namespace UniMeet.UserModule;
@@ -47,10 +49,12 @@ public class UserModule : IModule
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IConfirmationCodeRepository, ConfirmationCodeRepository>();
+        services.AddScoped<IPasswordResetCodeRepository, PasswordResetCodeRepository>();
         
         services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
         services.AddSingleton<IConfirmationLinkService, ConfirmationLinkService>(_ => new ConfirmationLinkService(_configuration.WebsiteUrl));
-
+        services.AddSingleton<IPasswordResetLinkService, PasswordResetLinkService>(_ => new PasswordResetLinkService(_configuration.WebsiteUrl));
+        
         // Mediator
         services.RegisterMediator(typeof(UserModuleApplication).Assembly);
     }

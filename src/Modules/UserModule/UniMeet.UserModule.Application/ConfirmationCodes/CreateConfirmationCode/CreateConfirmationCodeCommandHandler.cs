@@ -7,7 +7,7 @@ public class CreateConfirmationCodeCommandHandler(IConfirmationCodeRepository co
 {
     public async Task<Guid> HandleAsync(CreateConfirmationCodeCommand request, CancellationToken cancellationToken = default)
     {
-        var expirationTime = DateTime.UtcNow.AddHours(1);
+        var expirationTime = DateTime.UtcNow.AddDays(1);
         var confirmationCode = new ConfirmationCode(request.UserId, expirationTime);
         
         await confirmationCodeRepository.AddAsync(confirmationCode, cancellationToken);
