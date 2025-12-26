@@ -14,6 +14,7 @@ public class User
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public bool IsActive { get; set; } = false;
+    public int GroupId { get; set; }
 
     public int UniversityId { get; set; }
     
@@ -23,7 +24,7 @@ public class User
 
     private User() { }
 
-    public User(string firstName, string lastName, string email, string passwordHash, int universityId)
+    public User(string firstName, string lastName, string email, string passwordHash, int universityId, int groupId)
     {
         Id = Guid.NewGuid();
         FirstName = firstName;
@@ -32,6 +33,7 @@ public class User
         PasswordHash = passwordHash;
         UniversityId = universityId;
         IsActive = false;
+        GroupId = groupId;
         
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;

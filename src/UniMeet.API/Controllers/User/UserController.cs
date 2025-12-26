@@ -80,7 +80,6 @@ public class UserController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
     [ActiveUser]
     public async Task<IActionResult> RefreshTokens([FromBody] string refreshToken)
     {
@@ -90,7 +89,6 @@ public class UserController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
     [ActiveUser]
     public async Task<IActionResult> Logout([FromBody] string refreshToken)
     {
