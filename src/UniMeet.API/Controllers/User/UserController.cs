@@ -2,12 +2,13 @@
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
 using UniMeet.Shared.Abstractions;
+using UniMeet.UserModule.Application.Users.ConfirmAccount;
 using UniMeet.UserModule.Application.Users.RegisterUser;
 
 namespace UniMeet.API.Controllers.User;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 public class UserController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
@@ -21,5 +22,13 @@ public class UserController(IMediator mediator) : ControllerBase
         
         await mediator.SendAsync(command);
         return Ok(ApiResponse<string>.Ok(null, "User registered successfully"));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ConfirmAccount([FromBody] Guid code)
+    {
+        var command = new ConfirmAccountCommand(code);
+        await mediator.SendAsync(command);
+        return Ok(ApiResponse<string>.Ok(null, "Account confirmed successfully"));
     }
 }

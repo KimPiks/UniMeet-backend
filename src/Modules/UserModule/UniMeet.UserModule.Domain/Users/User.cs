@@ -1,4 +1,6 @@
-﻿namespace UniMeet.UserModule.Domain.Users;
+﻿using UniMeet.UserModule.Domain.ConfirmationCodes;
+
+namespace UniMeet.UserModule.Domain.Users;
 
 public class User
 {
@@ -12,6 +14,8 @@ public class User
     public bool IsActive { get; set; } = false;
 
     public int UniversityId { get; set; }
+    
+    public List<ConfirmationCode> ConfirmationCodes { get; set; } = new();
 
     private User() { }
 

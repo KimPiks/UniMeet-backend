@@ -1,3 +1,3 @@
 ﻿namespace UniMeet.UserModule.Config;
 
-internal record Configuration(string ConnectionString);
+internal record Configuration(string ConnectionString, string WebsiteUrl);

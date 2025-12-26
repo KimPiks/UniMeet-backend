@@ -8,9 +8,11 @@ using UniMeet.Shared.Mediator.Extensions;
 using UniMeet.UserModule.Application;
 using UniMeet.UserModule.Application.Services;
 using UniMeet.UserModule.Config;
+using UniMeet.UserModule.Domain.ConfirmationCodes;
 using UniMeet.UserModule.Domain.Services;
 using UniMeet.UserModule.Domain.Users;
 using UniMeet.UserModule.Infrastructure;
+using UniMeet.UserModule.Infrastructure.ConfirmationCodes;
 using UniMeet.UserModule.Infrastructure.Users;
 
 namespace UniMeet.UserModule;
@@ -44,8 +46,10 @@ public class UserModule : IModule
         
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
-
+        services.AddScoped<IConfirmationCodeRepository, ConfirmationCodeRepository>();
+        
         services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
+        services.AddSingleton<IConfirmationLinkService, ConfirmationLinkService>(_ => new ConfirmationLinkService(_configuration.WebsiteUrl));
 
         // Mediator
         services.RegisterMediator(typeof(UserModuleApplication).Assembly);
@@ -54,12 +58,18 @@ public class UserModule : IModule
     private static Configuration ValidateConfiguration(IConfiguration configuration)
     {
         var connectionString = configuration["DbConnectionString"];
+        var websiteUrl = configuration["WebsiteUrl"];
         
         if (string.IsNullOrEmpty(connectionString))
         {
             throw new MissingConfigurationException("UserModule: DbConnectionString is not configured.");
         }
 
-        return new Configuration(connectionString);
+        if (string.IsNullOrEmpty(websiteUrl))
+        {
+            throw new MissingConfigurationException("UserModule: WebsiteUrl is not configured.");
+        }
+
+        return new Configuration(connectionString, websiteUrl);
     }
 }
