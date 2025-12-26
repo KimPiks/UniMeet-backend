@@ -35,6 +35,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ModularSystem\ModularSystem.csproj" />
+      <ProjectReference Include="..\Modules\MailingModule\MailingModule\MailingModule.csproj" />
       <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Application\UniMeet.UniversityModule.Application.csproj" />
       <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Domain\UniMeet.UniversityModule.Domain.csproj" />
       <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Infrastructure\UniMeet.UniversityModule.Infrastructure.csproj" />
