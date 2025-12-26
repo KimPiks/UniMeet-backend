@@ -23,20 +23,6 @@ public class ActiveUserAttribute : Attribute, IAsyncAuthorizationFilter
             context.Result = new UnauthorizedResult();
             return;
         }
-        
-        if (user.FindFirst("exp") != null)
-        {
-            var expString = user.FindFirst("exp")?.Value;
-            if (long.TryParse(expString, out long exp))
-            {
-                var expDate = DateTimeOffset.FromUnixTimeSeconds(exp).UtcDateTime;
-                if (expDate < DateTime.UtcNow)
-                {
-                    context.Result = new UnauthorizedResult();
-                    return;
-                }
-            }
-        }
 
         var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
         var dbUser = await userRepository.GetByIdAsync(userId);

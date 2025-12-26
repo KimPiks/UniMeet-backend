@@ -24,6 +24,7 @@ namespace UniMeet.API.Controllers.University;
 public class UniversitiesController(IMediator mediator) : ControllerBase
 {
     [HttpGet("{universityId:int}")]
+    [Permission("UniversityModule.GetUniversity")]
     public async Task<IActionResult> GetUniversityById([FromRoute] int universityId)
     {
         var query = new GetUniversityByIdQuery(universityId);
@@ -32,6 +33,7 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
     }
     
     [HttpGet]
+    [Permission("UniversityModule.GetAllUniversities")]
     public async Task<IActionResult> GetAllUniversities([FromQuery] int offset = 0, [FromQuery] int limit = 100)
     {
         var query = new GetAllUniversitiesQuery(offset, limit);
@@ -40,6 +42,7 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
     }
     
     [HttpGet("{universityId:int}/AllowedEmailDomains")]
+    [Permission("UniversityModule.GetAllowedDomains")]
     public async Task<IActionResult> GetAllowedEmailDomains([FromRoute] int universityId, [FromQuery] int offset = 0, [FromQuery] int limit = 100)
     {
         var query = new GetAllowedEmailDomainsByUniversityIdQuery(universityId, offset, limit);
@@ -48,6 +51,7 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
     }
     
     [HttpGet("{universityId:int}/Departments")]
+    [Permission("UniversityModule.GetDepartments")]
     public async Task<IActionResult> GetAllDepartments([FromRoute] int universityId, [FromQuery] int offset = 0, [FromQuery] int limit = 100)
     {
         var query = new GetDepartmentsByUniversityIdQuery(universityId, offset, limit);
@@ -57,6 +61,7 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
+    [Permission( "UniversityModule.CreateUniversity")]
     public async Task<IActionResult> CreateUniversity([FromBody] UniversityCreateRequest request)
     {
         var command = new CreateUniversityCommand(
@@ -72,6 +77,7 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{universityId:int}")]
+    [Permission("UniversityModule.DeleteUniversity")]
     public async Task<IActionResult> DeleteUniversity([FromRoute] int universityId)
     {
         var command = new DeleteUniversityCommand(universityId);
@@ -80,6 +86,7 @@ public class UniversitiesController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
+    [Permission("UniversityModule.UpdateUniversity")]
     public async Task<IActionResult> UpdateUniversity([FromBody] UniversityUpdateRequest request)
     {
         var command = new UpdateUniversityCommand(
