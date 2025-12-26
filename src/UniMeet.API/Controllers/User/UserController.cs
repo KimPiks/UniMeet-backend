@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
@@ -9,6 +10,7 @@ using UniMeet.UserModule.Application.PasswordResetCodes.ResetPassword;
 using UniMeet.UserModule.Application.RefreshTokens.RefreshTokens;
 using UniMeet.UserModule.Application.Users.ConfirmAccount;
 using UniMeet.UserModule.Application.Users.LoginUser;
+using UniMeet.UserModule.Application.Users.Logout;
 using UniMeet.UserModule.Application.Users.RegisterUser;
 using UniMeet.UserModule.Domain.Models;
 
@@ -78,10 +80,22 @@ public class UserController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
+    [ActiveUser]
     public async Task<IActionResult> RefreshTokens([FromBody] string refreshToken)
     {
         var command = new RefreshTokensCommand(refreshToken);
         var tokens = await mediator.SendAsync(command);
         return Ok(ApiResponse<LoginTokens>.Ok(tokens, "Tokens refreshed successfully"));
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ActiveUser]
+    public async Task<IActionResult> Logout([FromBody] string refreshToken)
+    {
+        var command = new LogoutCommand(refreshToken);
+        await mediator.SendAsync(command);
+        return Ok(ApiResponse<string>.Ok(null, "User logged out successfully"));
     }
 }
