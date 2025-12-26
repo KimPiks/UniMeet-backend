@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
 using UniMeet.Shared.Abstractions;
@@ -16,6 +18,8 @@ namespace UniMeet.API.Controllers.University;
 
 [ApiController]
 [Route("[controller]")]
+[ActiveUser]
+[Authorize]
 public class DepartmentsController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
