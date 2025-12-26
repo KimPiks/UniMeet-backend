@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\UniMeet.Shared\UniMeet.Shared.csproj" />
+      <ProjectReference Include="..\..\MailingModule\MailingModule\MailingModule.csproj" />
       <ProjectReference Include="..\..\UniversityModule\UniMeet.UniversityModule.Application\UniMeet.UniversityModule.Application.csproj" />
       <ProjectReference Include="..\UniMeet.UserModule.Domain\UniMeet.UserModule.Domain.csproj" />
     </ItemGroup>
