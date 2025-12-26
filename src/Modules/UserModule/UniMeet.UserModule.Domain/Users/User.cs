@@ -1,5 +1,6 @@
 ﻿using UniMeet.UserModule.Domain.ConfirmationCodes;
 using UniMeet.UserModule.Domain.PasswordResetCodes;
+using UniMeet.UserModule.Domain.RefreshTokens;
 
 namespace UniMeet.UserModule.Domain.Users;
 
@@ -18,6 +19,7 @@ public class User
     
     public List<ConfirmationCode> ConfirmationCodes { get; set; } = new();
     public List<PasswordResetCode> PasswordResetCodes { get; set; } = new();
+    public List<RefreshToken> RefreshTokens { get; set; } = new(); 
 
     private User() { }
 
