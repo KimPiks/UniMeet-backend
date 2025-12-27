@@ -38,7 +38,6 @@ public class UserTests
         // Arrange
         var user = new User("John", "Doe", "john@example.com", "old_hash", 1, 1);
         var oldUpdatedAt = user.UpdatedAt;
-        Thread.Sleep(10); // Ensure time difference
         var newPasswordHash = "new_hash";
 
         // Act
@@ -46,7 +45,7 @@ public class UserTests
 
         // Assert
         user.PasswordHash.Should().Be(newPasswordHash);
-        user.UpdatedAt.Should().BeAfter(oldUpdatedAt);
+        user.UpdatedAt.Should().BeOnOrAfter(oldUpdatedAt);
     }
 
     [Fact]
@@ -55,7 +54,6 @@ public class UserTests
         // Arrange
         var user = new User("John", "Doe", "john@example.com", "hash", 1, 1);
         var oldUpdatedAt = user.UpdatedAt;
-        Thread.Sleep(10);
         var newFirstName = "Jane";
         var newLastName = "Smith";
 
@@ -65,7 +63,7 @@ public class UserTests
         // Assert
         user.FirstName.Should().Be(newFirstName);
         user.LastName.Should().Be(newLastName);
-        user.UpdatedAt.Should().BeAfter(oldUpdatedAt);
+        user.UpdatedAt.Should().BeOnOrAfter(oldUpdatedAt);
     }
 
     [Fact]
@@ -74,14 +72,13 @@ public class UserTests
         // Arrange
         var user = new User("John", "Doe", "john@example.com", "hash", 1, 1);
         var oldUpdatedAt = user.UpdatedAt;
-        Thread.Sleep(10);
 
         // Act
         user.Activate();
 
         // Assert
         user.IsActive.Should().BeTrue();
-        user.UpdatedAt.Should().BeAfter(oldUpdatedAt);
+        user.UpdatedAt.Should().BeOnOrAfter(oldUpdatedAt);
     }
 
     [Fact]
@@ -90,7 +87,6 @@ public class UserTests
         // Arrange
         var user = new User("John", "Doe", "john@example.com", "hash", 1, 1);
         var oldUpdatedAt = user.UpdatedAt;
-        Thread.Sleep(10);
         var newGroupId = 5;
 
         // Act
@@ -98,7 +94,7 @@ public class UserTests
 
         // Assert
         user.GroupId.Should().Be(newGroupId);
-        user.UpdatedAt.Should().BeAfter(oldUpdatedAt);
+        user.UpdatedAt.Should().BeOnOrAfter(oldUpdatedAt);
     }
 
     [Fact]

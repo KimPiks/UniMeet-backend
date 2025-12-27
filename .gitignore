@@ -7,3 +7,10 @@ erd/
 logs/
 Migrations/
 UniMeet.sln.DotSettings.user
+
+# Test results
+TestResults/
+**/TestResults/
+coverage.cobertura.xml
+**/coverage.cobertura.xml
+*.trx
