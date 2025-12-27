@@ -14,8 +14,8 @@ public class JwtService : IJwtService
     private readonly string _issuer;
     private readonly string _audience;
     
-    private const int AccessTokenExpiresMinutes = 1;
-    private const int RefreshTokenExpireMinutes = 10;
+    private const int AccessTokenExpiresMinutes = 60;
+    private const int RefreshTokenExpireMinutes = 1440;
     
     public JwtService(string secretKey, string issuer, string audience)
     {
