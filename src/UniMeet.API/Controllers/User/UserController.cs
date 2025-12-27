@@ -8,10 +8,13 @@ using UniMeet.UserModule.Application.PasswordResetCodes.CheckIfResetPasswordCode
 using UniMeet.UserModule.Application.PasswordResetCodes.RequestPasswordReset;
 using UniMeet.UserModule.Application.PasswordResetCodes.ResetPassword;
 using UniMeet.UserModule.Application.RefreshTokens.RefreshTokens;
+using UniMeet.UserModule.Application.Users;
 using UniMeet.UserModule.Application.Users.ConfirmAccount;
+using UniMeet.UserModule.Application.Users.GetAllUsers;
 using UniMeet.UserModule.Application.Users.LoginUser;
 using UniMeet.UserModule.Application.Users.Logout;
 using UniMeet.UserModule.Application.Users.RegisterUser;
+using UniMeet.UserModule.Application.Users.SetGroup;
 using UniMeet.UserModule.Domain.Models;
 
 namespace UniMeet.API.Controllers.User;
@@ -81,6 +84,7 @@ public class UserController(IMediator mediator) : ControllerBase
 
     [HttpPost]
     [ActiveUser]
+    [Permission("UserModule.RefreshTokens")]
     public async Task<IActionResult> RefreshTokens([FromBody] string refreshToken)
     {
         var command = new RefreshTokensCommand(refreshToken);
@@ -89,11 +93,35 @@ public class UserController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     [ActiveUser]
+    [Permission("UserModule.Logout")]
     public async Task<IActionResult> Logout([FromBody] string refreshToken)
     {
         var command = new LogoutCommand(refreshToken);
         await mediator.SendAsync(command);
         return Ok(ApiResponse<string>.Ok(null, "User logged out successfully"));
+    }
+
+    [HttpGet]
+    [Authorize]
+    [ActiveUser]
+    [Permission("UserModule.GetUsers")]
+    public async Task<IActionResult> GetAllUsers([FromQuery] int offset = 0, [FromQuery] int limit = 100)
+    {
+        var query = new GetAllUsersQuery(offset, limit);
+        var users = await mediator.SendAsync(query);
+        return Ok(ApiResponse<IEnumerable<UserDto>>.Ok(users, "Users retrieved successfully"));
+    }
+
+    [HttpPatch]
+    [Authorize]
+    [ActiveUser]
+    [Permission("UserModule.SetGroup")]
+    public async Task<IActionResult> SetGroup([FromBody] SetGroupRequest request)
+    {
+        var command = new SetGroupCommand(request.UserId, request.GroupId);
+        await mediator.SendAsync(command);
+        return Ok(ApiResponse<string>.Ok(null, "User group set successfully")); 
     }
 }

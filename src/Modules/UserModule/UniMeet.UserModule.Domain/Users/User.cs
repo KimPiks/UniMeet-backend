@@ -14,7 +14,7 @@ public class User
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public bool IsActive { get; set; } = false;
-    public int GroupId { get; set; }
+    public int GroupId { get; private set; }
 
     public int UniversityId { get; set; }
     
@@ -55,6 +55,12 @@ public class User
     public void Activate()
     {
         IsActive = true;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void SetGroup(int groupId)
+    {
+        GroupId = groupId;
         UpdatedAt = DateTime.UtcNow;
     }
 }

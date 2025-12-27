@@ -23,6 +23,7 @@ namespace UniMeet.API.Controllers.University;
 public class DepartmentsController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
+    [Permission("UniversityModule.AddDepartment")]
     public async Task<IActionResult> CreateDepartment([FromBody] DepartmentCreateRequest request)
     {
         var command = new AddDepartmentCommand(request.UniversityId, request.DepartmentName);
@@ -31,6 +32,7 @@ public class DepartmentsController(IMediator mediator) : ControllerBase
     }
     
     [HttpGet("{departmentId:int}")]
+    [Permission("UniversityModule.GetDepartment")]
     public async Task<IActionResult> GetDepartmentById([FromRoute] int departmentId)
     {
         var query = new GetDepartmentByIdQuery(departmentId);
@@ -39,6 +41,7 @@ public class DepartmentsController(IMediator mediator) : ControllerBase
     }
     
     [HttpGet("{departmentId:int}/FieldsOfStudy")]
+    [Permission("UniversityModule.GetFieldsOfStudy")]
     public async Task<IActionResult> GetFieldsOfStudy([FromRoute] int departmentId, [FromQuery] int offset = 0, [FromQuery] int limit = 100)
     {
         var query = new GetFieldsOfStudyByDepartmentIdQuery(departmentId, offset, limit);
@@ -47,6 +50,7 @@ public class DepartmentsController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{departmentId:int}")]
+    [Permission("UniversityModule.DeleteDepartment")]
     public async Task<IActionResult> DeleteDepartment([FromRoute] int departmentId)
     {
         var command = new DeleteDepartmentCommand(departmentId);
@@ -55,6 +59,7 @@ public class DepartmentsController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
+    [Permission("UniversityModule.UpdateDepartment")]
     public async Task<IActionResult> UpdateDepartment([FromBody] DepartmentUpdateRequest request)
     {
         var command = new UpdateDepartmentCommand(request.DepartmentId, request.DepartmentName);

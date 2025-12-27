@@ -59,6 +59,8 @@ public class PermissionsModule : IModule
         using (var scope = services.BuildServiceProvider().CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<PermissionsContext>();
+            if (context.Groups.Any() || context.Permissions.Any())
+                return;
             
             foreach (var groupEntry in groups)
             {
@@ -66,21 +68,13 @@ public class PermissionsModule : IModule
                 var groupName = groupConfig.Name;
                 var permissions = groupConfig.Permissions;
 
-                var dbGroup = context.Groups.FirstOrDefault(g => g.Name == groupName);
-                if (dbGroup == null)
-                {
-                    context.Groups.Add(new Group(groupName));
-                    context.SaveChanges();
-                }
-                dbGroup = context.Groups.First(g => g.Name == groupName);
-
+                context.Groups.Add(new Group(groupName));
+                context.SaveChanges();
+                
+                var group = context.Groups.First(g => g.Name == groupName);
                 foreach (var permission in permissions)
                 {
-                    var permissionExists = context.Permissions.Any(p => p.PermissionName == permission);
-                    if (permissionExists)
-                        continue;
-                    
-                    context.Permissions.Add(new Permission(dbGroup.Id, permission));
+                    context.Permissions.Add(new Permission(group.Id, permission));
                 }
                 context.SaveChanges();
             }
