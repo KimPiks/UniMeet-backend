@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PermissionsModule.Domain.Groups;
+using UniMeet.API.Responses;
 using UniMeet.UserModule.Domain.Users;
 
 namespace UniMeet.API.Attributes;
@@ -21,7 +22,10 @@ public class PermissionAttribute : Attribute, IAsyncAuthorizationFilter
         var user = context.HttpContext.User;
         if (user == null || !user.Identity.IsAuthenticated)
         {
-            context.Result = new UnauthorizedResult();
+            context.HttpContext.Response.StatusCode = 401;
+            context.Result = new Microsoft.AspNetCore.Mvc.JsonResult(
+                ApiResponse<string>.Fail(null, "Unauthorized")
+            );
             return;
         }
         
@@ -29,7 +33,10 @@ public class PermissionAttribute : Attribute, IAsyncAuthorizationFilter
         Guid userId;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out userId))
         {
-            context.Result = new UnauthorizedResult();
+            context.HttpContext.Response.StatusCode = 401;
+            context.Result = new Microsoft.AspNetCore.Mvc.JsonResult(
+                ApiResponse<string>.Fail(null, "Unauthorized")
+            );
             return;
         }
         
@@ -41,7 +48,10 @@ public class PermissionAttribute : Attribute, IAsyncAuthorizationFilter
                 var expDate = DateTimeOffset.FromUnixTimeSeconds(exp).UtcDateTime;
                 if (expDate < DateTime.UtcNow)
                 {
-                    context.Result = new UnauthorizedResult();
+                    context.HttpContext.Response.StatusCode = 401;
+                    context.Result = new Microsoft.AspNetCore.Mvc.JsonResult(
+                        ApiResponse<string>.Fail(null, "Unauthorized")
+                    );
                     return;
                 }
             }
@@ -52,20 +62,29 @@ public class PermissionAttribute : Attribute, IAsyncAuthorizationFilter
         var dbUser = await userRepository.GetByIdAsync(userId);
         if (dbUser == null)
         {
-            context.Result = new UnauthorizedResult();
+            context.HttpContext.Response.StatusCode = 401;
+            context.Result = new Microsoft.AspNetCore.Mvc.JsonResult(
+                ApiResponse<string>.Fail(null, "Unauthorized")
+            );
             return;
         }
         
         var group = await groupRepository.GetByIdAsync(dbUser.GroupId);
         if (group == null)
         {
-            context.Result = new UnauthorizedResult();
+            context.HttpContext.Response.StatusCode = 401;
+            context.Result = new Microsoft.AspNetCore.Mvc.JsonResult(
+                ApiResponse<string>.Fail(null, "Unauthorized")
+            );
             return;
         }
         
         if (!group.Permissions.Any(p => p.PermissionName == _permissionName))
         {
-            context.Result = new ForbidResult();
+            context.HttpContext.Response.StatusCode = 403;
+            context.Result = new Microsoft.AspNetCore.Mvc.JsonResult(
+                ApiResponse<string>.Fail(null, "Forbidden")
+            );
         }
     }
 }
