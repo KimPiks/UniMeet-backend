@@ -52,6 +52,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.PermissionsModule.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.PermissionsModule.Infrastructure", "src\Modules\PermissionsModule\UniMeet.PermissionsModule.Infrastructure\UniMeet.PermissionsModule.Infrastructure.csproj", "{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs_generator", "docs_generator", "{398B1DF1-C0A2-47C5-BF6A-B92CBD85C017}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.Docs.Generator", "docs_generator\UniMeet.Docs.Generator\UniMeet.Docs.Generator.csproj", "{84040F86-0932-45EE-A718-BDA9160D6184}"
+EndProject
 
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +89,7 @@ Global
 		{119A3FDF-6227-40EC-8C71-6BADDD3FFFDF} = {950C8A57-D640-44AC-8065-8911D5C18706}
 		{9F31A593-3137-4651-B029-F2168D46556A} = {950C8A57-D640-44AC-8065-8911D5C18706}
 		{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449} = {950C8A57-D640-44AC-8065-8911D5C18706}
+		{84040F86-0932-45EE-A718-BDA9160D6184} = {398B1DF1-C0A2-47C5-BF6A-B92CBD85C017}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6D5880E7-E007-43C4-B5A0-9AB8FD22487C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -179,5 +184,9 @@ Global
 		{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84040F86-0932-45EE-A718-BDA9160D6184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84040F86-0932-45EE-A718-BDA9160D6184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84040F86-0932-45EE-A718-BDA9160D6184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84040F86-0932-45EE-A718-BDA9160D6184}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
