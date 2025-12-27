@@ -66,9 +66,9 @@ public class UserController(IMediator mediator) : ControllerBase
 
     [HttpPost]
     [OnlyAnonymous]
-    public async Task<IActionResult> RequestPasswordReset([FromBody] string email)
+    public async Task<IActionResult> RequestPasswordReset([FromBody] EmailRequest request)
     {
-        var command = new RequestPasswordResetCommand(email);
+        var command = new RequestPasswordResetCommand(request.Email);
         await mediator.SendAsync(command);
         return Ok(ApiResponse<string>.Ok(null, "Password reset requested successfully"));
     }
@@ -85,9 +85,9 @@ public class UserController(IMediator mediator) : ControllerBase
     [HttpPost]
     [ActiveUser]
     [Permission("UserModule.RefreshTokens")]
-    public async Task<IActionResult> RefreshTokens([FromBody] string refreshToken)
+    public async Task<IActionResult> RefreshTokens([FromBody] RefreshTokenRequest request)
     {
-        var command = new RefreshTokensCommand(refreshToken);
+        var command = new RefreshTokensCommand(request.RefreshToken);
         var tokens = await mediator.SendAsync(command);
         return Ok(ApiResponse<LoginTokens>.Ok(tokens, "Tokens refreshed successfully"));
     }
@@ -96,9 +96,9 @@ public class UserController(IMediator mediator) : ControllerBase
     [Authorize]
     [ActiveUser]
     [Permission("UserModule.Logout")]
-    public async Task<IActionResult> Logout([FromBody] string refreshToken)
+    public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
     {
-        var command = new LogoutCommand(refreshToken);
+        var command = new LogoutCommand(request.RefreshToken);
         await mediator.SendAsync(command);
         return Ok(ApiResponse<string>.Ok(null, "User logged out successfully"));
     }
