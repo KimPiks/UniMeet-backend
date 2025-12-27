@@ -2,8 +2,6 @@
 
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{07DDEC5A-B01A-4478-B01E-9A93DB9751BF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0F39FCD5-0050-4AAE-BCCF-07C83D40C55F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{B85848D8-BCB5-496F-BDA8-D4E8A234E7F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.API", "src\UniMeet.API\UniMeet.API.csproj", "{6D5880E7-E007-43C4-B5A0-9AB8FD22487C}"
@@ -32,6 +30,28 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.UniversityModule.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.UniversityModule.Infrastructure", "src\Modules\UniversityModule\UniMeet.UniversityModule.Infrastructure\UniMeet.UniversityModule.Infrastructure.csproj", "{14222B24-6771-4EE4-AE11-3B0424AC0D3A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EnrollmentModule", "EnrollmentModule", "{FEC846C5-991B-42CB-84D2-3B997DB15DA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.UserEnrollmentModule", "src\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule\UniMeet.UserEnrollmentModule.csproj", "{3830E6C1-2C64-4F61-9566-0E7DACEE2885}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.UserEnrollmentModule.Domain", "src\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule.Domain\UniMeet.UserEnrollmentModule.Domain.csproj", "{FB516E35-4A0C-4F9D-9551-08E9888CFC3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.UserEnrollmentModule.Infrastructure", "src\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule.Infrastructure\UniMeet.UserEnrollmentModule.Infrastructure.csproj", "{815D9A85-EFB2-47BA-A1A1-5CB79149CEE4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MailingModule", "MailingModule", "{8D369A38-D052-4870-ADED-62C655C32FA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailingModule", "src\Modules\MailingModule\MailingModule\MailingModule.csproj", "{99B22B11-5F22-4B48-A52E-C6C5DFBDACF7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PermissionsModule", "PermissionsModule", "{950C8A57-D640-44AC-8065-8911D5C18706}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.PermissionsModule", "src\Modules\PermissionsModule\UniMeet.PermissionsModule\UniMeet.PermissionsModule.csproj", "{9CD28EDE-9B72-4063-9BE6-0F7269BC2CBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.PermissionsModule.Domain", "src\Modules\PermissionsModule\UniMeet.PermissionsModule.Domain\UniMeet.PermissionsModule.Domain.csproj", "{119A3FDF-6227-40EC-8C71-6BADDD3FFFDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.PermissionsModule.Application", "src\Modules\PermissionsModule\UniMeet.PermissionsModule.Application\UniMeet.PermissionsModule.Application.csproj", "{9F31A593-3137-4651-B029-F2168D46556A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniMeet.PermissionsModule.Infrastructure", "src\Modules\PermissionsModule\UniMeet.PermissionsModule.Infrastructure\UniMeet.PermissionsModule.Infrastructure.csproj", "{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449}"
+EndProject
 
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +74,17 @@ Global
 		{8A1220AB-53DA-462C-AF03-2AE6A93E6A7F} = {A90711A8-B81C-4D1F-815F-FE6BCB59F112}
 		{603FFA65-A4CA-4E73-AF49-BC7579FD9BCC} = {A90711A8-B81C-4D1F-815F-FE6BCB59F112}
 		{14222B24-6771-4EE4-AE11-3B0424AC0D3A} = {A90711A8-B81C-4D1F-815F-FE6BCB59F112}
+		{FEC846C5-991B-42CB-84D2-3B997DB15DA9} = {B85848D8-BCB5-496F-BDA8-D4E8A234E7F4}
+		{3830E6C1-2C64-4F61-9566-0E7DACEE2885} = {FEC846C5-991B-42CB-84D2-3B997DB15DA9}
+		{FB516E35-4A0C-4F9D-9551-08E9888CFC3D} = {FEC846C5-991B-42CB-84D2-3B997DB15DA9}
+		{815D9A85-EFB2-47BA-A1A1-5CB79149CEE4} = {FEC846C5-991B-42CB-84D2-3B997DB15DA9}
+		{8D369A38-D052-4870-ADED-62C655C32FA5} = {B85848D8-BCB5-496F-BDA8-D4E8A234E7F4}
+		{99B22B11-5F22-4B48-A52E-C6C5DFBDACF7} = {8D369A38-D052-4870-ADED-62C655C32FA5}
+		{950C8A57-D640-44AC-8065-8911D5C18706} = {B85848D8-BCB5-496F-BDA8-D4E8A234E7F4}
+		{9CD28EDE-9B72-4063-9BE6-0F7269BC2CBA} = {950C8A57-D640-44AC-8065-8911D5C18706}
+		{119A3FDF-6227-40EC-8C71-6BADDD3FFFDF} = {950C8A57-D640-44AC-8065-8911D5C18706}
+		{9F31A593-3137-4651-B029-F2168D46556A} = {950C8A57-D640-44AC-8065-8911D5C18706}
+		{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449} = {950C8A57-D640-44AC-8065-8911D5C18706}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6D5880E7-E007-43C4-B5A0-9AB8FD22487C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -116,5 +147,37 @@ Global
 		{14222B24-6771-4EE4-AE11-3B0424AC0D3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14222B24-6771-4EE4-AE11-3B0424AC0D3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14222B24-6771-4EE4-AE11-3B0424AC0D3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3830E6C1-2C64-4F61-9566-0E7DACEE2885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3830E6C1-2C64-4F61-9566-0E7DACEE2885}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3830E6C1-2C64-4F61-9566-0E7DACEE2885}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3830E6C1-2C64-4F61-9566-0E7DACEE2885}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB516E35-4A0C-4F9D-9551-08E9888CFC3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB516E35-4A0C-4F9D-9551-08E9888CFC3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB516E35-4A0C-4F9D-9551-08E9888CFC3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB516E35-4A0C-4F9D-9551-08E9888CFC3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{815D9A85-EFB2-47BA-A1A1-5CB79149CEE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{815D9A85-EFB2-47BA-A1A1-5CB79149CEE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{815D9A85-EFB2-47BA-A1A1-5CB79149CEE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{815D9A85-EFB2-47BA-A1A1-5CB79149CEE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99B22B11-5F22-4B48-A52E-C6C5DFBDACF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99B22B11-5F22-4B48-A52E-C6C5DFBDACF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99B22B11-5F22-4B48-A52E-C6C5DFBDACF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99B22B11-5F22-4B48-A52E-C6C5DFBDACF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CD28EDE-9B72-4063-9BE6-0F7269BC2CBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CD28EDE-9B72-4063-9BE6-0F7269BC2CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CD28EDE-9B72-4063-9BE6-0F7269BC2CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CD28EDE-9B72-4063-9BE6-0F7269BC2CBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{119A3FDF-6227-40EC-8C71-6BADDD3FFFDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{119A3FDF-6227-40EC-8C71-6BADDD3FFFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{119A3FDF-6227-40EC-8C71-6BADDD3FFFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{119A3FDF-6227-40EC-8C71-6BADDD3FFFDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F31A593-3137-4651-B029-F2168D46556A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F31A593-3137-4651-B029-F2168D46556A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F31A593-3137-4651-B029-F2168D46556A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F31A593-3137-4651-B029-F2168D46556A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD73A3F-1FC9-4A07-8E8A-FCA690E7E449}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

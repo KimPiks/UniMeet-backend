@@ -8,7 +8,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\UniMeet.Shared\UniMeet.Shared.csproj" />
+      <ProjectReference Include="..\..\MailingModule\MailingModule\MailingModule.csproj" />
+      <ProjectReference Include="..\..\PermissionsModule\UniMeet.PermissionsModule.Application\UniMeet.PermissionsModule.Application.csproj" />
+      <ProjectReference Include="..\..\UniversityModule\UniMeet.UniversityModule.Application\UniMeet.UniversityModule.Application.csproj" />
       <ProjectReference Include="..\UniMeet.UserModule.Domain\UniMeet.UserModule.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
     </ItemGroup>
 
 </Project>

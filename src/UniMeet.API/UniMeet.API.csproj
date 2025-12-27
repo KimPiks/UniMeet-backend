@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
           <PrivateAssets>all</PrivateAssets>
@@ -35,10 +36,18 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ModularSystem\ModularSystem.csproj" />
+      <ProjectReference Include="..\Modules\MailingModule\MailingModule\MailingModule.csproj" />
+      <ProjectReference Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule.Application\UniMeet.PermissionsModule.Application.csproj" />
+      <ProjectReference Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule.Domain\UniMeet.PermissionsModule.Domain.csproj" />
+      <ProjectReference Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule.Infrastructure\UniMeet.PermissionsModule.Infrastructure.csproj" />
+      <ProjectReference Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule\UniMeet.PermissionsModule.csproj" />
       <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Application\UniMeet.UniversityModule.Application.csproj" />
       <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Domain\UniMeet.UniversityModule.Domain.csproj" />
       <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Infrastructure\UniMeet.UniversityModule.Infrastructure.csproj" />
       <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule\UniMeet.UniversityModule.csproj" />
+      <ProjectReference Include="..\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule.Domain\UniMeet.UserEnrollmentModule.Domain.csproj" />
+      <ProjectReference Include="..\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule.Infrastructure\UniMeet.UserEnrollmentModule.Infrastructure.csproj" />
+      <ProjectReference Include="..\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule\UniMeet.UserEnrollmentModule.csproj" />
       <ProjectReference Include="..\Modules\UserModule\UniMeet.UserModule\UniMeet.UserModule.csproj" />
       <ProjectReference Include="..\UniMeet.Shared\UniMeet.Shared.csproj" />
     </ItemGroup>

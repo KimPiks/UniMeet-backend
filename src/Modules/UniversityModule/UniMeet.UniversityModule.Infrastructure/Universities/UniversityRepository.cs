@@ -23,6 +23,15 @@ public class UniversityRepository(UniversityContext context) : IUniversityReposi
             .FirstOrDefaultAsync(u => u.AllowedEmailDomains.Any(d => d.Id == allowedDomainId), cancellationToken);
     }
 
+    public async Task<University?> GetByAllowedEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        return await context.Universities
+            .Include(u => u.AllowedEmailDomains)
+            .Include(u => u.Departments)
+            .ThenInclude(d => d.FieldsOfStudy)
+            .FirstOrDefaultAsync(u => u.AllowedEmailDomains.Any(d => d.Domain == email.ToLower()), cancellationToken);
+    }
+
     public async Task<University?> GetByDepartmentIdAsync(int departmentId,
         CancellationToken cancellationToken = default)
     {
