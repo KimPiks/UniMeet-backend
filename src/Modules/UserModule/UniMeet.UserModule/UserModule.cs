@@ -18,7 +18,6 @@ using UniMeet.UserModule.Domain.Services;
 using UniMeet.UserModule.Domain.Users;
 using UniMeet.UserModule.Infrastructure;
 using UniMeet.UserModule.Infrastructure.ConfirmationCodes;
-using UniMeet.UserModule.Infrastructure.Migrations;
 using UniMeet.UserModule.Infrastructure.PasswordResetCodes;
 using UniMeet.UserModule.Infrastructure.RefreshTokens;
 using UniMeet.UserModule.Infrastructure.Users;
