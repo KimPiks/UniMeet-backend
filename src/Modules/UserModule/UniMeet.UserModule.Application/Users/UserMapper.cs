@@ -12,7 +12,11 @@ public static class UserMapper
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
-            UniversityId = user.UniversityId
+            UniversityId = user.UniversityId,
+            IsActive = user.IsActive,
+            CreatedAt = user.CreatedAt,
+            UpdatedAt = user.UpdatedAt,
+            GroupId = user.GroupId
         };
     }
 }

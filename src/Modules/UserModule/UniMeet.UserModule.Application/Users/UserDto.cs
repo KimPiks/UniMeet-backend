@@ -10,4 +10,5 @@ public class UserDto
     public DateTime UpdatedAt { get; set; }
     public bool IsActive { get; set; } = false;
     public required int UniversityId { get; set; }
+    public required int GroupId { get; set; }
 }
