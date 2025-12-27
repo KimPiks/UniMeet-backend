@@ -1,5 +1,8 @@
+using Microsoft.OpenApi.Models;
 using Serilog;
 using UniMeet.API.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +21,33 @@ builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(option =>
+{
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Enter token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 
 // Load modules
 ModularSystem.ModularSystem.RunModules(builder.Configuration, builder.Services);
@@ -42,6 +71,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 app.UseHttpsRedirection();
+
+app.UseAuthentication(); 
+app.UseAuthorization();
 
 app.MapControllers();
 

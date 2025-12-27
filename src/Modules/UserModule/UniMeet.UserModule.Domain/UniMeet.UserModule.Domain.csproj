@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\UniMeet.Shared\UniMeet.Shared.csproj" />
+    </ItemGroup>
+
 </Project>

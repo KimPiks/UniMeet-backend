@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
 using UniMeet.Shared.Abstractions;
@@ -14,9 +16,12 @@ namespace UniMeet.API.Controllers.University;
 
 [ApiController]
 [Route("[controller]")]
+[ActiveUser]
+[Authorize]
 public class AllowedEmailDomainsController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
+    [Permission("UniversityModule.AddAllowedEmailDomain")]
     public async Task<IActionResult> CreateAllowedEmailDomain([FromBody] AllowedEmailCreateRequest request)
     {
         var command = new AddAllowedEmailDomainCommand(request.UniversityId, request.Domain);
@@ -25,6 +30,7 @@ public class AllowedEmailDomainsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{domainId:int}")]
+    [Permission("UniversityModule.GetAllowedEmailDomain")]
     public async Task<IActionResult> GetAllowedEmailDomain([FromRoute] int domainId)
     {
         var query = new GetAllowedEmailDomainByIdQuery(domainId);
@@ -33,6 +39,7 @@ public class AllowedEmailDomainsController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{domainId:int}")]
+    [Permission("UniversityModule.DeleteAllowedEmailDomain")]
     public async Task<IActionResult> DeleteAllowedEmailDomain([FromRoute] int domainId)
     {
         var command = new DeleteAllowedEmailDomainCommand(domainId);
@@ -41,6 +48,7 @@ public class AllowedEmailDomainsController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
+    [Permission("UniversityModule.UpdateAllowedEmailDomain")]
     public async Task<IActionResult> UpdateAllowedEmailDomain([FromBody] AllowedEmailUpdateRequest request)
     {
         var command = new UpdateAllowedEmailDomainCommand(request.DomainId, request.NewDomain);

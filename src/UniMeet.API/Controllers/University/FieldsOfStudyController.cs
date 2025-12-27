@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
 using UniMeet.Shared.Abstractions;
@@ -12,9 +14,12 @@ namespace UniMeet.API.Controllers.University;
 
 [ApiController]
 [Route("[controller]")]
+[ActiveUser]
+[Authorize]
 public class FieldsOfStudyController(IMediator mediator) : ControllerBase
 {
     [HttpGet("{fieldOfStudyId:int}")]
+    [Permission("UniversityModule.GetFieldOfStudy")]
     public async Task<IActionResult> GetFieldOfStudy([FromRoute] int fieldOfStudyId)
     {
         var query = new GetFieldOfStudyByIdQuery(fieldOfStudyId);
@@ -23,6 +28,7 @@ public class FieldsOfStudyController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
+    [Permission("UniversityModule.AddFieldOfStudy")]
     public async Task<IActionResult> CreateFieldOfStudy([FromBody] FieldOfStudyCreateRequest request)
     {
         var command = new AddFieldOfStudyCommand(request.DepartmentId, request.FieldOfStudyName);
@@ -31,6 +37,7 @@ public class FieldsOfStudyController(IMediator mediator) : ControllerBase
     }
     
     [HttpDelete("{fieldOfStudyId:int}")]
+    [Permission("UniversityModule.DeleteFieldOfStudy")]
     public async Task<IActionResult> DeleteFieldOfStudy([FromRoute] int fieldOfStudyId)
     {
         var command = new DeleteFieldOfStudyCommand(fieldOfStudyId);
@@ -39,6 +46,7 @@ public class FieldsOfStudyController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
+    [Permission("UniversityModule.UpdateFieldOfStudy")]
     public async Task<IActionResult> UpdateFieldOfStudy([FromBody] FieldOfStudyUpdateRequest request)
     {
         var command = new UpdateFieldOfStudyCommand(request.FieldOfStudyId, request.FieldOfStudyName);
