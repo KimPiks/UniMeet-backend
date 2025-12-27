@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using UniMeet.API.Responses;
 using UniMeet.UserModule.Domain.Users;
 
 namespace UniMeet.API.Attributes;
@@ -12,7 +13,10 @@ public class ActiveUserAttribute : Attribute, IAsyncAuthorizationFilter
         var user = context.HttpContext.User;
         if (user == null || !user.Identity.IsAuthenticated)
         {
-            context.Result = new UnauthorizedResult();
+            context.HttpContext.Response.StatusCode = 401;
+            context.Result = new Microsoft.AspNetCore.Mvc.JsonResult(
+                ApiResponse<string>.Fail(null, "Unauthorized")
+            );
             return;
         }
 
@@ -20,7 +24,10 @@ public class ActiveUserAttribute : Attribute, IAsyncAuthorizationFilter
         Guid userId;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out userId))
         {
-            context.Result = new UnauthorizedResult();
+            context.HttpContext.Response.StatusCode = 401;
+            context.Result = new Microsoft.AspNetCore.Mvc.JsonResult(
+                ApiResponse<string>.Fail(null, "Unauthorized")
+            );
             return;
         }
 
@@ -28,13 +35,19 @@ public class ActiveUserAttribute : Attribute, IAsyncAuthorizationFilter
         var dbUser = await userRepository.GetByIdAsync(userId);
         if (dbUser == null)
         {
-            context.Result = new UnauthorizedResult();
+            context.HttpContext.Response.StatusCode = 401;
+            context.Result = new Microsoft.AspNetCore.Mvc.JsonResult(
+                ApiResponse<string>.Fail(null, "Unauthorized")
+            );
             return;
         }
 
         if (!dbUser.IsActive)
         {
-            context.Result = new ObjectResult("User is not active.") { StatusCode = 403 };
+            context.HttpContext.Response.StatusCode = 403;
+            context.Result = new Microsoft.AspNetCore.Mvc.JsonResult(
+                ApiResponse<string>.Fail(null, "User is not active")
+            );
         }
     }
 }
