@@ -7,10 +7,9 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/UniMeet.API/UniMeet.API.csproj", "src/UniMeet.API/"]
-RUN dotnet restore "src/UniMeet.API/UniMeet.API.csproj"
-COPY . .
-WORKDIR "/src/src/UniMeet.API"
+COPY ./src ./src
+WORKDIR /src/src/UniMeet.API
+RUN dotnet restore "./UniMeet.API.csproj"
 RUN dotnet build "./UniMeet.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

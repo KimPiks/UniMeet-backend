@@ -38,6 +38,12 @@ public class UserEnrollmentModule : IModule
         });
         
         // Repositories
+
+        using (var scope = services.BuildServiceProvider().CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<UserEnrollmentContext>();
+            context.Database.Migrate();
+        }
     }
     
     private static Configuration ValidateConfiguration(IConfiguration configuration)

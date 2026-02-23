@@ -49,6 +49,12 @@ public class UniversityModule : IModule
 
         // Mediator
         services.RegisterMediator(typeof(UniversityModuleApplication).Assembly);
+        
+        using (var scope = services.BuildServiceProvider().CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<UniversityContext>();
+            context.Database.Migrate();
+        }
     }
     
     private static Configuration ValidateConfiguration(IConfiguration configuration)

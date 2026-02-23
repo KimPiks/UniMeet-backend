@@ -1,23 +1,50 @@
+version: "3.9"
+
 services:
+  postgres:
+    image: postgres:15
+    container_name: unimeet-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB} -h localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
   unimeet-api:
     build:
       context: .
-      dockerfile: src/UniMeet.API/Dockerfile
-    container_name: unimeet_api_service
+      dockerfile: Dockerfile
+    container_name: unimeet-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DOTNET_ENVIRONMENT: Development
+      Modules__UserModule__DbConnectionString: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      Modules__UniversityModule__DbConnectionString: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      Modules__UserEnrollmentModule__DbConnectionString: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      Modules__PermissionsModule__DbConnectionString: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      Modules__UserModule__Auth__Secret: ${USER_MODULE_AUTH_SECRET}
+      Modules__UserModule__WebsiteUrl: ${USER_MODULE_WEBSITE_URL}
+      Modules__MailingModule__Smtp__Host: ${MAILING_MODULE_SMTP_HOST}
+      Modules__MailingModule__Smtp__Port: ${MAILING_MODULE_SMTP_PORT}
+      Modules__MailingModule__Smtp__Username: ${MAILING_MODULE_SMTP_USERNAME}
+      Modules__MailingModule__Smtp__Password: ${MAILING_MODULE_SMTP_PASSWORD}
+      Modules__MailingModule__Smtp__SenderName: ${MAILING_MODULE_SMTP_SENDER_NAME}
     ports:
       - "8080:8080"
-    depends_on:
-      - database
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-  
-  database:
-    image: postgres:16
-    container_name: unimeet_db
+      - "8081:8081"
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: unimeet
-    ports:
-      - "5432:5432"
+
+volumes:
+  pgdata:

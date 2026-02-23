@@ -18,7 +18,6 @@ using UniMeet.UserModule.Domain.Services;
 using UniMeet.UserModule.Domain.Users;
 using UniMeet.UserModule.Infrastructure;
 using UniMeet.UserModule.Infrastructure.ConfirmationCodes;
-using UniMeet.UserModule.Infrastructure.Migrations;
 using UniMeet.UserModule.Infrastructure.PasswordResetCodes;
 using UniMeet.UserModule.Infrastructure.RefreshTokens;
 using UniMeet.UserModule.Infrastructure.Users;
@@ -104,6 +103,12 @@ public class UserModule : IModule
                     }
                 };
             });
+        
+        using (var scope = services.BuildServiceProvider().CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<UserContext>();
+            context.Database.Migrate();
+        }
     }
     
     private static Configuration ValidateConfiguration(IConfiguration configuration)

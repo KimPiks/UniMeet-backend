@@ -7,3 +7,5 @@ erd/
 logs/
 Migrations/
 UniMeet.sln.DotSettings.user
+.config/
+.env
