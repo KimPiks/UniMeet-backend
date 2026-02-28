@@ -48,15 +48,14 @@ public class PermissionsModule : IModule
         
         // Mediator
         services.RegisterMediator(typeof(PermissionsModuleApplication).Assembly);
-        
-        // TODO: switch in appsetting wheter to seed the data (problem with migrations)
-        //this.RegisterDefaultGroups(services);
 
         using (var scope = services.BuildServiceProvider().CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<PermissionsContext>();
             context.Database.Migrate();
         }
+        
+        this.RegisterDefaultGroups(services);
     }
 
     private void RegisterDefaultGroups(IServiceCollection services)
