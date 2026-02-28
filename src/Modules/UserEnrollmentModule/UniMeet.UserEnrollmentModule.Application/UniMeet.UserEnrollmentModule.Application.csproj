@@ -7,15 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
       <ProjectReference Include="..\..\..\UniMeet.Shared\UniMeet.Shared.csproj" />
-      <ProjectReference Include="..\UniMeet.UserEnrollmentModule.Application\UniMeet.UserEnrollmentModule.Application.csproj" />
       <ProjectReference Include="..\UniMeet.UserEnrollmentModule.Infrastructure\UniMeet.UserEnrollmentModule.Infrastructure.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.11" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     </ItemGroup>
 
 </Project>

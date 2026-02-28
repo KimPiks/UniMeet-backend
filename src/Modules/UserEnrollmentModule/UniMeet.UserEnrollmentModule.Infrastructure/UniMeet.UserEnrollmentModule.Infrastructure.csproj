@@ -16,8 +16,4 @@
       <ProjectReference Include="..\UniMeet.UserEnrollmentModule.Domain\UniMeet.UserEnrollmentModule.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="UserAffiliation\" />
-    </ItemGroup>
-
 </Project>

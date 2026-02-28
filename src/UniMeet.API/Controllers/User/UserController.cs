@@ -4,6 +4,10 @@ using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
 using UniMeet.Shared.Abstractions;
+using UniMeet.UniversityModule.Application.FieldsOfStudy;
+using UniMeet.UniversityModule.Application.FieldsOfStudy.GetFieldOfStudyById;
+using UniMeet.UserEnrollmentModule.Application.UserAffiliations.AddAffiliation;
+using UniMeet.UserEnrollmentModule.Application.UserAffiliations.GetAffiliationByUserId;
 using UniMeet.UserModule.Application.PasswordResetCodes.CheckIfResetPasswordCodeExists;
 using UniMeet.UserModule.Application.PasswordResetCodes.RequestPasswordReset;
 using UniMeet.UserModule.Application.PasswordResetCodes.ResetPassword;
@@ -123,5 +127,45 @@ public class UserController(IMediator mediator) : ControllerBase
         var command = new SetGroupCommand(request.UserId, request.GroupId);
         await mediator.SendAsync(command);
         return Ok(ApiResponse<string>.Ok(null, "User group set successfully")); 
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ActiveUser]
+    [Permission("UserEnrollmentModule.EnrollInCourse")]
+    public async Task<IActionResult> EnrollInCourse([FromBody] EnrollInCourseRequest request)
+    {
+        var fieldOfStudyQuery = new GetFieldOfStudyByIdQuery(request.FieldOfStudyId);
+        var fieldOfStudy = await mediator.SendAsync(fieldOfStudyQuery);
+        if (fieldOfStudy == null) {
+            return Ok(ApiResponse<string>.Ok(null, "Field of study not found"));
+        }
+        
+        var command = new AddAffiliationCommand(request.UserId, request.FieldOfStudyId);
+        await mediator.SendAsync(command);
+        return Ok(ApiResponse<string>.Ok(null, "User enrolled in course successfully"));
+    }
+
+    [HttpGet]
+    [Authorize]
+    [ActiveUser]
+    [Permission("UserEnrollmentModule.GetUserAffiliations")]
+    public async Task<IActionResult> GetUserAffiliations([FromQuery] Guid userId)
+    {
+        var query = new GetAffiliationByUserIdQuery(userId);
+        var affiliation = await mediator.SendAsync(query);
+        if (affiliation == null)
+        {
+            return Ok(ApiResponse<string>.Ok(null, "User has no affiliations"));
+        }
+
+        var fieldOfStudyQuery = new GetFieldOfStudyByIdQuery(affiliation.FieldOfStudyId);
+        var fieldOfStudy = await mediator.SendAsync(fieldOfStudyQuery);
+        if (fieldOfStudy == null)
+        {
+            return Ok(ApiResponse<string>.Ok(null, "Field of study not found"));
+        }
+
+        return Ok(ApiResponse<FieldOfStudyDto>.Ok(fieldOfStudy, "User affiliations retrieved successfully"));
     }
 }

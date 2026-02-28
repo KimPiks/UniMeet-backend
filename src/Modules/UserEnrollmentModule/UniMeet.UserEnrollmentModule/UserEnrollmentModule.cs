@@ -5,8 +5,11 @@ using ModularSystem;
 using Serilog;
 using UniMeet.Shared.Exceptions;
 using UniMeet.Shared.Mediator.Extensions;
+using UniMeet.UserEnrollmentModule.Application;
 using UniMeet.UserEnrollmentModule.Config;
+using UniMeet.UserEnrollmentModule.Domain.UserAffiliation;
 using UniMeet.UserEnrollmentModule.Infrastructure;
+using UniMeet.UserEnrollmentModule.Infrastructure.UserAffiliation;
 
 namespace UniMeet.UserEnrollmentModule;
 
@@ -38,6 +41,9 @@ public class UserEnrollmentModule : IModule
         });
         
         // Repositories
+        services.AddScoped<IUserAffiliationRepository, UserAffiliationRepository>();
+        
+        services.RegisterMediator(typeof(UserEnrollmentModuleApplication).Assembly);
 
         using (var scope = services.BuildServiceProvider().CreateScope())
         {
