@@ -1,6 +1,7 @@
 ﻿using UniMeet.UserModule.Domain.ConfirmationCodes;
 using UniMeet.UserModule.Domain.PasswordResetCodes;
 using UniMeet.UserModule.Domain.RefreshTokens;
+using UniMeet.UserModule.Domain.UserDetails;
 
 namespace UniMeet.UserModule.Domain.Users;
 
@@ -15,6 +16,8 @@ public class User
     public DateTime UpdatedAt { get; set; }
     public bool IsActive { get; set; } = false;
     public int GroupId { get; private set; }
+    public int UserDetailId { get; set; }
+    public UserDetail UserDetail { get; set; }
 
     public int UniversityId { get; set; }
     
@@ -24,7 +27,7 @@ public class User
 
     private User() { }
 
-    public User(string firstName, string lastName, string email, string passwordHash, int universityId, int groupId)
+    public User(string firstName, string lastName, string email, string passwordHash, int universityId, int groupId, Sex sex)
     {
         Id = Guid.NewGuid();
         FirstName = firstName;
@@ -37,6 +40,8 @@ public class User
         
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
+        
+        UserDetail = new UserDetail(this, sex);
     }
     
     public void UpdatePassword(string newPasswordHash)

@@ -9,3 +9,4 @@ Migrations/
 UniMeet.sln.DotSettings.user
 .config/
 .env
+src/UniMeet.API/uploads/

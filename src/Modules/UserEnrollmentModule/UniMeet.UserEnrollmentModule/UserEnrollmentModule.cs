@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ModularSystem;
@@ -44,12 +44,6 @@ public class UserEnrollmentModule : IModule
         services.AddScoped<IUserAffiliationRepository, UserAffiliationRepository>();
         
         services.RegisterMediator(typeof(UserEnrollmentModuleApplication).Assembly);
-
-        using (var scope = services.BuildServiceProvider().CreateScope())
-        {
-            var context = scope.ServiceProvider.GetRequiredService<UserEnrollmentContext>();
-            context.Database.Migrate();
-        }
     }
     
     private static Configuration ValidateConfiguration(IConfiguration configuration)

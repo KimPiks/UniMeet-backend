@@ -1,3 +1,5 @@
-﻿namespace UniMeet.API.Models.Requests;
+﻿using UniMeet.UserModule.Domain.UserDetails;
 
-public record RegisterUserRequest(string FirstName, string LastName, string Email, string Password);
+namespace UniMeet.API.Models.Requests;
+
+public record RegisterUserRequest(string FirstName, string LastName, string Email, string Password, Sex Sex);

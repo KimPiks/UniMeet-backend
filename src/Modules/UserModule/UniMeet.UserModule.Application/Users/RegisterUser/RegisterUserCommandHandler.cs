@@ -44,7 +44,7 @@ public class RegisterUserCommandHandler(IUserRepository userRepository,
         
         // Create user
         var passwordHash = passwordHasher.Hash(request.Password);
-        var user = new User(request.FirstName, request.LastName, request.Email, passwordHash, university.Id, group.Id);
+        var user = new User(request.FirstName, request.LastName, request.Email, passwordHash, university.Id, group.Id, request.Sex);
         
         await userRepository.AddAsync(user, cancellationToken);
         await userRepository.SaveChangesAsync(cancellationToken);

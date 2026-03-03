@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using UniMeet.UserModule.Domain.UserDetails;
 using UniMeet.UserModule.Domain.Users;
 
 namespace UniMeet.UserModule.Infrastructure.Users.Configuration;
@@ -31,5 +32,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.UpdatedAt)
             .IsRequired();
+        
+        builder.HasOne(u => u.UserDetail)
+            .WithOne(ud => ud.User)
+            .HasForeignKey<User>(u => u.UserDetailId);
     }
 }

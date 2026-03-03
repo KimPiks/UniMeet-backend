@@ -3,6 +3,7 @@ using Serilog;
 using UniMeet.API.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,21 @@ ModularSystem.ModularSystem.SummarizeModules();
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+// Create uploads directory if it doesn't exist
+var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
+// Serve static files from uploads directory
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        uploadsPath),
+    RequestPath = "/uploads"
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

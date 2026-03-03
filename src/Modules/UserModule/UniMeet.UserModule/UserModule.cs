@@ -12,15 +12,20 @@ using UniMeet.UserModule.Application;
 using UniMeet.UserModule.Application.Services;
 using UniMeet.UserModule.Config;
 using UniMeet.UserModule.Domain.ConfirmationCodes;
+using UniMeet.UserModule.Domain.Interests;
 using UniMeet.UserModule.Domain.PasswordResetCodes;
 using UniMeet.UserModule.Domain.RefreshTokens;
 using UniMeet.UserModule.Domain.Services;
+using UniMeet.UserModule.Domain.UserDetails;
 using UniMeet.UserModule.Domain.Users;
 using UniMeet.UserModule.Infrastructure;
 using UniMeet.UserModule.Infrastructure.ConfirmationCodes;
+using UniMeet.UserModule.Infrastructure.Interests;
 using UniMeet.UserModule.Infrastructure.PasswordResetCodes;
 using UniMeet.UserModule.Infrastructure.RefreshTokens;
+using UniMeet.UserModule.Infrastructure.UserDetails;
 using UniMeet.UserModule.Infrastructure.Users;
+using UniMeet.UserModule.Infrastructure.Services;
 
 namespace UniMeet.UserModule;
 
@@ -53,6 +58,8 @@ public class UserModule : IModule
         
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserDetailRepository, UserDetailRepository>();
+        services.AddScoped<IInterestRepository, InterestRepository>();
         services.AddScoped<IConfirmationCodeRepository, ConfirmationCodeRepository>();
         services.AddScoped<IPasswordResetCodeRepository, PasswordResetCodeRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
@@ -61,6 +68,8 @@ public class UserModule : IModule
         services.AddSingleton<IConfirmationLinkService, ConfirmationLinkService>(_ => new ConfirmationLinkService(_configuration.WebsiteUrl));
         services.AddSingleton<IPasswordResetLinkService, PasswordResetLinkService>(_ => new PasswordResetLinkService(_configuration.WebsiteUrl));
         services.AddSingleton<IJwtService, JwtService>(_ => new JwtService(_configuration.Auth.Secret, _configuration.Auth.Issuer, _configuration.Auth.Audience));
+        services.AddSingleton<IProfilePictureValidator, ProfilePictureValidator>();
+        services.AddScoped<IFileStorageService, FileStorageService>();
         
         // Mediator
         services.RegisterMediator(typeof(UserModuleApplication).Assembly);
@@ -103,12 +112,6 @@ public class UserModule : IModule
                     }
                 };
             });
-        
-        using (var scope = services.BuildServiceProvider().CreateScope())
-        {
-            var context = scope.ServiceProvider.GetRequiredService<UserContext>();
-            context.Database.Migrate();
-        }
     }
     
     private static Configuration ValidateConfiguration(IConfiguration configuration)

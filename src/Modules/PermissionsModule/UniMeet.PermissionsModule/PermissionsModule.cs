@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ModularSystem;
@@ -49,13 +49,10 @@ public class PermissionsModule : IModule
         // Mediator
         services.RegisterMediator(typeof(PermissionsModuleApplication).Assembly);
 
-        using (var scope = services.BuildServiceProvider().CreateScope())
+        if (_configuration.SeedDatabase)
         {
-            var context = scope.ServiceProvider.GetRequiredService<PermissionsContext>();
-            context.Database.Migrate();
+            this.RegisterDefaultGroups(services);
         }
-        
-        this.RegisterDefaultGroups(services);
     }
 
     private void RegisterDefaultGroups(IServiceCollection services)
@@ -91,6 +88,7 @@ public class PermissionsModule : IModule
     {
         var connectionString = configuration["DbConnectionString"];
         var defaultGroups = configuration.GetSection("DefaultGroups").Get<Dictionary<string, PermissionConfiguration>>();
+        var seedDatabase = configuration.GetValue<bool>("SeedDatabase");
         
         if (string.IsNullOrEmpty(connectionString))
         {
@@ -102,6 +100,6 @@ public class PermissionsModule : IModule
             throw new MissingConfigurationException("PermissionsModule: DefaultGroups is not configured.");
         }
 
-        return new Configuration(connectionString, defaultGroups);
+        return new Configuration(connectionString, defaultGroups, seedDatabase);
     }
 }
