@@ -1,6 +1,8 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
+using UniMeet.API.Hubs;
 using UniMeet.API.Middlewares;
+using UniMeet.MessagingModule.Application.Messages;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json;
 using Microsoft.Extensions.FileProviders;
@@ -16,6 +18,23 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 builder.Services.AddTransient<ExceptionMiddleware>();
+
+// CORS — allow all origins in dev (required for SignalR from browser/file://)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DevPolicy", policy =>
+    {
+        policy
+            .SetIsOriginAllowed(_ => true) // dowolny origin (dev only)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // wymagane przez SignalR
+    });
+});
+
+// SignalR for real-time messaging
+builder.Services.AddSignalR();
+builder.Services.AddScoped<IMessagingHubNotifier, MessagingHubNotifier>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -58,6 +77,9 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+// Serve wwwroot (chat.html dev tester)
+app.UseStaticFiles();
+
 // Create uploads directory if it doesn't exist
 var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
 if (!Directory.Exists(uploadsPath))
@@ -86,11 +108,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+app.UseCors("DevPolicy");
 app.UseHttpsRedirection();
 
 app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<MessagingHub>("/hubs/messaging");
 
 app.Run();
