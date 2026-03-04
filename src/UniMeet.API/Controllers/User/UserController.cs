@@ -115,6 +115,8 @@ public class UserController(IMediator mediator) : ControllerBase
     [Permission("UserModule.Logout")]
     public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
     {
+        var guid = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+
         var command = new LogoutCommand(request.RefreshToken);
         await mediator.SendAsync(command);
         return Ok(ApiResponse<string>.Ok(null, "User logged out successfully"));
@@ -154,7 +156,11 @@ public class UserController(IMediator mediator) : ControllerBase
             return Ok(ApiResponse<string>.Ok(null, "Field of study not found"));
         }
         
-        var command = new AddAffiliationCommand(request.UserId, request.FieldOfStudyId);
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var enrollUserId))
+            return Unauthorized(ApiResponse<string>.Fail("Invalid user token"));
+
+        var command = new AddAffiliationCommand(enrollUserId, request.FieldOfStudyId);
         await mediator.SendAsync(command);
         return Ok(ApiResponse<string>.Ok(null, "User enrolled in course successfully"));
     }
@@ -218,7 +224,11 @@ public class UserController(IMediator mediator) : ControllerBase
     [Permission("UserModule.UpdateUserDetail")]
     public async Task<IActionResult> UpdateUserDetail([FromBody] UpdateUserDetailRequest request)
     {
-        var command = new UpdateUserDetailCommand(request.UserDetailId, request.InterestIds);
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            return Unauthorized(ApiResponse<string>.Fail("Invalid user token"));
+
+        var command = new UpdateUserDetailCommand(request.UserDetailId, userId, request.InterestIds);
         var userDetail = await mediator.SendAsync(command);
         return Ok(ApiResponse<UserDetailDto>.Ok(userDetail, "User detail updated successfully"));
     }
@@ -308,7 +318,11 @@ public class UserController(IMediator mediator) : ControllerBase
     [Permission("UserModule.UpdateUserDetail")]
     public async Task<IActionResult> DeleteProfilePicture([FromQuery] int userDetailId)
     {
-        var command = new DeleteProfilePictureCommand(userDetailId);
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            return Unauthorized(ApiResponse<string>.Fail("Invalid user token"));
+
+        var command = new DeleteProfilePictureCommand(userDetailId, userId);
         var userDetail = await mediator.SendAsync(command);
         return Ok(ApiResponse<UserDetailDto>.Ok(userDetail, "Profile picture deleted successfully"));
     }

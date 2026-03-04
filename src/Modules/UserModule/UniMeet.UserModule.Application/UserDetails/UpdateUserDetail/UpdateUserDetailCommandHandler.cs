@@ -1,4 +1,5 @@
 using UniMeet.Shared.Abstractions;
+using UniMeet.Shared.Exceptions;
 using UniMeet.UserModule.Domain.UserDetails;
 using UniMeet.UserModule.Domain.Interests;
 
@@ -12,6 +13,9 @@ public class UpdateUserDetailCommandHandler(IUserDetailRepository userDetailRepo
         var userDetail = await userDetailRepository.GetByIdAsync(request.UserDetailId, cancellationToken);
         if (userDetail == null)
             throw new KeyNotFoundException($"UserDetail with id {request.UserDetailId} not found");
+
+        if (userDetail.UserId != request.RequestingUserId)
+            throw new ForbiddenException("You are not allowed to update another user's details.");
         
         if (request.InterestIds != null && request.InterestIds.Count > 0)
         {

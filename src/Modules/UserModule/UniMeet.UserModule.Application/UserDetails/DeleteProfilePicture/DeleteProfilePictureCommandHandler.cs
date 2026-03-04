@@ -1,4 +1,5 @@
 using UniMeet.Shared.Abstractions;
+using UniMeet.Shared.Exceptions;
 using UniMeet.UserModule.Domain.UserDetails;
 using UniMeet.UserModule.Application.Services;
 
@@ -17,6 +18,9 @@ public class DeleteProfilePictureCommandHandler(
         {
             throw new KeyNotFoundException($"UserDetail with id {request.UserDetailId} not found");
         }
+
+        if (userDetail.UserId != request.RequestingUserId)
+            throw new ForbiddenException("You are not allowed to delete another user's profile picture.");
 
         // Delete file from disk if exists
         if (!string.IsNullOrEmpty(userDetail.ProfilePicturePath))

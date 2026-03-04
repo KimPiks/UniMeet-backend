@@ -27,6 +27,11 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddlew
             logger.LogWarning(ex, "Not found error occured: {Message}", ex.Message);
             await WriteResponse(context, HttpStatusCode.NotFound, ApiResponse<string>.Fail(ex.Message));
         }
+        catch (ForbiddenException ex)
+        {
+            logger.LogWarning(ex, "Forbidden error occurred: {Message}", ex.Message);
+            await WriteResponse(context, HttpStatusCode.Forbidden, ApiResponse<string>.Fail(ex.Message));
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unexpected error occurred");

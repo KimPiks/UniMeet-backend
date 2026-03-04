@@ -31,6 +31,9 @@ public class UploadProfilePictureCommandHandler(
             throw new ValidationException($"UserDetail with id {request.UserDetailId} not found");
         }
 
+        if (userDetail.UserId != request.UserId)
+            throw new ForbiddenException("You are not allowed to upload a profile picture for another user.");
+
         // Delete old picture if exists
         if (!string.IsNullOrEmpty(userDetail.ProfilePicturePath))
         {
