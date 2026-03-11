@@ -19,16 +19,15 @@ builder.Host.UseSerilog();
 
 builder.Services.AddTransient<ExceptionMiddleware>();
 
-// CORS — allow all origins in dev (required for SignalR from browser/file://)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevPolicy", policy =>
     {
         policy
-            .SetIsOriginAllowed(_ => true) // dowolny origin (dev only)
+            .SetIsOriginAllowed(_ => true) 
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials(); // wymagane przez SignalR
+            .AllowCredentials(); 
     });
 });
 
@@ -77,7 +76,6 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-// Serve wwwroot (chat.html dev tester)
 app.UseStaticFiles();
 
 // Create uploads directory if it doesn't exist
