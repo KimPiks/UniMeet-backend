@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   postgres:
     image: postgres:15
@@ -30,20 +28,25 @@ services:
         condition: service_healthy
     environment:
       DOTNET_ENVIRONMENT: Development
-      Modules__UserModule__DbConnectionString: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
-      Modules__UniversityModule__DbConnectionString: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
-      Modules__UserEnrollmentModule__DbConnectionString: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
-      Modules__PermissionsModule__DbConnectionString: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      ASPNETCORE_URLS: http://+:8080
+      Modules__UserModule__DbConnectionString: ${POSTGRES_CONNECTION_STRING}
+      Modules__UniversityModule__DbConnectionString: ${POSTGRES_CONNECTION_STRING}
+      Modules__UserEnrollmentModule__DbConnectionString: ${POSTGRES_CONNECTION_STRING}
+      Modules__PermissionsModule__DbConnectionString: ${POSTGRES_CONNECTION_STRING}
+      Modules__MessagingModule__DbConnectionString: ${POSTGRES_CONNECTION_STRING}
+      Modules__MatchingModule__DbConnectionString: ${POSTGRES_CONNECTION_STRING}
       Modules__UserModule__Auth__Secret: ${USER_MODULE_AUTH_SECRET}
+      Modules__UserModule__Auth__Issuer: ${USER_MODULE_AUTH_ISSUER}
+      Modules__UserModule__Auth__Audience: ${USER_MODULE_AUTH_AUDIENCE}
       Modules__UserModule__WebsiteUrl: ${USER_MODULE_WEBSITE_URL}
       Modules__MailingModule__Smtp__Host: ${MAILING_MODULE_SMTP_HOST}
       Modules__MailingModule__Smtp__Port: ${MAILING_MODULE_SMTP_PORT}
       Modules__MailingModule__Smtp__Username: ${MAILING_MODULE_SMTP_USERNAME}
       Modules__MailingModule__Smtp__Password: ${MAILING_MODULE_SMTP_PASSWORD}
       Modules__MailingModule__Smtp__SenderName: ${MAILING_MODULE_SMTP_SENDER_NAME}
+      Modules__PermissionsModule__SeedDatabase: ${PERMISSIONS_MODULE_SEED_DATABASE}
     ports:
       - "8080:8080"
-      - "8081:8081"
     restart: always
 
 volumes:

@@ -8,6 +8,10 @@ using System.Text.Json;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuredUrls = builder.Configuration["ASPNETCORE_URLS"] ?? builder.Configuration["Urls"];
+var hasHttpsBinding = configuredUrls?
+    .Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+    .Any(url => url.StartsWith("https://", StringComparison.OrdinalIgnoreCase)) == true;
 
 // Add serilog logger
 Log.Logger = new LoggerConfiguration()
@@ -107,7 +111,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 app.UseCors("DevPolicy");
-app.UseHttpsRedirection();
+if (hasHttpsBinding)
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication(); 
 app.UseAuthorization();

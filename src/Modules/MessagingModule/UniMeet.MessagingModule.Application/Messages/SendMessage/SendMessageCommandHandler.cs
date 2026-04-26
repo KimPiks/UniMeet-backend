@@ -24,7 +24,6 @@ public class SendMessageCommandHandler(
 
         var dto = new MessageDto(message.Id, message.ConversationId, message.SenderId, message.Content, message.SentAt, message.IsRead);
 
-        // Notify the recipient in real-time
         var recipientId = conversation.User1Id == request.SenderId ? conversation.User2Id : conversation.User1Id;
         await hubNotifier.SendMessageAsync(recipientId, dto, cancellationToken);
 

@@ -1,21 +1,18 @@
 using UniMeet.MessagingModule.Domain.Conversations;
-using UniMeet.MessagingModule.Domain.Messages;
 using UniMeet.Shared.Abstractions;
 
-namespace UniMeet.MessagingModule.Application.Conversations.GetOrCreateConversation;
+namespace UniMeet.MessagingModule.Application.Conversations.CreateConversation;
 
-public class GetOrCreateConversationCommandHandler(IConversationRepository conversationRepository)
-    : ICommandHandler<GetOrCreateConversationCommand, ConversationDto>
+public class CreateConversationCommandHandler(IConversationRepository conversationRepository)
+    : ICommandHandler<CreateConversationCommand, ConversationDto>
 {
-    public async Task<ConversationDto> HandleAsync(GetOrCreateConversationCommand request, CancellationToken cancellationToken = default)
+    public async Task<ConversationDto> HandleAsync(CreateConversationCommand request, CancellationToken cancellationToken = default)
     {
-        var existing = await conversationRepository.GetByUsersAsync(
-            request.RequestingUserId, request.OtherUserId, cancellationToken);
-
-        if (existing != null)
+        var existing = await conversationRepository.GetByUsersAsync(request.UserAId, request.UserBId, cancellationToken);
+        if (existing is not null)
             return MapToDto(existing);
 
-        var conversation = Conversation.Create(request.RequestingUserId, request.OtherUserId);
+        var conversation = Conversation.Create(request.UserAId, request.UserBId);
         await conversationRepository.AddAsync(conversation, cancellationToken);
         await conversationRepository.SaveChangesAsync(cancellationToken);
 
