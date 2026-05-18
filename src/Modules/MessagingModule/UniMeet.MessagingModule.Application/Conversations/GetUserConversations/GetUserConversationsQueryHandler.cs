@@ -10,13 +10,6 @@ public class GetUserConversationsQueryHandler(IConversationRepository conversati
     {
         var conversations = await conversationRepository.GetByUserIdAsync(request.UserId, cancellationToken);
 
-        return conversations.Select(c =>
-        {
-            var last = c.Messages.OrderByDescending(m => m.SentAt).FirstOrDefault();
-            var lastDto = last is null
-                ? null
-                : new MessageSummaryDto(last.SenderId, last.Content, last.SentAt, last.IsRead);
-            return new ConversationDto(c.Id, c.User1Id, c.User2Id, c.CreatedAt, lastDto);
-        });
+        return conversations.Select(c => c.ToDto(request.UserId));
     }
 }

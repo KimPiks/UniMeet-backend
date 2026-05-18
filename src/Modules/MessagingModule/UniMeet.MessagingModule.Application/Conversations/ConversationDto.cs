@@ -2,8 +2,10 @@ namespace UniMeet.MessagingModule.Application.Conversations;
 
 public record ConversationDto(
     Guid Id,
-    Guid User1Id,
-    Guid User2Id,
+    bool IsGroup,
+    Guid? User1Id,
+    Guid? User2Id,
+    IReadOnlyCollection<Guid> ParticipantIds,
     DateTime CreatedAt,
     MessageSummaryDto? LastMessage);
 

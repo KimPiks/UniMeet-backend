@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using UniMeet.UserModule.Domain.UserDetails;
 using UniMeet.UserModule.Domain.Users;
 
 namespace UniMeet.UserModule.Infrastructure.Users;
@@ -38,5 +39,45 @@ public class UserRepository(UserContext context) : IUserRepository
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<User>> SearchAsync(
+        int? universityId,
+        Sex? sex,
+        IReadOnlyCollection<int>? interestIds,
+        IReadOnlyCollection<Guid>? userIds,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<User> query = context.Users
+            .Include(u => u.UserDetail)
+            .ThenInclude(d => d.Interests)
+            .Where(u => u.IsActive);
+
+        if (universityId.HasValue)
+        {
+            query = query.Where(u => u.UniversityId == universityId.Value);
+        }
+
+        if (sex.HasValue)
+        {
+            query = query.Where(u => u.UserDetail.Sex == sex.Value);
+        }
+
+        if (interestIds is { Count: > 0 })
+        {
+            query = query.Where(u => u.UserDetail.Interests.Any(i => interestIds.Contains(i.Id)));
+        }
+
+        if (userIds is { Count: > 0 })
+        {
+            query = query.Where(u => userIds.Contains(u.Id));
+        }
+
+        if (userIds is { Count: 0 })
+        {
+            return Array.Empty<User>();
+        }
+
+        return await query.ToListAsync(cancellationToken);
     }
 }

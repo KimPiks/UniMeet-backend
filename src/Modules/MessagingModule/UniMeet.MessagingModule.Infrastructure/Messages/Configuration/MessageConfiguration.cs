@@ -16,9 +16,13 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
         builder.Property(m => m.SenderId).IsRequired();
         builder.Property(m => m.Content).IsRequired().HasMaxLength(4000);
         builder.Property(m => m.SentAt).IsRequired();
-        builder.Property(m => m.IsRead).IsRequired();
 
         builder.HasIndex(m => m.ConversationId);
         builder.HasIndex(m => new { m.ConversationId, m.SentAt });
+
+        builder.HasMany(m => m.ReadReceipts)
+            .WithOne()
+            .HasForeignKey(r => r.MessageId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

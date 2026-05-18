@@ -6,6 +6,14 @@ appsettings.Development.json
 erd/
 logs/
 Migrations/
+!src/Modules/MessagingModule/UniMeet.MessagingModule.Infrastructure/Migrations/
+src/Modules/MessagingModule/UniMeet.MessagingModule.Infrastructure/Migrations/*
+!src/Modules/MessagingModule/UniMeet.MessagingModule.Infrastructure/Migrations/20260517214659_AddGroupConversations*.cs
+!src/Modules/MessagingModule/UniMeet.MessagingModule.Infrastructure/Migrations/MessagingContextModelSnapshot.cs
+!src/Modules/PermissionsModule/UniMeet.PermissionsModule.Infrastructure/Migrations/
+src/Modules/PermissionsModule/UniMeet.PermissionsModule.Infrastructure/Migrations/*
+!src/Modules/PermissionsModule/UniMeet.PermissionsModule.Infrastructure/Migrations/20260517215145_AddCreateGroupConversationPermission*.cs
+!src/Modules/PermissionsModule/UniMeet.PermissionsModule.Infrastructure/Migrations/PermissionsContextModelSnapshot.cs
 UniMeet.sln.DotSettings.user
 .config/
 .env

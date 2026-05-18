@@ -7,7 +7,7 @@ public class Message
     public Guid SenderId { get; set; }
     public string Content { get; set; } = null!;
     public DateTime SentAt { get; set; }
-    public bool IsRead { get; set; }
+    public List<MessageReadReceipt> ReadReceipts { get; set; } = new();
 
     private Message() { }
 
@@ -19,13 +19,7 @@ public class Message
             ConversationId = conversationId,
             SenderId = senderId,
             Content = content,
-            SentAt = DateTime.UtcNow,
-            IsRead = false
+            SentAt = DateTime.UtcNow
         };
-    }
-
-    public void MarkAsRead()
-    {
-        IsRead = true;
     }
 }

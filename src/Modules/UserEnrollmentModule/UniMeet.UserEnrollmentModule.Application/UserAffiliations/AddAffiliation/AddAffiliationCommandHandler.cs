@@ -7,12 +7,18 @@ public class AddAffiliationCommandHandler(IUserAffiliationRepository repository)
 {
     public async Task HandleAsync(AddAffiliationCommand request, CancellationToken cancellationToken = default)
     {
-        var affiliation = new UserAffiliation(
-            request.UserId,
-            request.FieldOfStudyId
-        );
-        
-        await repository.AddAsync(affiliation, cancellationToken);
+        var affiliation = await repository.GetByUserIdAsync(request.UserId, cancellationToken);
+
+        if (affiliation is null)
+        {
+            affiliation = new UserAffiliation(request.UserId, request.FieldOfStudyId);
+            await repository.AddAsync(affiliation, cancellationToken);
+        }
+        else
+        {
+            affiliation.UpdateFieldOfStudy(request.FieldOfStudyId);
+        }
+
         await repository.SaveChangesAsync(cancellationToken);
     }
 }

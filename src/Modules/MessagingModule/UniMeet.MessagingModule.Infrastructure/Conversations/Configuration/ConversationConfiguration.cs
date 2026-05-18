@@ -12,16 +12,25 @@ public class ConversationConfiguration : IEntityTypeConfiguration<Conversation>
 
         builder.HasKey(c => c.Id);
 
-        builder.Property(c => c.User1Id).IsRequired();
-        builder.Property(c => c.User2Id).IsRequired();
+        builder.Property(c => c.IsGroup).IsRequired();
+        builder.Property(c => c.CreatedByUserId);
+        builder.Property(c => c.User1Id);
+        builder.Property(c => c.User2Id);
         builder.Property(c => c.CreatedAt).IsRequired();
 
-        // Enforce uniqueness of the user pair (User1Id is always the smaller GUID)
-        builder.HasIndex(c => new { c.User1Id, c.User2Id }).IsUnique();
+        // Enforce uniqueness only for private conversations.
+        builder.HasIndex(c => new { c.User1Id, c.User2Id })
+            .IsUnique()
+            .HasFilter("\"IsGroup\" = FALSE AND \"User1Id\" IS NOT NULL AND \"User2Id\" IS NOT NULL");
 
         builder.HasMany(c => c.Messages)
             .WithOne()
             .HasForeignKey(m => m.ConversationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(c => c.Participants)
+            .WithOne()
+            .HasForeignKey(p => p.ConversationId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

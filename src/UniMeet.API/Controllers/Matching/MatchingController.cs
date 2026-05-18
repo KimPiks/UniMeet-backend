@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Attributes;
 using UniMeet.API.Responses;
+using UniMeet.MatchingModule.Application.Likes.GetLikes;
 using UniMeet.MatchingModule.Application.Likes;
 using UniMeet.MatchingModule.Application.Likes.LikeUser;
 using UniMeet.MatchingModule.Application.Matches;
@@ -9,6 +10,8 @@ using UniMeet.MatchingModule.Application.Matches.GetUserMatches;
 using UniMeet.MatchingModule.Application.Matches.Unmatch;
 using UniMeet.MessagingModule.Application.Conversations.CreateConversation;
 using UniMeet.Shared.Abstractions;
+using UniMeet.UserModule.Application.Users;
+using UniMeet.UserModule.Application.Users.GetUserById;
 
 namespace UniMeet.API.Controllers.Matching;
 
@@ -44,12 +47,28 @@ public class MatchingController(IMediator mediator) : ControllerBase
         return Ok(ApiResponse<IEnumerable<MatchDto>>.Ok(matches, "Matches retrieved"));
     }
 
+    [HttpGet]
+    [Permission("MatchingModule.GetLikes")]
+    public async Task<IActionResult> GetLikes([FromQuery] Guid userId)
+    {
+        var likedUserIds = await mediator.SendAsync(new GetLikesQuery(userId));
+        var likedUsers = new List<UserDto?>();
+        foreach (var id in likedUserIds)
+        {
+            likedUsers.Add(await mediator.SendAsync(new GetUserByIdQuery(id)));
+        }
+
+        return Ok(ApiResponse<IEnumerable<UserDto>>.Ok(
+            likedUsers.Where(user => user is not null).Select(user => user!).ToList(),
+            "Liked users retrieved"));
+    }
+
     [HttpPost]
     [Permission("MatchingModule.Unmatch")]
     public async Task<IActionResult> Unmatch([FromQuery] Guid otherUserId)
     {
         await mediator.SendAsync(new UnmatchCommand(CurrentUserId, otherUserId));
-        return Ok(ApiResponse<string>.Ok(null, "Unmatched"));
+        return Ok(ApiResponse<string>.Ok(null!, "Unmatched"));
     }
 }
 

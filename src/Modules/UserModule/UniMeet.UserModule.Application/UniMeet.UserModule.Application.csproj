@@ -12,6 +12,7 @@
       <ProjectReference Include="..\..\PermissionsModule\UniMeet.PermissionsModule.Application\UniMeet.PermissionsModule.Application.csproj" />
       <ProjectReference Include="..\..\UniversityModule\UniMeet.UniversityModule.Application\UniMeet.UniversityModule.Application.csproj" />
       <ProjectReference Include="..\UniMeet.UserModule.Domain\UniMeet.UserModule.Domain.csproj" />
+      <ProjectReference Include="..\..\UserEnrollmentModule\UniMeet.UserEnrollmentModule.Domain\UniMeet.UserEnrollmentModule.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>

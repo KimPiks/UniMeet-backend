@@ -5,10 +5,10 @@ namespace UniMeet.API.Hubs;
 
 public class MessagingHubNotifier(IHubContext<MessagingHub> hubContext) : IMessagingHubNotifier
 {
-    public async Task SendMessageAsync(Guid recipientUserId, MessageDto message, CancellationToken cancellationToken = default)
+    public async Task SendMessageAsync(IEnumerable<Guid> recipientUserIds, MessageDto message, CancellationToken cancellationToken = default)
     {
         await hubContext.Clients
-            .Group(recipientUserId.ToString())
+            .Groups(recipientUserIds.Select(id => id.ToString()))
             .SendAsync("ReceiveMessage", message, cancellationToken);
     }
 }

@@ -10,5 +10,9 @@ public class UserAffiliationConfiguration : IEntityTypeConfiguration<Domain.User
         builder.ToTable("user_affiliations");
         
         builder.HasKey(ua => ua.Id);
+        builder.Property(ua => ua.UserId).IsRequired();
+        builder.Property(ua => ua.FieldOfStudyId).IsRequired();
+
+        builder.HasIndex(ua => ua.UserId).IsUnique();
     }
 }

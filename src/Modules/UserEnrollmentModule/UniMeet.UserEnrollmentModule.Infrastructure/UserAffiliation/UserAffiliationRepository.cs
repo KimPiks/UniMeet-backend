@@ -31,4 +31,25 @@ public class UserAffiliationRepository(UserEnrollmentContext context) : IUserAff
     {
         await context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Guid>> GetUserIdsByFieldOfStudyIdAsync(int fieldOfStudyId, CancellationToken cancellationToken = default)
+    {
+        return await context.UserAffiliations
+            .Where(x => x.FieldOfStudyId == fieldOfStudyId)
+            .Select(x => x.UserId)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IDictionary<Guid, int>> GetFieldOfStudyIdsByUserIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
+    {
+        var userIdList = userIds.Distinct().ToList();
+        if (userIdList.Count == 0)
+        {
+            return new Dictionary<Guid, int>();
+        }
+
+        return await context.UserAffiliations
+            .Where(x => userIdList.Contains(x.UserId))
+            .ToDictionaryAsync(x => x.UserId, x => x.FieldOfStudyId, cancellationToken);
+    }
 }

@@ -12,10 +12,6 @@ public class GetConversationByUsersQueryHandler(IConversationRepository conversa
         if (conversation is null)
             return null;
 
-        var last = conversation.Messages.OrderByDescending(m => m.SentAt).FirstOrDefault();
-        var lastDto = last is null
-            ? null
-            : new MessageSummaryDto(last.SenderId, last.Content, last.SentAt, last.IsRead);
-        return new ConversationDto(conversation.Id, conversation.User1Id, conversation.User2Id, conversation.CreatedAt, lastDto);
+        return conversation.ToDto(request.UserAId);
     }
 }

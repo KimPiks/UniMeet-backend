@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
@@ -20,6 +20,7 @@ using UniMeet.UserModule.Application.RefreshTokens.RefreshTokens;
 using UniMeet.UserModule.Application.Users;
 using UniMeet.UserModule.Application.Users.ConfirmAccount;
 using UniMeet.UserModule.Application.Users.GetAllUsers;
+using UniMeet.UserModule.Application.Users.GetUserById;
 using UniMeet.UserModule.Application.Users.LoginUser;
 using UniMeet.UserModule.Application.Users.Logout;
 using UniMeet.UserModule.Application.Users.RegisterUser;
@@ -31,6 +32,7 @@ using UniMeet.UserModule.Application.UserDetails.UpdateUserDetail;
 using UniMeet.UserModule.Application.UserDetails.UploadProfilePicture;
 using UniMeet.UserModule.Application.UserDetails.DeleteProfilePicture;
 using UniMeet.UserModule.Application.UserDetails.GetProfilePicture;
+using UniMeet.UserModule.Application.Users.SearchUsers;
 using UniMeet.UserModule.Domain.Models;
 
 namespace UniMeet.API.Controllers.User;
@@ -54,7 +56,7 @@ public class UserController(IMediator mediator) : ControllerBase
         return Ok(ApiResponse<string>.Ok(null, "User registered successfully"));
     }
 
-    [HttpPost]
+    [HttpGet]
     [OnlyAnonymous]
     public async Task<IActionResult> ConfirmAccount([FromQuery] Guid code)
     {
@@ -131,6 +133,21 @@ public class UserController(IMediator mediator) : ControllerBase
         var query = new GetAllUsersQuery(offset, limit);
         var users = await mediator.SendAsync(query);
         return Ok(ApiResponse<IEnumerable<UserDto>>.Ok(users, "Users retrieved successfully"));
+    }
+
+    [HttpGet]
+    [Authorize]
+    [ActiveUser]
+    [Permission("UserModule.GetUsers")]
+    public async Task<IActionResult> GetUserById([FromQuery] Guid userId)
+    {
+        var query = new GetUserByIdQuery(userId);
+        var user = await mediator.SendAsync(query);
+        if (user == null)
+        {
+            return Ok(ApiResponse<UserDto>.Ok(null, "User not found"));
+        }
+        return Ok(ApiResponse<UserDto>.Ok(user, "User retrieved successfully"));
     }
 
     [HttpPatch]
@@ -286,31 +303,15 @@ public class UserController(IMediator mediator) : ControllerBase
     [Authorize]
     [ActiveUser]
     [Permission("UserModule.UpdateUserDetail")]
-    public async Task<IActionResult> UploadProfilePicture([FromQuery] int userDetailId, IFormFile file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest(ApiResponse<string>.Fail("No file provided"));
-        }
+    public async Task<IActionResult> UploadProfilePicture([FromQuery] int userDetailId, IFormFile? file)
+        => await UploadOrUpdateProfilePictureAsync(userDetailId, file, "Profile picture uploaded successfully");
 
-        // Get UserId from JWT token
-        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized(ApiResponse<string>.Fail("Invalid user token"));
-        }
-
-        using (var memoryStream = new MemoryStream())
-        {
-            await file.CopyToAsync(memoryStream);
-            var fileContent = memoryStream.ToArray();
-            var mimeType = file.ContentType ?? "application/octet-stream";
-
-            var command = new UploadProfilePictureCommand(userDetailId, userId, fileContent, file.FileName, mimeType);
-            var userDetail = await mediator.SendAsync(command);
-            return Ok(ApiResponse<UserDetailDto>.Ok(userDetail, "Profile picture uploaded successfully"));
-        }
-    }
+    [HttpPost]
+    [Authorize]
+    [ActiveUser]
+    [Permission("UserModule.UpdateUserDetail")]
+    public async Task<IActionResult> UpdateProfilePicture([FromQuery] int userDetailId, IFormFile? file)
+        => await UploadOrUpdateProfilePictureAsync(userDetailId, file, "Profile picture updated successfully");
 
     [HttpDelete]
     [Authorize]
@@ -337,6 +338,57 @@ public class UserController(IMediator mediator) : ControllerBase
         var picture = await mediator.SendAsync(query);
         
         return File(picture.PictureData, picture.MimeType, picture.FileName);
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ActiveUser]
+    [Permission("UserModule.SearchUsers")]
+    public async Task<IActionResult> SearchUsers([FromBody] SearchUsersRequest request)
+    {
+        var profile = new UserSearchProfile(
+            request.Profile.UniversityId,
+            request.Profile.FieldOfStudyId,
+            request.Profile.InterestIds,
+            request.Profile.Sex);
+
+        UserSearchFilters? filters = null;
+        if (request.Filters != null)
+        {
+            filters = new UserSearchFilters(
+                request.Filters.UniversityId,
+                request.Filters.FieldOfStudyId,
+                request.Filters.InterestIds,
+                request.Filters.Sex);
+        }
+
+        var query = new SearchUsersQuery(profile, filters, request.Offset, request.Padding);
+        var users = await mediator.SendAsync(query);
+        return Ok(ApiResponse<IEnumerable<SearchUserDto>>.Ok(users, "Users retrieved successfully"));
+    }
+
+    private async Task<IActionResult> UploadOrUpdateProfilePictureAsync(int userDetailId, IFormFile? file, string successMessage)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest(ApiResponse<string>.Fail("No file provided"));
+        }
+
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+        {
+            return Unauthorized(ApiResponse<string>.Fail("Invalid user token"));
+        }
+
+        using var memoryStream = new MemoryStream();
+        await file.CopyToAsync(memoryStream);
+
+        var fileContent = memoryStream.ToArray();
+        var mimeType = file.ContentType;
+        var command = new UploadProfilePictureCommand(userDetailId, userId, fileContent, file.FileName, mimeType);
+        var userDetail = await mediator.SendAsync(command);
+
+        return Ok(ApiResponse<UserDetailDto>.Ok(userDetail, successMessage));
     }
 }
 

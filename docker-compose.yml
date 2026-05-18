@@ -47,6 +47,8 @@ services:
       Modules__PermissionsModule__SeedDatabase: ${PERMISSIONS_MODULE_SEED_DATABASE}
     ports:
       - "8080:8080"
+    volumes:
+      - ./src/UniMeet.API/uploads:/app/uploads
     restart: always
 
 volumes:

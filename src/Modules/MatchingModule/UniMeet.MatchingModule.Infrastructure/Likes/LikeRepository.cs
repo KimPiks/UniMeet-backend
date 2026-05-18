@@ -11,6 +11,14 @@ public class LikeRepository(MatchingContext context) : ILikeRepository
             .FirstOrDefaultAsync(l => l.LikerId == likerId && l.LikedId == likedId, cancellationToken);
     }
 
+    public async Task<IEnumerable<Like>> GetByLikerIdAsync(Guid likerId, CancellationToken cancellationToken = default)
+    {
+        return await context.Likes
+            .Where(l => l.LikerId == likerId)
+            .OrderByDescending(l => l.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> ExistsAsync(Guid likerId, Guid likedId, CancellationToken cancellationToken = default)
     {
         return await context.Likes
