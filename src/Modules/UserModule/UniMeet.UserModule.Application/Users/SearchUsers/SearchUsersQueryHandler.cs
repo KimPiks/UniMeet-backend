@@ -1,12 +1,12 @@
 ﻿using UniMeet.Shared.Abstractions;
-using UniMeet.UserEnrollmentModule.Domain.UserAffiliation;
+using ModularSystem.Contracts.UserEnrollment;
 using UniMeet.UserModule.Domain.Users;
 
 namespace UniMeet.UserModule.Application.Users.SearchUsers;
 
 public class SearchUsersQueryHandler(
     IUserRepository userRepository,
-    IUserAffiliationRepository userAffiliationRepository)
+    IMediator mediator)
     : IQueryHandler<SearchUsersQuery, IEnumerable<SearchUserDto>>
 {
     private const int UniversityScore = 5;
@@ -21,7 +21,7 @@ public class SearchUsersQueryHandler(
 
         if (filters?.FieldOfStudyId is int fieldOfStudyId)
         {
-            var ids = await userAffiliationRepository.GetUserIdsByFieldOfStudyIdAsync(fieldOfStudyId, cancellationToken);
+            var ids = await mediator.SendAsync(new GetUserIdsByFieldOfStudyIdQuery(fieldOfStudyId), cancellationToken);
             if (ids.Count == 0)
             {
                 return Array.Empty<SearchUserDto>();
@@ -43,8 +43,9 @@ public class SearchUsersQueryHandler(
         }
 
         var userIds = users.Select(u => u.Id).ToList();
-        var fieldOfStudyByUserId = await userAffiliationRepository
-            .GetFieldOfStudyIdsByUserIdsAsync(userIds, cancellationToken);
+        var fieldOfStudyByUserId = await mediator.SendAsync(
+            new GetFieldOfStudyIdsByUserIdsQuery(userIds),
+            cancellationToken);
 
         var profile = request.Profile;
         var profileInterestIds = new HashSet<int>(profile.InterestIds);

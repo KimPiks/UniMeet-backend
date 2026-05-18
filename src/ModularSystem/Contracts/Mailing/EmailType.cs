@@ -1,4 +1,4 @@
-﻿namespace MailingModule.Enums;
+namespace ModularSystem.Contracts.Mailing;
 
 public enum EmailType
 {

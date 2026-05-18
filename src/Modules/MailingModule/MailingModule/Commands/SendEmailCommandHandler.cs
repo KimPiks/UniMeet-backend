@@ -1,5 +1,6 @@
 ﻿using MailingModule.Models;
 using MailingModule.Services;
+using ModularSystem.Contracts.Mailing;
 using UniMeet.Shared.Abstractions;
 
 namespace MailingModule.Commands;

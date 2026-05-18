@@ -1,27 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\UniMeet.Shared\UniMeet.Shared.csproj" />
-      <ProjectReference Include="..\..\MailingModule\MailingModule\MailingModule.csproj" />
-      <ProjectReference Include="..\..\PermissionsModule\UniMeet.PermissionsModule.Application\UniMeet.PermissionsModule.Application.csproj" />
-      <ProjectReference Include="..\..\UniversityModule\UniMeet.UniversityModule.Application\UniMeet.UniversityModule.Application.csproj" />
-      <ProjectReference Include="..\UniMeet.UserModule.Domain\UniMeet.UserModule.Domain.csproj" />
-      <ProjectReference Include="..\..\UserEnrollmentModule\UniMeet.UserEnrollmentModule.Domain\UniMeet.UserEnrollmentModule.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-      <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.3.9" />
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
-      <PackageReference Include="SixLabors.ImageSharp" Version="3.1.1" />
-      <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    </ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UniMeet.UserModule.Domain\UniMeet.UserModule.Domain.csproj" />
+    <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.3.9" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.1" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 </Project>
-

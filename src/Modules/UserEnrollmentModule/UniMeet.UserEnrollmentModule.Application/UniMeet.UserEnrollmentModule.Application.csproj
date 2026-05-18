@@ -1,14 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\UniMeet.Shared\UniMeet.Shared.csproj" />
-      <ProjectReference Include="..\UniMeet.UserEnrollmentModule.Infrastructure\UniMeet.UserEnrollmentModule.Infrastructure.csproj" />
-    </ItemGroup>
-
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UniMeet.UserEnrollmentModule.Domain\UniMeet.UserEnrollmentModule.Domain.csproj" />
+    <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
+  </ItemGroup>
 </Project>

@@ -38,27 +38,12 @@
     <ItemGroup>
       <ProjectReference Include="..\ModularSystem\ModularSystem.csproj" />
       <ProjectReference Include="..\Modules\MailingModule\MailingModule\MailingModule.csproj" />
-      <ProjectReference Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule.Application\UniMeet.PermissionsModule.Application.csproj" />
-      <ProjectReference Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule.Domain\UniMeet.PermissionsModule.Domain.csproj" />
-      <ProjectReference Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule.Infrastructure\UniMeet.PermissionsModule.Infrastructure.csproj" />
       <ProjectReference Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule\UniMeet.PermissionsModule.csproj" />
-      <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Application\UniMeet.UniversityModule.Application.csproj" />
-      <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Domain\UniMeet.UniversityModule.Domain.csproj" />
-      <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule.Infrastructure\UniMeet.UniversityModule.Infrastructure.csproj" />
       <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule\UniMeet.UniversityModule.csproj" />
-      <ProjectReference Include="..\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule.Domain\UniMeet.UserEnrollmentModule.Domain.csproj" />
-      <ProjectReference Include="..\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule.Infrastructure\UniMeet.UserEnrollmentModule.Infrastructure.csproj" />
       <ProjectReference Include="..\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule\UniMeet.UserEnrollmentModule.csproj" />
       <ProjectReference Include="..\Modules\MessagingModule\UniMeet.MessagingModule\UniMeet.MessagingModule.csproj" />
-      <ProjectReference Include="..\Modules\MessagingModule\UniMeet.MessagingModule.Application\UniMeet.MessagingModule.Application.csproj" />
-      <ProjectReference Include="..\Modules\MessagingModule\UniMeet.MessagingModule.Domain\UniMeet.MessagingModule.Domain.csproj" />
-      <ProjectReference Include="..\Modules\MessagingModule\UniMeet.MessagingModule.Infrastructure\UniMeet.MessagingModule.Infrastructure.csproj" />
       <ProjectReference Include="..\Modules\MatchingModule\UniMeet.MatchingModule\UniMeet.MatchingModule.csproj" />
-      <ProjectReference Include="..\Modules\MatchingModule\UniMeet.MatchingModule.Application\UniMeet.MatchingModule.Application.csproj" />
-      <ProjectReference Include="..\Modules\MatchingModule\UniMeet.MatchingModule.Domain\UniMeet.MatchingModule.Domain.csproj" />
-      <ProjectReference Include="..\Modules\MatchingModule\UniMeet.MatchingModule.Infrastructure\UniMeet.MatchingModule.Infrastructure.csproj" />
       <ProjectReference Include="..\Modules\UserModule\UniMeet.UserModule\UniMeet.UserModule.csproj" />
-      <ProjectReference Include="..\UniMeet.Shared\UniMeet.Shared.csproj" />
     </ItemGroup>
 
 </Project>

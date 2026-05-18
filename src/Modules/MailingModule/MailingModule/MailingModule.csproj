@@ -1,30 +1,20 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.1" />
+  </ItemGroup>
+  <Target Name="CopyTemplatesOutside" AfterTargets="Build">
     <ItemGroup>
-      <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
-      <ProjectReference Include="..\..\..\UniMeet.Shared\UniMeet.Shared.csproj" />
+      <TemplateFiles Include="EmailTemplates\**\*" />
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.1" />
-    </ItemGroup>
-    
-    <Target Name="CopyTemplatesOutside" AfterTargets="Build">
-        <ItemGroup>
-            <TemplateFiles Include="EmailTemplates\**\*" />
-        </ItemGroup>
-
-        <Message Importance="high" Text="Copying email templates to output dir: @(TemplateFiles)" />
-
-        <Copy
-                SourceFiles="@(TemplateFiles)"
-                DestinationFolder="$(OutputPath)..\..\..\..\..\..\UniMeet.API\EmailTemplates\%(RecursiveDir)"
-                SkipUnchangedFiles="true" />
-    </Target>
+    <Message Importance="high" Text="Copying email templates to output dir: @(TemplateFiles)" />
+    <Copy SourceFiles="@(TemplateFiles)" DestinationFolder="$(OutputPath)..\..\..\..\..\..\UniMeet.API\EmailTemplates\%(RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
 </Project>

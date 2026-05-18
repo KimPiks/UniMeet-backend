@@ -1,16 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <RootNamespace>PermissionsModule.Application</RootNamespace>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
-      <ProjectReference Include="..\..\..\UniMeet.Shared\UniMeet.Shared.csproj" />
-      <ProjectReference Include="..\UniMeet.PermissionsModule.Domain\UniMeet.PermissionsModule.Domain.csproj" />
-    </ItemGroup>
-
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>PermissionsModule.Application</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UniMeet.PermissionsModule.Domain\UniMeet.PermissionsModule.Domain.csproj" />
+    <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
+  </ItemGroup>
 </Project>

@@ -1,21 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
-      <ProjectReference Include="..\UniMeet.UniversityModule.Application\UniMeet.UniversityModule.Application.csproj" />
-      <ProjectReference Include="..\UniMeet.UniversityModule.Domain\UniMeet.UniversityModule.Domain.csproj" />
-      <ProjectReference Include="..\UniMeet.UniversityModule.Infrastructure\UniMeet.UniversityModule.Infrastructure.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-    </ItemGroup>
-
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UniMeet.UniversityModule.Application\UniMeet.UniversityModule.Application.csproj" />
+    <ProjectReference Include="..\UniMeet.UniversityModule.Domain\UniMeet.UniversityModule.Domain.csproj" />
+    <ProjectReference Include="..\UniMeet.UniversityModule.Infrastructure\UniMeet.UniversityModule.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+  </ItemGroup>
 </Project>

@@ -1,5 +1,4 @@
-﻿using MailingModule.Enums;
-using MailingModule.Models;
+﻿using ModularSystem.Contracts.Mailing;
 
 namespace MailingModule;
 

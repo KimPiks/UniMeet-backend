@@ -1,6 +1,4 @@
-﻿using MailingModule.Commands;
-using MailingModule.Enums;
-using MailingModule.Models;
+﻿using ModularSystem.Contracts.Mailing;
 using UniMeet.Shared.Abstractions;
 using UniMeet.UserModule.Domain.PasswordResetCodes;
 using UniMeet.UserModule.Domain.Services;

@@ -1,23 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <RootNamespace>PermissionsModule</RootNamespace>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
-      <ProjectReference Include="..\..\..\UniMeet.Shared\UniMeet.Shared.csproj" />
-      <ProjectReference Include="..\UniMeet.PermissionsModule.Application\UniMeet.PermissionsModule.Application.csproj" />
-      <ProjectReference Include="..\UniMeet.PermissionsModule.Domain\UniMeet.PermissionsModule.Domain.csproj" />
-      <ProjectReference Include="..\UniMeet.PermissionsModule.Infrastructure\UniMeet.PermissionsModule.Infrastructure.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.1" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-    </ItemGroup>
-
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>PermissionsModule</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UniMeet.PermissionsModule.Application\UniMeet.PermissionsModule.Application.csproj" />
+    <ProjectReference Include="..\UniMeet.PermissionsModule.Domain\UniMeet.PermissionsModule.Domain.csproj" />
+    <ProjectReference Include="..\UniMeet.PermissionsModule.Infrastructure\UniMeet.PermissionsModule.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\ModularSystem\ModularSystem.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+  </ItemGroup>
 </Project>

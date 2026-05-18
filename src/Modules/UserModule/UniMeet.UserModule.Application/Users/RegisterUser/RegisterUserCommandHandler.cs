@@ -1,10 +1,7 @@
-﻿using MailingModule.Commands;
-using MailingModule.Enums;
-using MailingModule.Models;
-using PermissionsModule.Application.Groups.GetGroupByName;
-using PermissionsModule.Domain.Groups.Exceptions;
+﻿using ModularSystem.Contracts.Mailing;
+using ModularSystem.Contracts.Permissions;
+using ModularSystem.Contracts.University;
 using UniMeet.Shared.Abstractions;
-using UniMeet.UniversityModule.Application.Universities.GetByAllowedDomain;
 using UniMeet.UserModule.Application.ConfirmationCodes.CreateConfirmationCode;
 using UniMeet.UserModule.Domain.Services;
 using UniMeet.UserModule.Domain.Users;
@@ -31,7 +28,7 @@ public class RegisterUserCommandHandler(IUserRepository userRepository,
 
         // Check if a user has a university email
         var emailDomain = request.Email.Split("@")[1];
-        var university = await mediator.SendAsync(new GetByAllowedDomainQuery(emailDomain), cancellationToken);
+        var university = await mediator.SendAsync(new GetUniversityByAllowedDomainQuery(emailDomain), cancellationToken);
         if (university == null)
             throw new EmailDomainNotAllowedException(request.Email);
         
@@ -39,7 +36,7 @@ public class RegisterUserCommandHandler(IUserRepository userRepository,
         var group = await mediator.SendAsync(new GetGroupByNameQuery("User"), cancellationToken);
         if (group == null)
         {
-            throw new GroupNotFoundException("User");
+            throw new DefaultGroupNotFoundException("User");
         }
         
         // Create user

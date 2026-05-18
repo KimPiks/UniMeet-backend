@@ -1,5 +1,7 @@
 ﻿using UniMeet.Shared.Exceptions;
 
+using ModularSystem.Contracts.Mailing;
+
 namespace MailingModule.Commands;
 
 public static class SendEmailCommandValidator
