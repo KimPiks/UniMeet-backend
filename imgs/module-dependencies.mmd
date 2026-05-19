@@ -1,0 +1,45 @@
+%%{init: {"theme": "base", "themeVariables": {"background": "#0b1018", "primaryColor": "#30343b", "primaryBorderColor": "#707782", "primaryTextColor": "#d7dee8", "lineColor": "#5bb8f6", "secondaryColor": "#111827", "tertiaryColor": "#151c27", "fontFamily": "Segoe UI, Arial, sans-serif"}}}%%
+flowchart TB
+    subgraph SRC["src"]
+        direction TB
+
+        Shared["C# UniMeet.Shared"]
+        ModularSystem["C# ModularSystem"]
+
+        subgraph Modules["Modules"]
+            direction LR
+            MatchingModule["MatchingModule"]
+            PermissionsModule["PermissionsModule"]
+            MailingModule["MailingModule"]
+            UniversityModule["UniversityModule"]
+            UserModule["UserModule"]
+            UserEnrollmentModule["UserEnrollmentModule"]
+            MessagingModule["MessagingModule"]
+        end
+
+        API["C# UniMeet.API"]
+    end
+
+    ModularSystem --> Shared
+
+    MatchingModule --> ModularSystem
+    PermissionsModule --> ModularSystem
+    MailingModule --> ModularSystem
+    UniversityModule --> ModularSystem
+    UserModule --> ModularSystem
+    UserEnrollmentModule --> ModularSystem
+    MessagingModule --> ModularSystem
+
+    API --> ModularSystem
+    API --> MatchingModule
+    API --> PermissionsModule
+    API --> MailingModule
+    API --> UniversityModule
+    API --> UserModule
+    API --> UserEnrollmentModule
+    API --> MessagingModule
+
+    classDef project fill:#30343b,stroke:#707782,color:#d7dee8,stroke-width:1px;
+    classDef boundary fill:#070b12,stroke:#303844,color:#d7dee8,stroke-width:1px;
+    class API,Shared,ModularSystem,MatchingModule,PermissionsModule,MailingModule,UniversityModule,UserModule,UserEnrollmentModule,MessagingModule project;
+    class SRC,Modules boundary;
