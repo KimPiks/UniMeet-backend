@@ -31,13 +31,14 @@ flowchart TB
     MessagingModule --> ModularSystem
 
     API --> ModularSystem
-    API --> MatchingModule
-    API --> PermissionsModule
-    API --> MailingModule
-    API --> UniversityModule
-    API --> UserModule
-    API --> UserEnrollmentModule
-    API --> MessagingModule
+
+    ModularSystem -. runtime discovery .-> MatchingModule
+    ModularSystem -. runtime discovery .-> PermissionsModule
+    ModularSystem -. runtime discovery .-> MailingModule
+    ModularSystem -. runtime discovery .-> UniversityModule
+    ModularSystem -. runtime discovery .-> UserModule
+    ModularSystem -. runtime discovery .-> UserEnrollmentModule
+    ModularSystem -. runtime discovery .-> MessagingModule
 
     classDef project fill:#30343b,stroke:#707782,color:#d7dee8,stroke-width:1px;
     classDef boundary fill:#070b12,stroke:#303844,color:#d7dee8,stroke-width:1px;

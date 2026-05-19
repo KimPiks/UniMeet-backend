@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using ModularSystem;
 using Serilog;
 using UniMeet.MessagingModule.Application;
-using UniMeet.MessagingModule.Application.Messages;
 using UniMeet.MessagingModule.Config;
 using UniMeet.MessagingModule.Domain.Conversations;
 using UniMeet.MessagingModule.Domain.Messages;

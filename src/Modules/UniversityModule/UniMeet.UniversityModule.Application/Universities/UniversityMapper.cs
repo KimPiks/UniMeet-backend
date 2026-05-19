@@ -1,4 +1,6 @@
-﻿using UniMeet.UniversityModule.Application.AllowedEmailDomains;
+using ModularSystem.Contracts.University.AllowedEmailDomains;
+using ModularSystem.Contracts.University.Departments;
+using UniMeet.UniversityModule.Application.AllowedEmailDomains;
 using UniMeet.UniversityModule.Application.Departments;
 using UniMeet.UniversityModule.Domain.Universities;
 

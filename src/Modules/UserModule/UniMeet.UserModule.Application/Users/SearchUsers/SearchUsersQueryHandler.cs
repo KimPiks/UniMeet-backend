@@ -1,6 +1,7 @@
 ﻿using UniMeet.Shared.Abstractions;
 using ModularSystem.Contracts.UserEnrollment;
 using UniMeet.UserModule.Domain.Users;
+using DomainSex = UniMeet.UserModule.Domain.UserDetails.Sex;
 
 namespace UniMeet.UserModule.Application.Users.SearchUsers;
 
@@ -32,7 +33,7 @@ public class SearchUsersQueryHandler(
 
         var users = await userRepository.SearchAsync(
             filters?.UniversityId,
-            filters?.Sex,
+            MapSex(filters?.Sex),
             filters?.InterestIds,
             fieldOfStudyUserIds,
             cancellationToken);
@@ -48,13 +49,14 @@ public class SearchUsersQueryHandler(
             cancellationToken);
 
         var profile = request.Profile;
+        var profileSex = MapSex(profile.Sex);
         var profileInterestIds = new HashSet<int>(profile.InterestIds);
 
         var scoredUsers = users.Select(user =>
         {
             var hasFieldOfStudy = fieldOfStudyByUserId.TryGetValue(user.Id, out var candidateFieldOfStudyId);
             var fieldOfStudyValue = hasFieldOfStudy ? candidateFieldOfStudyId : (int?)null;
-            var score = CalculateScore(user, fieldOfStudyValue, profile, profileInterestIds);
+            var score = CalculateScore(user, fieldOfStudyValue, profile, profileSex, profileInterestIds);
 
             return new
             {
@@ -77,7 +79,12 @@ public class SearchUsersQueryHandler(
             .ToList();
     }
 
-    private static int CalculateScore(User user, int? fieldOfStudyId, UserSearchProfile profile, HashSet<int> profileInterestIds)
+    private static int CalculateScore(
+        User user,
+        int? fieldOfStudyId,
+        UserSearchProfile profile,
+        DomainSex profileSex,
+        HashSet<int> profileInterestIds)
     {
         var score = 0;
 
@@ -93,7 +100,7 @@ public class SearchUsersQueryHandler(
 
         if (user.UserDetail != null)
         {
-            if (user.UserDetail.Sex == profile.Sex)
+            if (user.UserDetail.Sex == profileSex)
             {
                 score += SexScore;
             }
@@ -107,4 +114,10 @@ public class SearchUsersQueryHandler(
 
         return score;
     }
+
+    private static DomainSex? MapSex(Sex? sex)
+        => sex is null ? null : Enum.Parse<DomainSex>(sex.Value.ToString());
+
+    private static DomainSex MapSex(Sex sex)
+        => Enum.Parse<DomainSex>(sex.ToString());
 }

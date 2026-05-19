@@ -1,0 +1,5 @@
+global using ModularSystem.Contracts.UserEnrollment;
+global using ModularSystem.Contracts.UserEnrollment.UserAffiliations;
+global using ModularSystem.Contracts.UserEnrollment.UserAffiliations.AddAffiliation;
+global using ModularSystem.Contracts.UserEnrollment.UserAffiliations.DeleteAffiliation;
+global using ModularSystem.Contracts.UserEnrollment.UserAffiliations.GetAffiliationByUserId;

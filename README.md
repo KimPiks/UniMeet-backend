@@ -20,7 +20,7 @@ UniMeet is a platform for university students to connect, meet up and communicat
 
 ## Architecture
 
-The backend follows a **Modular Monolith** architecture. `UniMeet.API` is the ASP.NET Core host and composition root. It references `ModularSystem` and module root projects, while `ModularSystem` discovers all `IModule` implementations at startup via reflection, reads each module's configuration section, and, if the module is enabled, calls `Start()` followed by `RegisterServices()`.
+The backend follows a **Modular Monolith** architecture. `UniMeet.API` is the ASP.NET Core host and composition root. It communicates with modules through `ModularSystem` CQRS contracts, while `ModularSystem` discovers all `IModule` implementations at startup via reflection, reads each module's configuration section, and, if the module is enabled, calls `Start()` followed by `RegisterServices()`.
 
 Modules are isolated from each other. A module must not reference another module directly. Cross-module communication goes through CQRS contracts exposed by `ModularSystem.Contracts`. `UniMeet.Shared` is referenced only by `ModularSystem`; module projects depend on `ModularSystem` instead of depending on `UniMeet.Shared` directly.
 
@@ -54,7 +54,7 @@ Each module is split into four projects following **Clean Architecture**:
 
 _Source: [imgs/module-dependencies.mmd](imgs/module-dependencies.mmd)_
 
-No module has a direct dependency on another module. For example, `UserModule` does not reference `UniversityModule`; it requests required university data through CQRS contracts in `ModularSystem.Contracts`. The API arrows show the current composition-root project references to module entry points.
+No module has a direct dependency on another module. For example, `UserModule` does not reference `UniversityModule`; it requests required university data through CQRS contracts in `ModularSystem.Contracts`. `UniMeet.API` does not compile-reference module assemblies; module DLLs are copied for runtime discovery and invoked through `ModularSystem`.
 
 ---
 

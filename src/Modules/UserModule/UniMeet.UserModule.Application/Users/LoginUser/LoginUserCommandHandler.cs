@@ -4,6 +4,7 @@ using UniMeet.UserModule.Domain.RefreshTokens;
 using UniMeet.UserModule.Domain.Services;
 using UniMeet.UserModule.Domain.Users;
 using UniMeet.UserModule.Domain.Users.Exceptions;
+using LoginTokens = ModularSystem.Contracts.User.Models.LoginTokens;
 
 namespace UniMeet.UserModule.Application.Users.LoginUser;
 

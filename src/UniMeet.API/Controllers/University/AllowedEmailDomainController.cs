@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
-using UniMeet.Shared.Abstractions;
-using UniMeet.Shared.Mediator;
-using UniMeet.UniversityModule.Application.AllowedEmailDomains;
-using UniMeet.UniversityModule.Application.AllowedEmailDomains.AddAllowedEmailDomain;
-using UniMeet.UniversityModule.Application.AllowedEmailDomains.DeleteAllowedEmailDomain;
-using UniMeet.UniversityModule.Application.AllowedEmailDomains.GetAllowedEmailDomainById;
-using UniMeet.UniversityModule.Application.AllowedEmailDomains.GetAllowedEmailDomainsByUniversityId;
-using UniMeet.UniversityModule.Application.AllowedEmailDomains.UpdateAllowedEmailDomain;
+using ModularSystem;
+using ModularSystem.Contracts.University.AllowedEmailDomains;
+using ModularSystem.Contracts.University.AllowedEmailDomains.AddAllowedEmailDomain;
+using ModularSystem.Contracts.University.AllowedEmailDomains.DeleteAllowedEmailDomain;
+using ModularSystem.Contracts.University.AllowedEmailDomains.GetAllowedEmailDomainById;
+using ModularSystem.Contracts.University.AllowedEmailDomains.GetAllowedEmailDomainsByUniversityId;
+using ModularSystem.Contracts.University.AllowedEmailDomains.UpdateAllowedEmailDomain;
 
 namespace UniMeet.API.Controllers.University;
 
@@ -18,7 +17,7 @@ namespace UniMeet.API.Controllers.University;
 [Route("[controller]")]
 [ActiveUser]
 [Authorize]
-public class AllowedEmailDomainsController(IMediator mediator) : ControllerBase
+public class AllowedEmailDomainsController(IModuleRequestDispatcher mediator) : ControllerBase
 {
     [HttpPost]
     [Permission("UniversityModule.AddAllowedEmailDomain")]

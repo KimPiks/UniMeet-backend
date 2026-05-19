@@ -1,18 +1,18 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Attributes;
 using UniMeet.API.Responses;
-using UniMeet.MatchingModule.Application.Matches.AreUsersMatched;
-using UniMeet.MessagingModule.Application.Conversations;
-using UniMeet.MessagingModule.Application.Conversations.CreateGroupConversation;
-using UniMeet.MessagingModule.Application.Conversations.GetConversationById;
-using UniMeet.MessagingModule.Application.Conversations.GetConversationByUsers;
-using UniMeet.MessagingModule.Application.Conversations.GetUserConversations;
-using UniMeet.MessagingModule.Application.Messages;
-using UniMeet.MessagingModule.Application.Messages.GetConversationMessages;
-using UniMeet.MessagingModule.Application.Messages.MarkMessagesAsRead;
-using UniMeet.MessagingModule.Application.Messages.SendMessage;
-using UniMeet.Shared.Abstractions;
+using ModularSystem.Contracts.Matching.Matches.AreUsersMatched;
+using ModularSystem.Contracts.Messaging.Conversations;
+using ModularSystem.Contracts.Messaging.Conversations.CreateGroupConversation;
+using ModularSystem.Contracts.Messaging.Conversations.GetConversationById;
+using ModularSystem.Contracts.Messaging.Conversations.GetConversationByUsers;
+using ModularSystem.Contracts.Messaging.Conversations.GetUserConversations;
+using ModularSystem.Contracts.Messaging.Messages;
+using ModularSystem.Contracts.Messaging.Messages.GetConversationMessages;
+using ModularSystem.Contracts.Messaging.Messages.MarkMessagesAsRead;
+using ModularSystem.Contracts.Messaging.Messages.SendMessage;
+using ModularSystem;
 using UniMeet.Shared.Exceptions;
 
 namespace UniMeet.API.Controllers.Messaging;
@@ -21,7 +21,7 @@ namespace UniMeet.API.Controllers.Messaging;
 [Route("[controller]/[action]")]
 [Authorize]
 [ActiveUser]
-public class MessagingController(IMediator mediator) : ControllerBase
+public class MessagingController(IModuleRequestDispatcher mediator) : ControllerBase
 {
     private Guid CurrentUserId =>
         Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);

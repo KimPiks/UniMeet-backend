@@ -1,8 +1,9 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using ModularSystem;
+using ModularSystem.Contracts.User.Users.GetUserAccessInfo;
 using UniMeet.API.Responses;
-using UniMeet.UserModule.Domain.Users;
 
 namespace UniMeet.API.Attributes;
 
@@ -31,8 +32,8 @@ public class ActiveUserAttribute : Attribute, IAsyncAuthorizationFilter
             return;
         }
 
-        var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-        var dbUser = await userRepository.GetByIdAsync(userId);
+        var dispatcher = context.HttpContext.RequestServices.GetRequiredService<IModuleRequestDispatcher>();
+        var dbUser = await dispatcher.SendAsync(new GetUserAccessInfoQuery(userId));
         if (dbUser == null)
         {
             context.HttpContext.Response.StatusCode = 401;

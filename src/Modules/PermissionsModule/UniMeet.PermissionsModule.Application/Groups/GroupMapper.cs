@@ -1,4 +1,5 @@
-﻿using PermissionsModule.Application.Permissions;
+using ModularSystem.Contracts.Permissions.Permissions;
+using PermissionsModule.Application.Permissions;
 using PermissionsModule.Domain.Groups;
 
 namespace PermissionsModule.Application.Groups;

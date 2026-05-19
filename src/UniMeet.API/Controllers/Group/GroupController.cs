@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PermissionsModule.Application.Groups;
-using PermissionsModule.Application.Groups.AddGroup;
-using PermissionsModule.Application.Groups.GetAllGroups;
-using PermissionsModule.Application.Groups.GetGroupByName;
-using PermissionsModule.Application.Groups.RemoveGroup;
-using PermissionsModule.Application.Groups.UpdateGroup;
+using ModularSystem.Contracts.Permissions.Groups;
+using ModularSystem.Contracts.Permissions.Groups.AddGroup;
+using ModularSystem.Contracts.Permissions.Groups.GetAllGroups;
+using ModularSystem.Contracts.Permissions.Groups.GetGroupByName;
+using ModularSystem.Contracts.Permissions.Groups.RemoveGroup;
+using ModularSystem.Contracts.Permissions.Groups.UpdateGroup;
 using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
-using UniMeet.Shared.Abstractions;
+using ModularSystem;
 
 namespace UniMeet.API.Controllers.Group;
 
@@ -17,7 +17,7 @@ namespace UniMeet.API.Controllers.Group;
 [Route("[controller]/[action]")]
 [Authorize]
 [ActiveUser]
-public class GroupController(IMediator mediator) : ControllerBase
+public class GroupController(IModuleRequestDispatcher mediator) : ControllerBase
 {
     [HttpGet]
     [Permission("PermissionsModule.GetGroups")]

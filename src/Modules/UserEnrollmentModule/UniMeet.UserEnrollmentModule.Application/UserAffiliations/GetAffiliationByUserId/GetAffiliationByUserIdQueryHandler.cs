@@ -3,10 +3,13 @@ using UniMeet.UserEnrollmentModule.Domain.UserAffiliation;
 
 namespace UniMeet.UserEnrollmentModule.Application.UserAffiliations.GetAffiliationByUserId;
 
-public class GetAffiliationByUserIdQueryHandler(IUserAffiliationRepository repository) : IQueryHandler<GetAffiliationByUserIdQuery, UserAffiliation?>
+public class GetAffiliationByUserIdQueryHandler(IUserAffiliationRepository repository) : IQueryHandler<GetAffiliationByUserIdQuery, UserAffiliationDto?>
 {
-    public async Task<UserAffiliation?> HandleAsync(GetAffiliationByUserIdQuery request, CancellationToken cancellationToken = default)
+    public async Task<UserAffiliationDto?> HandleAsync(GetAffiliationByUserIdQuery request, CancellationToken cancellationToken = default)
     {
-        return await repository.GetByUserIdAsync(request.UserId, cancellationToken);
+        var affiliation = await repository.GetByUserIdAsync(request.UserId, cancellationToken);
+        return affiliation is null
+            ? null
+            : new UserAffiliationDto(affiliation.Id, affiliation.UserId, affiliation.FieldOfStudyId);
     }
 }

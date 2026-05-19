@@ -2,7 +2,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using UniMeet.API.Hubs;
 using UniMeet.API.Middlewares;
-using UniMeet.MessagingModule.Application.Messages;
+using ModularSystem.Contracts.Messaging.Messages;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json;
 using Microsoft.Extensions.FileProviders;
@@ -28,10 +28,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("DevPolicy", policy =>
     {
         policy
-            .SetIsOriginAllowed(_ => true) 
+            .SetIsOriginAllowed(_ => true)
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials(); 
+            .AllowCredentials();
     });
 });
 
@@ -116,7 +116,7 @@ if (hasHttpsBinding)
     app.UseHttpsRedirection();
 }
 
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

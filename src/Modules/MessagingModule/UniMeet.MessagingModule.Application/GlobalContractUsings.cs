@@ -1,0 +1,10 @@
+global using ModularSystem.Contracts.Messaging.Conversations;
+global using ModularSystem.Contracts.Messaging.Conversations.CreateConversation;
+global using ModularSystem.Contracts.Messaging.Conversations.CreateGroupConversation;
+global using ModularSystem.Contracts.Messaging.Conversations.GetConversationById;
+global using ModularSystem.Contracts.Messaging.Conversations.GetConversationByUsers;
+global using ModularSystem.Contracts.Messaging.Conversations.GetUserConversations;
+global using ModularSystem.Contracts.Messaging.Messages;
+global using ModularSystem.Contracts.Messaging.Messages.GetConversationMessages;
+global using ModularSystem.Contracts.Messaging.Messages.MarkMessagesAsRead;
+global using ModularSystem.Contracts.Messaging.Messages.SendMessage;

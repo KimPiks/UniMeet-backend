@@ -37,13 +37,13 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ModularSystem\ModularSystem.csproj" />
-      <ProjectReference Include="..\Modules\MailingModule\MailingModule\MailingModule.csproj" />
-      <ProjectReference Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule\UniMeet.PermissionsModule.csproj" />
-      <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule\UniMeet.UniversityModule.csproj" />
-      <ProjectReference Include="..\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule\UniMeet.UserEnrollmentModule.csproj" />
-      <ProjectReference Include="..\Modules\MessagingModule\UniMeet.MessagingModule\UniMeet.MessagingModule.csproj" />
-      <ProjectReference Include="..\Modules\MatchingModule\UniMeet.MatchingModule\UniMeet.MatchingModule.csproj" />
-      <ProjectReference Include="..\Modules\UserModule\UniMeet.UserModule\UniMeet.UserModule.csproj" />
+      <ProjectReference Include="..\Modules\MailingModule\MailingModule\MailingModule.csproj" ReferenceOutputAssembly="false" OutputItemType="Content" CopyToOutputDirectory="PreserveNewest" PrivateAssets="all" />
+      <ProjectReference Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule\UniMeet.PermissionsModule.csproj" ReferenceOutputAssembly="false" OutputItemType="Content" CopyToOutputDirectory="PreserveNewest" PrivateAssets="all" />
+      <ProjectReference Include="..\Modules\UniversityModule\UniMeet.UniversityModule\UniMeet.UniversityModule.csproj" ReferenceOutputAssembly="false" OutputItemType="Content" CopyToOutputDirectory="PreserveNewest" PrivateAssets="all" />
+      <ProjectReference Include="..\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule\UniMeet.UserEnrollmentModule.csproj" ReferenceOutputAssembly="false" OutputItemType="Content" CopyToOutputDirectory="PreserveNewest" PrivateAssets="all" />
+      <ProjectReference Include="..\Modules\MessagingModule\UniMeet.MessagingModule\UniMeet.MessagingModule.csproj" ReferenceOutputAssembly="false" OutputItemType="Content" CopyToOutputDirectory="PreserveNewest" PrivateAssets="all" />
+      <ProjectReference Include="..\Modules\MatchingModule\UniMeet.MatchingModule\UniMeet.MatchingModule.csproj" ReferenceOutputAssembly="false" OutputItemType="Content" CopyToOutputDirectory="PreserveNewest" PrivateAssets="all" />
+      <ProjectReference Include="..\Modules\UserModule\UniMeet.UserModule\UniMeet.UserModule.csproj" ReferenceOutputAssembly="false" OutputItemType="Content" CopyToOutputDirectory="PreserveNewest" PrivateAssets="all" />
     </ItemGroup>
 
 </Project>

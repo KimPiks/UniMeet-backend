@@ -1,0 +1,10 @@
+global using ModularSystem.Contracts.Permissions.Groups;
+global using ModularSystem.Contracts.Permissions.Groups.AddGroup;
+global using ModularSystem.Contracts.Permissions.Groups.GetAllGroups;
+global using ModularSystem.Contracts.Permissions.Groups.GetGroupByName;
+global using ModularSystem.Contracts.Permissions.Groups.RemoveGroup;
+global using ModularSystem.Contracts.Permissions.Groups.UpdateGroup;
+global using ModularSystem.Contracts.Permissions.Permissions;
+global using ModularSystem.Contracts.Permissions.Permissions.AddPermission;
+global using ModularSystem.Contracts.Permissions.Permissions.GetPermissionsForGroup;
+global using ModularSystem.Contracts.Permissions.Permissions.RemovePermission;

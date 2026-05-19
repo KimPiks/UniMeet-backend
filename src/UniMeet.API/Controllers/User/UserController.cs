@@ -3,43 +3,43 @@ using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
-using UniMeet.Shared.Abstractions;
-using UniMeet.UniversityModule.Application.FieldsOfStudy;
-using UniMeet.UniversityModule.Application.FieldsOfStudy.GetFieldOfStudyById;
-using UniMeet.UserEnrollmentModule.Application.UserAffiliations.AddAffiliation;
-using UniMeet.UserEnrollmentModule.Application.UserAffiliations.GetAffiliationByUserId;
-using UniMeet.UserModule.Application.Interests;
-using UniMeet.UserModule.Application.Interests.CreateInterest;
-using UniMeet.UserModule.Application.Interests.DeleteInterest;
-using UniMeet.UserModule.Application.Interests.GetAllInterests;
-using UniMeet.UserModule.Application.Interests.GetInterestById;
-using UniMeet.UserModule.Application.PasswordResetCodes.CheckIfResetPasswordCodeExists;
-using UniMeet.UserModule.Application.PasswordResetCodes.RequestPasswordReset;
-using UniMeet.UserModule.Application.PasswordResetCodes.ResetPassword;
-using UniMeet.UserModule.Application.RefreshTokens.RefreshTokens;
-using UniMeet.UserModule.Application.Users;
-using UniMeet.UserModule.Application.Users.ConfirmAccount;
-using UniMeet.UserModule.Application.Users.GetAllUsers;
-using UniMeet.UserModule.Application.Users.GetUserById;
-using UniMeet.UserModule.Application.Users.LoginUser;
-using UniMeet.UserModule.Application.Users.Logout;
-using UniMeet.UserModule.Application.Users.RegisterUser;
-using UniMeet.UserModule.Application.Users.SetGroup;
-using UniMeet.UserModule.Application.UserDetails;
-using UniMeet.UserModule.Application.UserDetails.GetUserDetailById;
-using UniMeet.UserModule.Application.UserDetails.GetUserDetailByUserId;
-using UniMeet.UserModule.Application.UserDetails.UpdateUserDetail;
-using UniMeet.UserModule.Application.UserDetails.UploadProfilePicture;
-using UniMeet.UserModule.Application.UserDetails.DeleteProfilePicture;
-using UniMeet.UserModule.Application.UserDetails.GetProfilePicture;
-using UniMeet.UserModule.Application.Users.SearchUsers;
-using UniMeet.UserModule.Domain.Models;
+using ModularSystem;
+using ModularSystem.Contracts.University.FieldsOfStudy;
+using ModularSystem.Contracts.University.FieldsOfStudy.GetFieldOfStudyById;
+using ModularSystem.Contracts.UserEnrollment.UserAffiliations.AddAffiliation;
+using ModularSystem.Contracts.UserEnrollment.UserAffiliations.GetAffiliationByUserId;
+using ModularSystem.Contracts.User.Interests;
+using ModularSystem.Contracts.User.Interests.CreateInterest;
+using ModularSystem.Contracts.User.Interests.DeleteInterest;
+using ModularSystem.Contracts.User.Interests.GetAllInterests;
+using ModularSystem.Contracts.User.Interests.GetInterestById;
+using ModularSystem.Contracts.User.PasswordResetCodes.CheckIfResetPasswordCodeExists;
+using ModularSystem.Contracts.User.PasswordResetCodes.RequestPasswordReset;
+using ModularSystem.Contracts.User.PasswordResetCodes.ResetPassword;
+using ModularSystem.Contracts.User.RefreshTokens.RefreshTokens;
+using ModularSystem.Contracts.User.Users;
+using ModularSystem.Contracts.User.Users.ConfirmAccount;
+using ModularSystem.Contracts.User.Users.GetAllUsers;
+using ModularSystem.Contracts.User.Users.GetUserById;
+using ModularSystem.Contracts.User.Users.LoginUser;
+using ModularSystem.Contracts.User.Users.Logout;
+using ModularSystem.Contracts.User.Users.RegisterUser;
+using ModularSystem.Contracts.User.Users.SetGroup;
+using ModularSystem.Contracts.User.UserDetails;
+using ModularSystem.Contracts.User.UserDetails.GetUserDetailById;
+using ModularSystem.Contracts.User.UserDetails.GetUserDetailByUserId;
+using ModularSystem.Contracts.User.UserDetails.UpdateUserDetail;
+using ModularSystem.Contracts.User.UserDetails.UploadProfilePicture;
+using ModularSystem.Contracts.User.UserDetails.DeleteProfilePicture;
+using ModularSystem.Contracts.User.UserDetails.GetProfilePicture;
+using ModularSystem.Contracts.User.Users.SearchUsers;
+using ModularSystem.Contracts.User.Models;
 
 namespace UniMeet.API.Controllers.User;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class UserController(IMediator mediator) : ControllerBase
+public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
 {
     [HttpPost]
     [OnlyAnonymous]

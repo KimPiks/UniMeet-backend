@@ -1,11 +1,11 @@
-﻿using ModularSystem.Contracts.Mailing;
+using ModularSystem.Contracts.Mailing;
 using ModularSystem.Contracts.Permissions;
 using ModularSystem.Contracts.University;
 using UniMeet.Shared.Abstractions;
-using UniMeet.UserModule.Application.ConfirmationCodes.CreateConfirmationCode;
 using UniMeet.UserModule.Domain.Services;
 using UniMeet.UserModule.Domain.Users;
 using UniMeet.UserModule.Domain.Users.Exceptions;
+using DomainSex = UniMeet.UserModule.Domain.UserDetails.Sex;
 
 namespace UniMeet.UserModule.Application.Users.RegisterUser;
 
@@ -41,7 +41,8 @@ public class RegisterUserCommandHandler(IUserRepository userRepository,
         
         // Create user
         var passwordHash = passwordHasher.Hash(request.Password);
-        var user = new User(request.FirstName, request.LastName, request.Email, passwordHash, university.Id, group.Id, request.Sex);
+        var sex = Enum.Parse<DomainSex>(request.Sex.ToString());
+        var user = new User(request.FirstName, request.LastName, request.Email, passwordHash, university.Id, group.Id, sex);
         
         await userRepository.AddAsync(user, cancellationToken);
         await userRepository.SaveChangesAsync(cancellationToken);

@@ -1,4 +1,5 @@
-﻿using UniMeet.UniversityModule.Application.FieldsOfStudy;
+using ModularSystem.Contracts.University.FieldsOfStudy;
+using UniMeet.UniversityModule.Application.FieldsOfStudy;
 using UniMeet.UniversityModule.Domain.Universities;
 
 namespace UniMeet.UniversityModule.Application.Departments;

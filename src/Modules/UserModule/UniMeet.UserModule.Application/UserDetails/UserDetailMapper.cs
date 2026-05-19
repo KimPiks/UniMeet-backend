@@ -1,4 +1,5 @@
 using UniMeet.UserModule.Domain.UserDetails;
+using ModularSystem.Contracts.User.Interests;
 using UniMeet.UserModule.Application.Interests;
 
 namespace UniMeet.UserModule.Application.UserDetails;

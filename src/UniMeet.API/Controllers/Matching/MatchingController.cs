@@ -1,17 +1,17 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Attributes;
 using UniMeet.API.Responses;
-using UniMeet.MatchingModule.Application.Likes.GetLikes;
-using UniMeet.MatchingModule.Application.Likes;
-using UniMeet.MatchingModule.Application.Likes.LikeUser;
-using UniMeet.MatchingModule.Application.Matches;
-using UniMeet.MatchingModule.Application.Matches.GetUserMatches;
-using UniMeet.MatchingModule.Application.Matches.Unmatch;
-using UniMeet.MessagingModule.Application.Conversations.CreateConversation;
-using UniMeet.Shared.Abstractions;
-using UniMeet.UserModule.Application.Users;
-using UniMeet.UserModule.Application.Users.GetUserById;
+using ModularSystem.Contracts.Matching.Likes.GetLikes;
+using ModularSystem.Contracts.Matching.Likes;
+using ModularSystem.Contracts.Matching.Likes.LikeUser;
+using ModularSystem.Contracts.Matching.Matches;
+using ModularSystem.Contracts.Matching.Matches.GetUserMatches;
+using ModularSystem.Contracts.Matching.Matches.Unmatch;
+using ModularSystem.Contracts.Messaging.Conversations.CreateConversation;
+using ModularSystem;
+using ModularSystem.Contracts.User.Users;
+using ModularSystem.Contracts.User.Users.GetUserById;
 
 namespace UniMeet.API.Controllers.Matching;
 
@@ -19,7 +19,7 @@ namespace UniMeet.API.Controllers.Matching;
 [Route("[controller]/[action]")]
 [Authorize]
 [ActiveUser]
-public class MatchingController(IMediator mediator) : ControllerBase
+public class MatchingController(IModuleRequestDispatcher mediator) : ControllerBase
 {
     private Guid CurrentUserId =>
         Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);

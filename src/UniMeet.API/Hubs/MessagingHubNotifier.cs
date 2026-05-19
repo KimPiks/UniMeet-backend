@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.SignalR;
-using UniMeet.MessagingModule.Application.Messages;
+﻿using Microsoft.AspNetCore.SignalR;
+using ModularSystem.Contracts.Messaging.Messages;
 
 namespace UniMeet.API.Hubs;
 

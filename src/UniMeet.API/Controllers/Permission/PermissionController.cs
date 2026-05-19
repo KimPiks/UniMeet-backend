@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PermissionsModule.Application.Permissions;
-using PermissionsModule.Application.Permissions.AddPermission;
-using PermissionsModule.Application.Permissions.GetPermissionsForGroup;
-using PermissionsModule.Application.Permissions.RemovePermission;
+using ModularSystem.Contracts.Permissions.Permissions;
+using ModularSystem.Contracts.Permissions.Permissions.AddPermission;
+using ModularSystem.Contracts.Permissions.Permissions.GetPermissionsForGroup;
+using ModularSystem.Contracts.Permissions.Permissions.RemovePermission;
 using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
-using UniMeet.Shared.Abstractions;
+using ModularSystem;
 
 namespace UniMeet.API.Controllers.Permission;
 
@@ -15,7 +15,7 @@ namespace UniMeet.API.Controllers.Permission;
 [Route("[controller]/[action]")]
 [Authorize]
 [ActiveUser]
-public class PermissionController(IMediator mediator) : ControllerBase
+public class PermissionController(IModuleRequestDispatcher mediator) : ControllerBase
 {
     [HttpPost]
     [Permission("PermissionsModule.AddPermission")]

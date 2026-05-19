@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
-using UniMeet.Shared.Abstractions;
-using UniMeet.UniversityModule.Application.FieldsOfStudy;
-using UniMeet.UniversityModule.Application.FieldsOfStudy.AddFieldOfStudy;
-using UniMeet.UniversityModule.Application.FieldsOfStudy.DeleteFieldOfStudy;
-using UniMeet.UniversityModule.Application.FieldsOfStudy.GetFieldOfStudyById;
-using UniMeet.UniversityModule.Application.FieldsOfStudy.UpdateFieldOfStudy;
+using ModularSystem;
+using ModularSystem.Contracts.University.FieldsOfStudy;
+using ModularSystem.Contracts.University.FieldsOfStudy.AddFieldOfStudy;
+using ModularSystem.Contracts.University.FieldsOfStudy.DeleteFieldOfStudy;
+using ModularSystem.Contracts.University.FieldsOfStudy.GetFieldOfStudyById;
+using ModularSystem.Contracts.University.FieldsOfStudy.UpdateFieldOfStudy;
 
 namespace UniMeet.API.Controllers.University;
 
@@ -16,7 +16,7 @@ namespace UniMeet.API.Controllers.University;
 [Route("[controller]")]
 [ActiveUser]
 [Authorize]
-public class FieldsOfStudyController(IMediator mediator) : ControllerBase
+public class FieldsOfStudyController(IModuleRequestDispatcher mediator) : ControllerBase
 {
     [HttpGet("{fieldOfStudyId:int}")]
     [Permission("UniversityModule.GetFieldOfStudy")]

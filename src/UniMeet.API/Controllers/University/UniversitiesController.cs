@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
-using UniMeet.Shared.Abstractions;
-using UniMeet.UniversityModule.Application.AllowedEmailDomains;
-using UniMeet.UniversityModule.Application.AllowedEmailDomains.GetAllowedEmailDomainsByUniversityId;
-using UniMeet.UniversityModule.Application.Departments;
-using UniMeet.UniversityModule.Application.Departments.GetDepartmentsByUniversityId;
-using UniMeet.UniversityModule.Application.Universities;
-using UniMeet.UniversityModule.Application.Universities.CreateUniversity;
-using UniMeet.UniversityModule.Application.Universities.DeleteUniversity;
-using UniMeet.UniversityModule.Application.Universities.GetAllUniversities;
-using UniMeet.UniversityModule.Application.Universities.GetUniversityById;
-using UniMeet.UniversityModule.Application.Universities.UpdateUniversity;
+using ModularSystem;
+using ModularSystem.Contracts.University.AllowedEmailDomains;
+using ModularSystem.Contracts.University.AllowedEmailDomains.GetAllowedEmailDomainsByUniversityId;
+using ModularSystem.Contracts.University.Departments;
+using ModularSystem.Contracts.University.Departments.GetDepartmentsByUniversityId;
+using ModularSystem.Contracts.University.Universities;
+using ModularSystem.Contracts.University.Universities.CreateUniversity;
+using ModularSystem.Contracts.University.Universities.DeleteUniversity;
+using ModularSystem.Contracts.University.Universities.GetAllUniversities;
+using ModularSystem.Contracts.University.Universities.GetUniversityById;
+using ModularSystem.Contracts.University.Universities.UpdateUniversity;
 
 namespace UniMeet.API.Controllers.University;
 
@@ -21,7 +21,7 @@ namespace UniMeet.API.Controllers.University;
 [Route("[controller]")]
 [ActiveUser]
 [Authorize]
-public class UniversitiesController(IMediator mediator) : ControllerBase
+public class UniversitiesController(IModuleRequestDispatcher mediator) : ControllerBase
 {
     [HttpGet("{universityId:int}")]
     [Permission("UniversityModule.GetUniversity")]

@@ -3,16 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
-using UniMeet.Shared.Abstractions;
-using UniMeet.Shared.Mediator;
-using UniMeet.UniversityModule.Application.Departments;
-using UniMeet.UniversityModule.Application.Departments.AddDepartment;
-using UniMeet.UniversityModule.Application.Departments.DeleteDepartment;
-using UniMeet.UniversityModule.Application.Departments.GetDepartmentById;
-using UniMeet.UniversityModule.Application.Departments.GetDepartmentsByUniversityId;
-using UniMeet.UniversityModule.Application.Departments.UpdateDepartment;
-using UniMeet.UniversityModule.Application.FieldsOfStudy;
-using UniMeet.UniversityModule.Application.FieldsOfStudy.GetFieldsOfStudyByDepartmentId;
+using ModularSystem;
+using ModularSystem.Contracts.University.Departments;
+using ModularSystem.Contracts.University.Departments.AddDepartment;
+using ModularSystem.Contracts.University.Departments.DeleteDepartment;
+using ModularSystem.Contracts.University.Departments.GetDepartmentById;
+using ModularSystem.Contracts.University.Departments.GetDepartmentsByUniversityId;
+using ModularSystem.Contracts.University.Departments.UpdateDepartment;
+using ModularSystem.Contracts.University.FieldsOfStudy;
+using ModularSystem.Contracts.University.FieldsOfStudy.GetFieldsOfStudyByDepartmentId;
 
 namespace UniMeet.API.Controllers.University;
 
@@ -20,7 +19,7 @@ namespace UniMeet.API.Controllers.University;
 [Route("[controller]")]
 [ActiveUser]
 [Authorize]
-public class DepartmentsController(IMediator mediator) : ControllerBase
+public class DepartmentsController(IModuleRequestDispatcher mediator) : ControllerBase
 {
     [HttpPost]
     [Permission("UniversityModule.AddDepartment")]

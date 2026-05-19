@@ -1,4 +1,5 @@
-﻿using UniMeet.UserModule.Application.Interests;
+using ModularSystem.Contracts.User.Interests;
+using UniMeet.UserModule.Application.Interests;
 using UniMeet.UserModule.Domain.Users;
 
 namespace UniMeet.UserModule.Application.Users.SearchUsers;

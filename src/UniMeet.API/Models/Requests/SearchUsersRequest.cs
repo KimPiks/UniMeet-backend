@@ -1,4 +1,4 @@
-﻿using UniMeet.UserModule.Domain.UserDetails;
+﻿using ModularSystem.Contracts.User.UserDetails;
 
 namespace UniMeet.API.Models.Requests;
 

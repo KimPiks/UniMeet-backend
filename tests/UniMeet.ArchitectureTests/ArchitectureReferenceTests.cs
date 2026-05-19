@@ -33,19 +33,41 @@ public class ArchitectureReferenceTests
     }
 
     [Fact]
-    public void Api_project_must_reference_modules_only_through_module_roots()
+    public void Api_project_must_not_compile_reference_modules()
     {
         var apiProject = Path.Combine(RepositoryRoot, "src", "UniMeet.API", "UniMeet.API.csproj");
         var moduleProjectsByPath = ModuleProjectsByPath();
 
         var violations = GetProjectReferences(apiProject, moduleProjectsByPath)
             .Where(reference =>
-                reference.TargetProjectName != "ModularSystem"
-                && (reference.TargetModule is null || reference.TargetLayer != Layer.ModuleRoot))
-            .Select(reference => $"{ToRelativePath(apiProject)} references {reference.RelativePath}")
+                reference.TargetModule is not null
+                && (reference.ReferenceOutputAssembly != false || reference.TargetLayer != Layer.ModuleRoot))
+            .Select(reference => $"{ToRelativePath(apiProject)} has invalid module reference {reference.RelativePath}")
             .ToList();
 
-        AssertNoViolations(violations, "API can reference ModularSystem and module root projects only.");
+        AssertNoViolations(violations, "API can copy module root projects for runtime discovery, but cannot compile-reference them.");
+    }
+
+    [Fact]
+    public void Api_code_must_not_use_module_namespaces()
+    {
+        var violations = ApiSourceFiles()
+            .SelectMany(file => ModuleNamespacePrefixes
+                .Select(module => new
+                {
+                    TargetModule = module.Key,
+                    Prefix = $"using {module.Value}",
+                    Lines = File.ReadLines(file)
+                        .Select((line, index) => new { Line = line.Trim(), Number = index + 1 })
+                        .Where(line => line.Line.StartsWith($"using {module.Value}", StringComparison.Ordinal))
+                        .ToList()
+                })
+                .Where(result => result.Lines.Count > 0)
+                .SelectMany(result => result.Lines.Select(line =>
+                    $"{ToRelativePath(file)}:{line.Number} uses {result.TargetModule}: {line.Line}")))
+            .ToList();
+
+        AssertNoViolations(violations, "API source code must communicate with modules through ModularSystem contracts only.");
     }
 
     [Fact]
@@ -194,18 +216,23 @@ public class ArchitectureReferenceTests
         return LoadProject(projectPath)
             .Descendants()
             .Where(element => element.Name.LocalName == "ProjectReference")
-            .Select(element => element.Attribute("Include")?.Value)
-            .Where(include => !string.IsNullOrWhiteSpace(include))
-            .Select(include =>
+            .Select(element => new
             {
-                var fullPath = Path.GetFullPath(Path.Combine(projectDirectory, include!));
+                Include = element.Attribute("Include")?.Value,
+                ReferenceOutputAssembly = ReadBooleanMetadata(element, "ReferenceOutputAssembly")
+            })
+            .Where(reference => !string.IsNullOrWhiteSpace(reference.Include))
+            .Select(reference =>
+            {
+                var fullPath = Path.GetFullPath(Path.Combine(projectDirectory, reference.Include!));
                 moduleProjectsByPath.TryGetValue(fullPath, out var targetProject);
 
                 return new ProjectReference(
                     ToRelativePath(fullPath),
                     Path.GetFileNameWithoutExtension(fullPath),
                     GetModuleName(fullPath),
-                    targetProject?.Layer);
+                    targetProject?.Layer,
+                    reference.ReferenceOutputAssembly);
             })
             .ToList();
     }
@@ -233,6 +260,30 @@ public class ArchitectureReferenceTests
                 ToRelativePath(path),
                 Path.GetFullPath(path)))
             .ToList();
+    }
+
+    private static IReadOnlyList<string> ApiSourceFiles()
+    {
+        var apiRoot = Path.Combine(RepositoryRoot, "src", "UniMeet.API");
+
+        return Directory
+            .EnumerateFiles(apiRoot, "*.cs", SearchOption.AllDirectories)
+            .Where(path => !IsGeneratedPath(path))
+            .Select(Path.GetFullPath)
+            .ToList();
+    }
+
+    private static bool? ReadBooleanMetadata(XElement element, string metadataName)
+    {
+        var value = element.Attribute(metadataName)?.Value
+                    ?? element.Elements().FirstOrDefault(child => child.Name.LocalName == metadataName)?.Value;
+
+        if (bool.TryParse(value, out var result))
+        {
+            return result;
+        }
+
+        return null;
     }
 
     private static XDocument LoadProject(string projectPath)
@@ -333,7 +384,8 @@ public class ArchitectureReferenceTests
         string RelativePath,
         string TargetProjectName,
         string? TargetModule,
-        Layer? TargetLayer);
+        Layer? TargetLayer,
+        bool? ReferenceOutputAssembly);
 
     private sealed record SourceFileInfo(string Module, string RelativePath, string FullPath);
 }
