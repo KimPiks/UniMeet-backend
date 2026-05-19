@@ -102,8 +102,7 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
     }
 
     [HttpPost]
-    [ActiveUser]
-    [Permission("UserModule.RefreshTokens")]
+    [AllowAnonymous]
     public async Task<IActionResult> RefreshTokens([FromBody] RefreshTokenRequest request)
     {
         var command = new RefreshTokensCommand(request.RefreshToken);
@@ -112,13 +111,9 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
-    [ActiveUser]
-    [Permission("UserModule.Logout")]
+    [AllowAnonymous]
     public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
     {
-        var guid = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
-
         var command = new LogoutCommand(request.RefreshToken);
         await mediator.SendAsync(command);
         return Ok(ApiResponse<string>.Ok(null, "User logged out successfully"));

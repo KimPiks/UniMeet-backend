@@ -32,6 +32,11 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddlew
             logger.LogWarning(ex, "Forbidden error occurred: {Message}", ex.Message);
             await WriteResponse(context, HttpStatusCode.Forbidden, ApiResponse<string>.Fail(ex.Message));
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            logger.LogWarning(ex, "Unauthorized error occurred: {Message}", ex.Message);
+            await WriteResponse(context, HttpStatusCode.Unauthorized, ApiResponse<string>.Fail(ex.Message));
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unexpected error occurred");
