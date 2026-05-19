@@ -1,7 +1,5 @@
 # UniMeet - Backend
 
-> **Project is under active development. Some features may change.**
-
 UniMeet is a platform for university students to connect, meet up and communicate based on shared interests and courses. Students register with their university e-mail address, are enrolled in their university's courses, and can find other students with overlapping enrolments or interests and message them in real time.
 
 ---
@@ -51,8 +49,6 @@ Each module is split into four projects following **Clean Architecture**:
 ### Module Dependency Diagram
 
 ![Module dependency diagram](imgs/module-dependencies.png)
-
-_Source: [imgs/module-dependencies.mmd](imgs/module-dependencies.mmd)_
 
 No module has a direct dependency on another module. For example, `UserModule` does not reference `UniversityModule`; it requests required university data through CQRS contracts in `ModularSystem.Contracts`. `UniMeet.API` does not compile-reference module assemblies; module DLLs are copied for runtime discovery and invoked through `ModularSystem`.
 
@@ -107,8 +103,6 @@ Key domain concepts: `Like`, `Match`.
 Every module that requires persistence uses its own **EF Core DbContext** connected to the shared PostgreSQL instance. Migrations are stored inside each module's `Infrastructure` project. Cross-module references are stored as scalar IDs and are marked as logical relationships in the diagram; they are not EF navigation dependencies between module contexts.
 
 ![Database diagram](imgs/database.png)
-
-_Source: [imgs/database.svg](imgs/database.svg)_
 
 ---
 
