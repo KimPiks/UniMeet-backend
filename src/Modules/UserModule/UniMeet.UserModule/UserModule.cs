@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ModularSystem;
+using ModularSystem.Auth;
 using Serilog;
 using UniMeet.Shared.Exceptions;
 using UniMeet.Shared.Mediator.Extensions;
@@ -89,11 +90,28 @@ public class UserModule : IModule
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = _configuration.Auth.Issuer,
                     ValidAudience = _configuration.Auth.Audience,
-                    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.Auth.Secret))
+                    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.Auth.Secret)),
+                    ClockSkew = TimeSpan.Zero
                 };
 
                 options.Events = new JwtBearerEvents
                 {
+                    OnTokenValidated = context =>
+                    {
+                        var tokenType = context.Principal?.FindFirst(AuthClaimTypes.TokenType)?.Value;
+                        if (tokenType != AuthTokenTypes.Access)
+                        {
+                            context.Fail("Only access tokens can be used to authorize API requests.");
+                        }
+
+                        var isActive = context.Principal?.FindFirst(AuthClaimTypes.IsActive)?.Value;
+                        if (!bool.TryParse(isActive, out var active) || !active)
+                        {
+                            context.Fail("The access token does not belong to an active user.");
+                        }
+
+                        return Task.CompletedTask;
+                    },
                     // SignalR sends the token via query string instead of Authorization header
                     OnMessageReceived = context =>
                     {

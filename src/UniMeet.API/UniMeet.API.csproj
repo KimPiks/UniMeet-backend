@@ -6,16 +6,18 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
+        <ModuleRuntimeOutputRoot>$(MSBuildProjectDirectory)/obj/$(Configuration)/$(TargetFramework)/module-runtime/</ModuleRuntimeOutputRoot>
+        <ModulePublishOutputRoot>$(MSBuildProjectDirectory)/obj/$(Configuration)/$(TargetFramework)/module-publish/</ModulePublishOutputRoot>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.11">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.11">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -45,5 +47,45 @@
       <ProjectReference Include="..\Modules\MatchingModule\UniMeet.MatchingModule\UniMeet.MatchingModule.csproj" ReferenceOutputAssembly="false" OutputItemType="Content" CopyToOutputDirectory="PreserveNewest" PrivateAssets="all" />
       <ProjectReference Include="..\Modules\UserModule\UniMeet.UserModule\UniMeet.UserModule.csproj" ReferenceOutputAssembly="false" OutputItemType="Content" CopyToOutputDirectory="PreserveNewest" PrivateAssets="all" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ModuleRuntimeProject Include="..\Modules\MailingModule\MailingModule\MailingModule.csproj" />
+      <ModuleRuntimeProject Include="..\Modules\PermissionsModule\UniMeet.PermissionsModule\UniMeet.PermissionsModule.csproj" />
+      <ModuleRuntimeProject Include="..\Modules\UniversityModule\UniMeet.UniversityModule\UniMeet.UniversityModule.csproj" />
+      <ModuleRuntimeProject Include="..\Modules\UserEnrollmentModule\UniMeet.UserEnrollmentModule\UniMeet.UserEnrollmentModule.csproj" />
+      <ModuleRuntimeProject Include="..\Modules\MessagingModule\UniMeet.MessagingModule\UniMeet.MessagingModule.csproj" />
+      <ModuleRuntimeProject Include="..\Modules\MatchingModule\UniMeet.MatchingModule\UniMeet.MatchingModule.csproj" />
+      <ModuleRuntimeProject Include="..\Modules\UserModule\UniMeet.UserModule\UniMeet.UserModule.csproj" />
+    </ItemGroup>
+
+    <Target Name="CopyModuleRuntimeAssembliesToOutput" AfterTargets="Build">
+      <MSBuild Projects="@(ModuleRuntimeProject)"
+               Targets="Publish"
+               Properties="Configuration=$(Configuration);TargetFramework=$(TargetFramework);PublishDir=$(ModuleRuntimeOutputRoot)%(Filename)/;UseAppHost=false;SelfContained=false"
+               BuildInParallel="true" />
+
+      <ItemGroup>
+        <_ModuleOutputAssembly Include="$(ModuleRuntimeOutputRoot)**/*.dll" />
+      </ItemGroup>
+
+      <Copy SourceFiles="@(_ModuleOutputAssembly)"
+            DestinationFolder="$(TargetDir)"
+            SkipUnchangedFiles="true" />
+    </Target>
+
+    <Target Name="CopyModuleRuntimeAssembliesToPublish" AfterTargets="Publish">
+      <MSBuild Projects="@(ModuleRuntimeProject)"
+               Targets="Publish"
+               Properties="Configuration=$(Configuration);TargetFramework=$(TargetFramework);PublishDir=$(ModulePublishOutputRoot)%(Filename)/;UseAppHost=false;SelfContained=false"
+               BuildInParallel="true" />
+
+      <ItemGroup>
+        <_ModulePublishAssembly Include="$(ModulePublishOutputRoot)**/*.dll" />
+      </ItemGroup>
+
+      <Copy SourceFiles="@(_ModulePublishAssembly)"
+            DestinationFolder="$(PublishDir)"
+            SkipUnchangedFiles="true" />
+    </Target>
 
 </Project>

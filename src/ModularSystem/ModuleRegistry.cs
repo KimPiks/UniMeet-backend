@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.Loader;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -10,6 +11,9 @@ namespace ModularSystem;
 /// </summary>
 public sealed class ModuleRegistry
 {
+    private static readonly object ResolverLock = new();
+    private static bool _moduleDependencyResolverRegistered;
+
     private List<IModule> _modules = [];
 
     public void RunModules(IConfiguration configuration, IServiceCollection services)
@@ -59,16 +63,85 @@ public sealed class ModuleRegistry
 
     private static List<Assembly> GetAssemblies()
     {
-        var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-        var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
+        EnsureModuleDependencyResolverRegistered();
 
-        var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+        var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        var assembliesToScan = AppDomain.CurrentDomain.GetAssemblies().ToList();
+
+        LoadRuntimeAssembliesFromBaseDirectory(baseDirectory);
+
+        var loadedByPath = AppDomain.CurrentDomain.GetAssemblies()
+            .Where(assembly => !string.IsNullOrWhiteSpace(assembly.Location))
+            .ToDictionary(assembly => assembly.Location, StringComparer.InvariantCultureIgnoreCase);
+
+        var referencedPaths = Directory.GetFiles(baseDirectory, "*.dll");
         var toLoad = referencedPaths.Where(r =>
-            !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase) &&
-            Path.GetFileName(r).Contains("Module", StringComparison.InvariantCultureIgnoreCase)).ToList();
+            Path.GetFileNameWithoutExtension(r).EndsWith("Module", StringComparison.InvariantCultureIgnoreCase)).ToList();
 
-        toLoad.ForEach(path => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path))));
-        return loadedAssemblies;
+        foreach (var path in toLoad)
+        {
+            var assembly = loadedByPath.TryGetValue(path, out var loadedAssembly)
+                ? loadedAssembly
+                : AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
+
+            if (assembliesToScan.All(loaded => loaded.FullName != assembly.FullName))
+            {
+                assembliesToScan.Add(assembly);
+            }
+        }
+
+        return assembliesToScan;
+    }
+
+    private static void LoadRuntimeAssembliesFromBaseDirectory(string baseDirectory)
+    {
+        var loadedAssemblyNames = AppDomain.CurrentDomain.GetAssemblies()
+            .Select(assembly => assembly.GetName().Name)
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+        foreach (var path in Directory.GetFiles(baseDirectory, "*.dll"))
+        {
+            AssemblyName assemblyName;
+            try
+            {
+                assemblyName = AssemblyName.GetAssemblyName(path);
+            }
+            catch (BadImageFormatException)
+            {
+                continue;
+            }
+
+            if (assemblyName.Name is null || loadedAssemblyNames.Contains(assemblyName.Name))
+            {
+                continue;
+            }
+
+            AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
+            loadedAssemblyNames.Add(assemblyName.Name);
+        }
+    }
+
+    private static void EnsureModuleDependencyResolverRegistered()
+    {
+        lock (ResolverLock)
+        {
+            if (_moduleDependencyResolverRegistered)
+            {
+                return;
+            }
+
+            AssemblyLoadContext.Default.Resolving += ResolveModuleDependency;
+            _moduleDependencyResolverRegistered = true;
+        }
+    }
+
+    private static Assembly? ResolveModuleDependency(AssemblyLoadContext context, AssemblyName assemblyName)
+    {
+        var assemblyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{assemblyName.Name}.dll");
+        return File.Exists(assemblyPath)
+            ? context.LoadFromAssemblyPath(assemblyPath)
+            : null;
     }
 
     private static List<IModule> GetModules(IList<Assembly> assemblies)
