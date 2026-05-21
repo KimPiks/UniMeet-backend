@@ -5,6 +5,9 @@ namespace PermissionsModule.Infrastructure.Permissions;
 
 public class PermissionRepository(PermissionsContext context) : IPermissionRepository
 {
+    private const int DefaultPageSize = 100;
+    private const int MaxPageSize = 100;
+
     public async Task<Permission?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await context.Permissions
@@ -14,10 +17,15 @@ public class PermissionRepository(PermissionsContext context) : IPermissionRepos
 
     public async Task<IEnumerable<Permission>> GetAllAsync(int offset, int limit, CancellationToken cancellationToken = default)
     {
+        var safeOffset = Math.Max(0, offset);
+        var safeLimit = limit <= 0 ? DefaultPageSize : Math.Min(limit, MaxPageSize);
         return await context.Permissions
+            .AsNoTracking()
             .Include(x => x.Group)
-            .Skip(offset)
-            .Take(limit)
+            .OrderBy(x => x.PermissionName)
+            .ThenBy(x => x.Id)
+            .Skip(safeOffset)
+            .Take(safeLimit)
             .ToListAsync(cancellationToken);
     }
 
@@ -38,7 +46,8 @@ public class PermissionRepository(PermissionsContext context) : IPermissionRepos
 
     public void Delete(Permission permission)
     {
-        context.Permissions.Remove(permission);
+        var trackedPermission = context.Permissions.Local.FirstOrDefault(x => x.Id == permission.Id);
+        context.Permissions.Remove(trackedPermission ?? permission);
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)

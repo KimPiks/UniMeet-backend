@@ -219,6 +219,39 @@ public class UserHandlersTests
     }
 
     [Fact]
+    public async Task LoginUserCommandHandler_rejects_missing_inactive_and_invalid_password_with_same_error()
+    {
+        await using var context = RepositoryTestContextFactory.CreateUserContext();
+        var userRepository = new UserRepository(context);
+        var inactiveUser = CreateUser();
+        context.Users.Add(inactiveUser);
+        var activeUser = CreateUser("ewa@uni.edu");
+        activeUser.Activate();
+        context.Users.Add(activeUser);
+        await context.SaveChangesAsync();
+        var mediator = new FakeMediator();
+        var handler = new LoginUserCommandHandler(
+            userRepository,
+            new RefreshTokenRepository(context),
+            new FakePasswordHasher(),
+            new FakeJwtService(activeUser.Id),
+            mediator);
+
+        var missing = await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
+            handler.HandleAsync(new LoginUserCommand("missing@uni.edu", "password")));
+        var inactive = await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
+            handler.HandleAsync(new LoginUserCommand(inactiveUser.Email, "password")));
+        var invalidPassword = await Assert.ThrowsAsync<UnauthorizedAccessException>(() =>
+            handler.HandleAsync(new LoginUserCommand(activeUser.Email, "wrong")));
+
+        Assert.Equal("Invalid credentials.", missing.Message);
+        Assert.Equal("Invalid credentials.", inactive.Message);
+        Assert.Equal("Invalid credentials.", invalidPassword.Message);
+        Assert.Empty(context.RefreshTokens);
+        Assert.Empty(mediator.SentRequests);
+    }
+
+    [Fact]
     public async Task RefreshTokensCommandHandler_replaces_valid_refresh_token()
     {
         await using var context = RepositoryTestContextFactory.CreateUserContext();
@@ -288,8 +321,32 @@ public class UserHandlersTests
         Assert.Equal(user.Email, email.To);
     }
 
+    [Fact]
+    public async Task RequestPasswordResetCommandHandler_ignores_missing_or_inactive_users_without_side_effects()
+    {
+        await using var context = RepositoryTestContextFactory.CreateUserContext();
+        var inactiveUser = CreateUser();
+        context.Users.Add(inactiveUser);
+        await context.SaveChangesAsync();
+        var mediator = new FakeMediator();
+        var handler = new RequestPasswordResetCommandHandler(
+            new UserRepository(context),
+            new PasswordResetCodeRepository(context),
+            new FakePasswordResetLinkService(),
+            mediator);
+
+        await handler.HandleAsync(new RequestPasswordResetCommand("missing@uni.edu"));
+        await handler.HandleAsync(new RequestPasswordResetCommand(inactiveUser.Email));
+
+        Assert.Empty(context.PasswordResetCodes);
+        Assert.Empty(mediator.SentRequests);
+    }
+
     private static User CreateUser()
         => new("Anna", "Kowalska", "anna@uni.edu", "hash", 1, 3, Sex.Female);
+
+    private static User CreateUser(string email)
+        => new("Anna", "Kowalska", email, "hash", 1, 3, Sex.Female);
 
     private sealed class FakePasswordHasher : IPasswordHasher
     {

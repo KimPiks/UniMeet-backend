@@ -15,5 +15,8 @@ public class AllowedEmailDomainConfiguration : IEntityTypeConfiguration<AllowedE
         builder.Property(aed => aed.Domain)
             .IsRequired()
             .HasMaxLength(128);
+
+        builder.HasIndex(aed => aed.Domain)
+            .IsUnique();
     }
 }

@@ -43,6 +43,9 @@ namespace PermissionsModule.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("groups", (string)null);
                 });
 
@@ -67,7 +70,8 @@ namespace PermissionsModule.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("GroupId", "PermissionName")
+                        .IsUnique();
 
                     b.ToTable("permissions", (string)null);
                 });

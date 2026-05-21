@@ -16,6 +16,9 @@ public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
             .IsRequired()
             .HasMaxLength(128);
 
+        builder.HasIndex(p => new { p.GroupId, p.PermissionName })
+            .IsUnique();
+
         builder.HasOne(p => p.Group)
             .WithMany(p => p.Permissions)
             .HasForeignKey(p => p.GroupId);

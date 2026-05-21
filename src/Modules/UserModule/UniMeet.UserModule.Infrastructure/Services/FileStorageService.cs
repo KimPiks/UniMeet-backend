@@ -53,14 +53,15 @@ public class FileStorageService : IFileStorageService
         if (string.IsNullOrEmpty(filePath))
             return false;
 
-        var fullPath = Path.Combine(_environment.ContentRootPath, filePath);
+        var fullPath = ResolveProfilePicturePath(filePath);
 
         if (!File.Exists(fullPath))
             return false;
 
         try
         {
-            await Task.Run(() => File.Delete(fullPath), cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
+            File.Delete(fullPath);
             return true;
         }
         catch
@@ -74,7 +75,7 @@ public class FileStorageService : IFileStorageService
         if (string.IsNullOrEmpty(filePath))
             return false;
 
-        var fullPath = Path.Combine(_environment.ContentRootPath, filePath);
+        var fullPath = ResolveProfilePicturePath(filePath);
         return File.Exists(fullPath);
     }
 
@@ -83,7 +84,7 @@ public class FileStorageService : IFileStorageService
         if (string.IsNullOrEmpty(filePath))
             throw new ArgumentException("File path is empty", nameof(filePath));
 
-        var fullPath = Path.Combine(_environment.ContentRootPath, filePath);
+        var fullPath = ResolveProfilePicturePath(filePath);
 
         if (!File.Exists(fullPath))
             throw new FileNotFoundException($"File not found: {filePath}");
@@ -93,8 +94,27 @@ public class FileStorageService : IFileStorageService
 
     public string GetUploadDirectory()
     {
-        return Path.Combine(_environment.ContentRootPath, ProfilePicturesDir);
+        return GetProfilePicturesRoot();
     }
+
+    private string ResolveProfilePicturePath(string filePath)
+    {
+        var root = GetProfilePicturesRoot();
+        var fullPath = Path.GetFullPath(Path.Combine(_environment.ContentRootPath, filePath));
+        var rootWithSeparator = root.EndsWith(Path.DirectorySeparatorChar)
+            ? root
+            : root + Path.DirectorySeparatorChar;
+
+        if (!fullPath.StartsWith(rootWithSeparator, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new UnauthorizedAccessException("Invalid profile picture path.");
+        }
+
+        return fullPath;
+    }
+
+    private string GetProfilePicturesRoot()
+        => Path.GetFullPath(Path.Combine(_environment.ContentRootPath, ProfilePicturesDir));
 }
 
 

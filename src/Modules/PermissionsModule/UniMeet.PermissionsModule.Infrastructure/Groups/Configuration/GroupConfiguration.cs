@@ -15,6 +15,9 @@ public class GroupConfiguration : IEntityTypeConfiguration<Group>
         builder.Property(g => g.Name)
             .IsRequired()
             .HasMaxLength(128);
+
+        builder.HasIndex(g => g.Name)
+            .IsUnique();
         
         builder.HasMany(g => g.Permissions)
             .WithOne(p => p.Group)

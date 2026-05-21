@@ -5,6 +5,9 @@ namespace UniMeet.UserModule.Infrastructure.Interests;
 
 public class InterestRepository(UserContext context) : IInterestRepository
 {
+    private const int DefaultPageSize = 100;
+    private const int MaxPageSize = 100;
+
     public async Task<Interest?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await context.Interests
@@ -13,9 +16,14 @@ public class InterestRepository(UserContext context) : IInterestRepository
 
     public async Task<IEnumerable<Interest>> GetAllAsync(int offset, int limit, CancellationToken cancellationToken = default)
     {
+        var safeOffset = Math.Max(0, offset);
+        var safeLimit = limit <= 0 ? DefaultPageSize : Math.Min(limit, MaxPageSize);
         return await context.Interests
-            .Skip(offset)
-            .Take(limit)
+            .AsNoTracking()
+            .OrderBy(x => x.Name)
+            .ThenBy(x => x.Id)
+            .Skip(safeOffset)
+            .Take(safeLimit)
             .ToListAsync(cancellationToken);
     }
 
@@ -26,7 +34,8 @@ public class InterestRepository(UserContext context) : IInterestRepository
 
     public void Delete(Interest interest)
     {
-        context.Interests.Remove(interest);
+        var trackedInterest = context.Interests.Local.FirstOrDefault(x => x.Id == interest.Id);
+        context.Interests.Remove(trackedInterest ?? interest);
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
