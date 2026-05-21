@@ -5,6 +5,9 @@ namespace UniMeet.UniversityModule.Infrastructure.Universities;
 
 public class UniversityRepository(UniversityContext context) : IUniversityRepository
 {
+    private const int DefaultPageSize = 100;
+    private const int MaxPageSize = 100;
+
     public async Task<University?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await context.Universities
@@ -54,12 +57,16 @@ public class UniversityRepository(UniversityContext context) : IUniversityReposi
 
     public async Task<IEnumerable<University>> GetAllAsync(int offset, int limit, CancellationToken cancellationToken = default)
     {
+        var safeOffset = Math.Max(0, offset);
+        var safeLimit = limit <= 0 ? DefaultPageSize : Math.Min(limit, MaxPageSize);
         return await context.Universities
+            .AsNoTracking()
             .Include(u => u.AllowedEmailDomains)
             .Include(u => u.Departments)
             .ThenInclude(d => d.FieldsOfStudy)
-            .Skip(offset)
-            .Take(limit)
+            .OrderBy(u => u.Id)
+            .Skip(safeOffset)
+            .Take(safeLimit)
             .ToListAsync(cancellationToken);
     }
 
@@ -70,7 +77,8 @@ public class UniversityRepository(UniversityContext context) : IUniversityReposi
 
     public void Delete(University university)
     {
-        context.Universities.Remove(university);
+        var trackedUniversity = context.Universities.Local.FirstOrDefault(x => x.Id == university.Id);
+        context.Universities.Remove(trackedUniversity ?? university);
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)

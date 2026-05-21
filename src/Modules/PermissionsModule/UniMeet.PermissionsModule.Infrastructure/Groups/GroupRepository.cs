@@ -5,6 +5,9 @@ namespace PermissionsModule.Infrastructure.Groups;
 
 public class GroupRepository(PermissionsContext context) : IGroupRepository
 {
+    private const int DefaultPageSize = 100;
+    private const int MaxPageSize = 100;
+
     public async Task<Group?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await context.Groups
@@ -21,10 +24,14 @@ public class GroupRepository(PermissionsContext context) : IGroupRepository
 
     public async Task<IEnumerable<Group>> GetAllAsync(int offset, int limit, CancellationToken cancellationToken = default)
     {
+        var safeOffset = Math.Max(0, offset);
+        var safeLimit = limit <= 0 ? DefaultPageSize : Math.Min(limit, MaxPageSize);
         return await context.Groups
+            .AsNoTracking()
             .Include(x => x.Permissions)
-            .Skip(offset)
-            .Take(limit)
+            .OrderBy(x => x.Id)
+            .Skip(safeOffset)
+            .Take(safeLimit)
             .ToListAsync(cancellationToken);
     }
 
@@ -40,7 +47,8 @@ public class GroupRepository(PermissionsContext context) : IGroupRepository
 
     public void Delete(Group group)
     {
-        context.Groups.Remove(group);
+        var trackedGroup = context.Groups.Local.FirstOrDefault(x => x.Id == group.Id);
+        context.Groups.Remove(trackedGroup ?? group);
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)

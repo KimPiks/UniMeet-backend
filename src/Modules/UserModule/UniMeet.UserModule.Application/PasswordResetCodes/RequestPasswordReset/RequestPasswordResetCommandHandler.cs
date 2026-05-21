@@ -3,7 +3,6 @@ using UniMeet.Shared.Abstractions;
 using UniMeet.UserModule.Domain.PasswordResetCodes;
 using UniMeet.UserModule.Domain.Services;
 using UniMeet.UserModule.Domain.Users;
-using UniMeet.UserModule.Domain.Users.Exceptions;
 
 namespace UniMeet.UserModule.Application.PasswordResetCodes.RequestPasswordReset;
 
@@ -17,11 +16,10 @@ public class RequestPasswordResetCommandHandler(IUserRepository userRepository,
         request.Validate(); 
         
         var user = await userRepository.GetByEmailAsync(request.Email, cancellationToken);
-        if (user == null)
-            throw new UserNotFoundException(request.Email);
-        
-        if (!user.IsActive)
-            throw new UserNotActiveException(request.Email);
+        if (user == null || !user.IsActive)
+        {
+            return;
+        }
         
         var codeExpiration = DateTime.UtcNow.AddDays(1);
         var passwordResetCode = new PasswordResetCode(user.Id, codeExpiration);

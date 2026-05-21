@@ -13,7 +13,16 @@ src/Modules/MessagingModule/UniMeet.MessagingModule.Infrastructure/Migrations/*
 !src/Modules/PermissionsModule/UniMeet.PermissionsModule.Infrastructure/Migrations/
 src/Modules/PermissionsModule/UniMeet.PermissionsModule.Infrastructure/Migrations/*
 !src/Modules/PermissionsModule/UniMeet.PermissionsModule.Infrastructure/Migrations/20260517215145_AddCreateGroupConversationPermission*.cs
+!src/Modules/PermissionsModule/UniMeet.PermissionsModule.Infrastructure/Migrations/20260520015500_AddPermissionSecurityIndexes.cs
 !src/Modules/PermissionsModule/UniMeet.PermissionsModule.Infrastructure/Migrations/PermissionsContextModelSnapshot.cs
+!src/Modules/UserModule/UniMeet.UserModule.Infrastructure/Migrations/
+src/Modules/UserModule/UniMeet.UserModule.Infrastructure/Migrations/*
+!src/Modules/UserModule/UniMeet.UserModule.Infrastructure/Migrations/20260520015400_AddUserSecurityIndexes.cs
+!src/Modules/UserModule/UniMeet.UserModule.Infrastructure/Migrations/UserContextModelSnapshot.cs
+!src/Modules/UniversityModule/UniMeet.UniversityModule.Infrastructure/Migrations/
+src/Modules/UniversityModule/UniMeet.UniversityModule.Infrastructure/Migrations/*
+!src/Modules/UniversityModule/UniMeet.UniversityModule.Infrastructure/Migrations/20260520015600_AddAllowedEmailDomainSecurityIndexes.cs
+!src/Modules/UniversityModule/UniMeet.UniversityModule.Infrastructure/Migrations/UniversityContextModelSnapshot.cs
 UniMeet.sln.DotSettings.user
 .config/
 .env

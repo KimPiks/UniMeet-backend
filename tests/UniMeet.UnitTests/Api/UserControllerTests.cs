@@ -57,6 +57,21 @@ public class UserControllerTests
     }
 
     [Fact]
+    public void CheckIfPasswordResetCodeExists_Returns_generic_success_without_dispatching_query()
+    {
+        var dispatcher = new FakeModuleRequestDispatcher();
+        var controller = new UserController(dispatcher);
+
+        var result = controller.CheckIfPasswordResetCodeExists(Guid.NewGuid());
+
+        var response = ControllerTestHelpers.AssertOkResponse<bool>(
+            result,
+            "Password reset code will be accepted if valid");
+        Assert.True(response.Data);
+        Assert.Empty(dispatcher.SentRequests);
+    }
+
+    [Fact]
     public async Task EnrollInCourse_When_user_claim_is_missing_returns_unauthorized_after_field_lookup()
     {
         var dispatcher = new FakeModuleRequestDispatcher();
@@ -148,6 +163,29 @@ public class UserControllerTests
         var response = Assert.IsType<ApiResponse<string>>(badRequest.Value);
         Assert.False(response.Success);
         Assert.Equal("No file provided", response.Message);
+        Assert.Empty(dispatcher.SentRequests);
+    }
+
+    [Fact]
+    public async Task UploadProfilePicture_When_file_is_too_large_returns_bad_request_without_buffering_or_dispatching()
+    {
+        var dispatcher = new FakeModuleRequestDispatcher();
+        var controller = new UserController(dispatcher);
+        controller.SetCurrentUser(Guid.NewGuid());
+        await using var stream = new MemoryStream([1]);
+        var file = new FormFile(stream, 0, 5 * 1024 * 1024 + 1, "file", "avatar.png")
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "image/png"
+        };
+
+        var result = await controller.UploadProfilePicture(7, file);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+        var response = Assert.IsType<ApiResponse<string>>(badRequest.Value);
+        Assert.False(response.Success);
+        Assert.Equal("File size exceeds maximum allowed size of 5 MB", response.Message);
+        Assert.Equal(0, stream.Position);
         Assert.Empty(dispatcher.SentRequests);
     }
 }

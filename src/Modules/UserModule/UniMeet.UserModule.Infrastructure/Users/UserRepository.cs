@@ -6,6 +6,10 @@ namespace UniMeet.UserModule.Infrastructure.Users;
 
 public class UserRepository(UserContext context) : IUserRepository
 {
+    private const int DefaultPageSize = 100;
+    private const int MaxPageSize = 100;
+    private const int MaxSearchCandidates = 1000;
+
     public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await context.Users
@@ -20,9 +24,14 @@ public class UserRepository(UserContext context) : IUserRepository
 
     public async Task<IEnumerable<User>> GetAllAsync(int offset, int limit, CancellationToken cancellationToken = default)
     {
+        var (safeOffset, safeLimit) = NormalizePage(offset, limit);
         return await context.Users
-            .Skip(offset)
-            .Take(limit)
+            .AsNoTracking()
+            .OrderBy(x => x.LastName)
+            .ThenBy(x => x.FirstName)
+            .ThenBy(x => x.Id)
+            .Skip(safeOffset)
+            .Take(safeLimit)
             .ToListAsync(cancellationToken);
     }
 
@@ -49,6 +58,7 @@ public class UserRepository(UserContext context) : IUserRepository
         CancellationToken cancellationToken = default)
     {
         IQueryable<User> query = context.Users
+            .AsNoTracking()
             .Include(u => u.UserDetail)
             .ThenInclude(d => d.Interests)
             .Where(u => u.IsActive);
@@ -78,6 +88,18 @@ public class UserRepository(UserContext context) : IUserRepository
             return Array.Empty<User>();
         }
 
-        return await query.ToListAsync(cancellationToken);
+        return await query
+            .OrderBy(u => u.LastName)
+            .ThenBy(u => u.FirstName)
+            .ThenBy(u => u.Id)
+            .Take(MaxSearchCandidates)
+            .ToListAsync(cancellationToken);
+    }
+
+    private static (int Offset, int Limit) NormalizePage(int offset, int limit)
+    {
+        var safeOffset = Math.Max(0, offset);
+        var safeLimit = limit <= 0 ? DefaultPageSize : Math.Min(limit, MaxPageSize);
+        return (safeOffset, safeLimit);
     }
 }

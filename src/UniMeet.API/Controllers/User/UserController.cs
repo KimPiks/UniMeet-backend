@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using UniMeet.API.Attributes;
 using UniMeet.API.Models.Requests;
 using UniMeet.API.Responses;
@@ -13,7 +14,6 @@ using ModularSystem.Contracts.User.Interests.CreateInterest;
 using ModularSystem.Contracts.User.Interests.DeleteInterest;
 using ModularSystem.Contracts.User.Interests.GetAllInterests;
 using ModularSystem.Contracts.User.Interests.GetInterestById;
-using ModularSystem.Contracts.User.PasswordResetCodes.CheckIfResetPasswordCodeExists;
 using ModularSystem.Contracts.User.PasswordResetCodes.RequestPasswordReset;
 using ModularSystem.Contracts.User.PasswordResetCodes.ResetPassword;
 using ModularSystem.Contracts.User.RefreshTokens.RefreshTokens;
@@ -41,8 +41,12 @@ namespace UniMeet.API.Controllers.User;
 [Route("[controller]/[action]")]
 public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
 {
+    private const long MaxProfilePictureBytes = 5 * 1024 * 1024;
+    private const int MaxProfilePictureRequestBytes = 6 * 1024 * 1024;
+
     [HttpPost]
     [OnlyAnonymous]
+    [EnableRateLimiting("AuthSensitive")]
     public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
     {
         var command = new RegisterUserCommand(
@@ -58,6 +62,7 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
 
     [HttpGet]
     [OnlyAnonymous]
+    [EnableRateLimiting("AuthSensitive")]
     public async Task<IActionResult> ConfirmAccount([FromQuery] Guid code)
     {
         var command = new ConfirmAccountCommand(code);
@@ -67,15 +72,15 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
 
     [HttpGet]
     [OnlyAnonymous]
-    public async Task<IActionResult> CheckIfPasswordResetCodeExists([FromQuery] Guid code)
+    [EnableRateLimiting("AuthSensitive")]
+    public IActionResult CheckIfPasswordResetCodeExists([FromQuery] Guid code)
     {
-        var exists = await mediator.SendAsync(new CheckIfResetPasswordCodeExistsQuery(code));
-        if (exists) return Ok(ApiResponse<bool>.Ok(true, "Password reset code exists"));
-        return Ok(ApiResponse<bool>.Ok(false, "Password reset code does not exist"));
+        return Ok(ApiResponse<bool>.Ok(true, "Password reset code will be accepted if valid"));
     }
 
     [HttpPost]
     [OnlyAnonymous]
+    [EnableRateLimiting("AuthSensitive")]
     public async Task<IActionResult> ResetPassword([FromBody] PasswordResetRequest request)
     {
         var passwordReset = new ResetPasswordCommand(request.Code, request.NewPassword);
@@ -85,6 +90,7 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
 
     [HttpPost]
     [OnlyAnonymous]
+    [EnableRateLimiting("AuthSensitive")]
     public async Task<IActionResult> RequestPasswordReset([FromBody] EmailRequest request)
     {
         var command = new RequestPasswordResetCommand(request.Email);
@@ -94,6 +100,7 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
 
     [HttpPost]
     [OnlyAnonymous]
+    [EnableRateLimiting("AuthSensitive")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var command = new LoginUserCommand(request.Email, request.Password);
@@ -103,6 +110,7 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
 
     [HttpPost]
     [AllowAnonymous]
+    [EnableRateLimiting("AuthSensitive")]
     public async Task<IActionResult> RefreshTokens([FromBody] RefreshTokenRequest request)
     {
         var command = new RefreshTokensCommand(request.RefreshToken);
@@ -112,6 +120,7 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
 
     [HttpPost]
     [AllowAnonymous]
+    [EnableRateLimiting("AuthSensitive")]
     public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
     {
         var command = new LogoutCommand(request.RefreshToken);
@@ -298,14 +307,18 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
     [Authorize]
     [ActiveUser]
     [Permission("UserModule.UpdateUserDetail")]
-    public async Task<IActionResult> UploadProfilePicture([FromQuery] int userDetailId, IFormFile? file)
+    [RequestSizeLimit(MaxProfilePictureRequestBytes)]
+    [EnableRateLimiting("FileUpload")]
+    public async Task<IActionResult> UploadProfilePicture([FromQuery] int userDetailId, [FromForm] IFormFile? file)
         => await UploadOrUpdateProfilePictureAsync(userDetailId, file, "Profile picture uploaded successfully");
 
     [HttpPost]
     [Authorize]
     [ActiveUser]
     [Permission("UserModule.UpdateUserDetail")]
-    public async Task<IActionResult> UpdateProfilePicture([FromQuery] int userDetailId, IFormFile? file)
+    [RequestSizeLimit(MaxProfilePictureRequestBytes)]
+    [EnableRateLimiting("FileUpload")]
+    public async Task<IActionResult> UpdateProfilePicture([FromQuery] int userDetailId, [FromForm] IFormFile? file)
         => await UploadOrUpdateProfilePictureAsync(userDetailId, file, "Profile picture updated successfully");
 
     [HttpDelete]
@@ -369,6 +382,11 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
             return BadRequest(ApiResponse<string>.Fail("No file provided"));
         }
 
+        if (file.Length > MaxProfilePictureBytes)
+        {
+            return BadRequest(ApiResponse<string>.Fail("File size exceeds maximum allowed size of 5 MB"));
+        }
+
         var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
         {
@@ -376,7 +394,7 @@ public class UserController(IModuleRequestDispatcher mediator) : ControllerBase
         }
 
         using var memoryStream = new MemoryStream();
-        await file.CopyToAsync(memoryStream);
+        await file.CopyToAsync(memoryStream, HttpContext.RequestAborted);
 
         var fileContent = memoryStream.ToArray();
         var mimeType = file.ContentType;

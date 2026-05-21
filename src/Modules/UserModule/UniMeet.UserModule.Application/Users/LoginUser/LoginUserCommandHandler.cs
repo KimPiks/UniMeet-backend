@@ -4,7 +4,6 @@ using UniMeet.UserModule.Domain.Models;
 using UniMeet.UserModule.Domain.RefreshTokens;
 using UniMeet.UserModule.Domain.Services;
 using UniMeet.UserModule.Domain.Users;
-using UniMeet.UserModule.Domain.Users.Exceptions;
 using LoginTokens = ModularSystem.Contracts.User.Models.LoginTokens;
 
 namespace UniMeet.UserModule.Application.Users.LoginUser;
@@ -21,13 +20,13 @@ public class LoginUserCommandHandler(
     {
         var user = await userRepository.GetByEmailAsync(request.Email, cancellationToken);
         if (user == null)
-            throw new UserNotFoundException(request.Email);
+            throw new UnauthorizedAccessException("Invalid credentials.");
 
         if (!user.IsActive)
-            throw new UserNotActiveException(request.Email);
+            throw new UnauthorizedAccessException("Invalid credentials.");
 
         if (!passwordHasher.Verify(request.Password, user.PasswordHash))
-            throw new InvalidPasswordException(request.Email);
+            throw new UnauthorizedAccessException("Invalid credentials.");
 
         var permissions = await mediator.SendAsync(new GetPermissionsForGroupQuery(user.GroupId), cancellationToken);
         var accessToken = jwtService.GenerateAccessToken(

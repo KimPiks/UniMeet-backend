@@ -9,8 +9,9 @@ public class ConversationRepository(MessagingContext context) : IConversationRep
     {
         return await context.Conversations
             .Include(c => c.Participants)
-            .Include(c => c.Messages)
+            .Include(c => c.Messages.OrderByDescending(m => m.SentAt).Take(1))
                 .ThenInclude(m => m.ReadReceipts)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
@@ -19,8 +20,9 @@ public class ConversationRepository(MessagingContext context) : IConversationRep
         var (user1, user2) = userA.CompareTo(userB) < 0 ? (userA, userB) : (userB, userA);
         return await context.Conversations
             .Include(c => c.Participants)
-            .Include(c => c.Messages)
+            .Include(c => c.Messages.OrderByDescending(m => m.SentAt).Take(1))
                 .ThenInclude(m => m.ReadReceipts)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(c => !c.IsGroup && c.User1Id == user1 && c.User2Id == user2, cancellationToken);
     }
 
@@ -28,10 +30,11 @@ public class ConversationRepository(MessagingContext context) : IConversationRep
     {
         return await context.Conversations
             .Include(c => c.Participants)
-            .Include(c => c.Messages)
+            .Include(c => c.Messages.OrderByDescending(m => m.SentAt).Take(1))
                 .ThenInclude(m => m.ReadReceipts)
             .Where(c => c.Participants.Any(p => p.UserId == userId))
             .OrderByDescending(c => c.Messages.Max(m => (DateTime?)m.SentAt) ?? c.CreatedAt)
+            .AsSplitQuery()
             .ToListAsync(cancellationToken);
     }
 
